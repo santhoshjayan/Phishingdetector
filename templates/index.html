@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing URL Detector</title>
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <style>
+        .risk-high {
+            color: #dc3545;
+        }
+        .risk-medium {
+            color: #fd7e14;
+        }
+        .risk-low {
+            color: #ffc107;
+        }
+        .risk-safe {
+            color: #28a745;
+        }
+        .risk-unknown {
+            color: #6c757d;
+        }
+        .finding-item {
+            margin-bottom: 8px;
+        }
+        .result-section {
+            display: none;
+        }
+        .loader {
+            display: none;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h1 class="h4 mb-0">Phishing URL Detector</h1>
+                    </div>
+                    <div class="card-body">
+                        <p class="lead">Enter a URL to analyze it for potential phishing indicators</p>
+                        
+                        <form id="urlForm" class="mb-4">
+                            <div class="input-group mb-3">
+                                <input type="url" class="form-control" id="urlInput" placeholder="https://example.com" required>
+                                <button class="btn btn-primary" type="submit">Analyze</button>
+                            </div>
+                        </form>
+                        
+                        <div id="loader" class="loader"></div>
+                        
+                        <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
+                        
+                        <div id="resultSection" class="result-section">
+                            <div class="card mb-4">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h2 class="h5 mb-0">Analysis Results</h2>
+                                    <span class="badge" id="riskBadge">Unknown</span>
+                                </div>
+                                <div class="card-body">
+                                    <h3 class="h6">URL: <span id="analyzedUrl" class="text-primary"></span></h3>
+                                    <p>Suspicious Indicators: <span id="suspiciousCount">0</span></p>
+                                    
+                                    <div class="alert alert-secondary" id="recommendation"></div>
+                                    
+                                    <div class="accordion" id="analysisAccordion">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#patternAnalysis">
+                                                    URL Pattern Analysis
+                                                </button>
+                                            </h2>
+                                            <div id="patternAnalysis" class="accordion-collapse collapse show" data-bs-parent="#analysisAccordion">
+                                                <div class="accordion-body">
+                                                    <ul id="patternList" class="list-group list-group-flush"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#domainInfo">
+                                                    Domain Information
+                                                </button>
+                                            </h2>
+                                            <div id="domainInfo" class="accordion-collapse collapse" data-bs-parent="#analysisAccordion">
+                                                <div class="accordion-body">
+                                                    <ul id="domainList" class="list-group list-group-flush"></ul>
+                                                    
+                                                    <h4 class="h6 mt-3">WHOIS Information</h4>
+                                                    <ul id="whoisList" class="list-group list-group-flush"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#reputationInfo">
+                                                    Reputation Information
+                                                </button>
+                                            </h2>
+                                            <div id="reputationInfo" class="accordion-collapse collapse" data-bs-parent="#analysisAccordion">
+                                                <div class="accordion-body">
+                                                    <ul id="reputationList" class="list-group list-group-flush"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <small>This tool analyzes URLs for suspicious patterns and provides a risk assessment. Always use caution when visiting unfamiliar websites.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlForm = document.getElementById('urlForm');
+            const urlInput = document.getElementById('urlInput');
+            const loader = document.getElementById('loader');
+            const errorMessage = document.getElementById('errorMessage');
+            const resultSection = document.getElementById('resultSection');
+            
+            // Elements for displaying results
+            const analyzedUrl = document.getElementById('analyzedUrl');
+            const riskBadge = document.getElementById('riskBadge');
+            const suspiciousCount = document.getElementById('suspiciousCount');
+            const recommendation = document.getElementById('recommendation');
+            const patternList = document.getElementById('patternList');
+            const domainList = document.getElementById('domainList');
+            const whoisList = document.getElementById('whoisList');
+            const reputationList = document.getElementById('reputationList');
+            
+            urlForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const url = urlInput.value.trim();
+                if (!url) {
+                    showError('Please enter a URL to analyze');
+                    return;
+                }
+                
+                // Reset UI
+                resetUI();
+                
+                // Show loader
+                loader.style.display = 'block';
+                
+                // Send the URL to the backend for analysis
+                fetch('/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url: url }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    loader.style.display = 'none';
+                    
+                    if (data.success) {
+                        displayResults(data.results);
+                    } else {
+                        showError(data.message || 'An error occurred while analyzing the URL');
+                    }
+                })
+                .catch(error => {
+                    loader.style.display = 'none';
+                    showError('Failed to analyze URL: ' + error.message);
+                });
+            });
+            
+            function resetUI() {
+                errorMessage.style.display = 'none';
+                resultSection.style.display = 'none';
+                patternList.innerHTML = '';
+                domainList.innerHTML = '';
+                whoisList.innerHTML = '';
+                reputationList.innerHTML = '';
+            }
+            
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+            }
+            
+            function displayResults(results) {
+                // Display basic information
+                analyzedUrl.textContent = results.url;
+                suspiciousCount.textContent = results.suspicious_indicators;
+                
+                // Set risk level badge
+                const riskLevel = results.risk_level;
+                riskBadge.textContent = riskLevel;
+                riskBadge.className = 'badge bg-secondary';
+                
+                // Set appropriate badge color based on risk level
+                if (riskLevel === 'High') {
+                    riskBadge.className = 'badge bg-danger';
+                    recommendation.innerHTML = 'This URL has a high likelihood of being a phishing attempt. <strong>Avoid accessing it.</strong>';
+                    recommendation.className = 'alert alert-danger';
+                } else if (riskLevel === 'Medium') {
+                    riskBadge.className = 'badge bg-warning text-dark';
+                    recommendation.innerHTML = 'This URL shows some suspicious characteristics. <strong>Proceed with caution.</strong>';
+                    recommendation.className = 'alert alert-warning';
+                } else if (riskLevel === 'Low') {
+                    riskBadge.className = 'badge bg-info';
+                    recommendation.innerHTML = 'This URL has minor suspicious indicators but appears relatively safe.';
+                    recommendation.className = 'alert alert-info';
+                } else if (riskLevel === 'Safe') {
+                    riskBadge.className = 'badge bg-success';
+                    recommendation.innerHTML = 'This URL appears to be safe based on our analysis.';
+                    recommendation.className = 'alert alert-success';
+                } else {
+                    recommendation.innerHTML = 'Unable to determine risk level.';
+                    recommendation.className = 'alert alert-secondary';
+                }
+                
+                // Display pattern analysis findings
+                const patternAnalysis = results.pattern_analysis;
+                if (patternAnalysis && patternAnalysis.findings) {
+                    patternAnalysis.findings.forEach(finding => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.textContent = finding;
+                        patternList.appendChild(li);
+                    });
+                }
+                
+                // Display domain information findings
+                const domainInfo = results.domain_info;
+                if (domainInfo && domainInfo.findings) {
+                    domainInfo.findings.forEach(finding => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.textContent = finding;
+                        domainList.appendChild(li);
+                    });
+                }
+                
+                // Display WHOIS information
+                if (domainInfo && domainInfo.whois_info) {
+                    for (const [key, value] of Object.entries(domainInfo.whois_info)) {
+                        if (value) {
+                            const li = document.createElement('li');
+                            li.className = 'list-group-item';
+                            li.innerHTML = `<strong>${key}:</strong> ${value}`;
+                            whoisList.appendChild(li);
+                        }
+                    }
+                }
+                
+                // Display reputation information
+                const reputationInfo = results.reputation;
+                if (reputationInfo && reputationInfo.findings) {
+                    reputationInfo.findings.forEach(finding => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.textContent = finding;
+                        reputationList.appendChild(li);
+                    });
+                }
+                
+                // Show results section
+                resultSection.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
