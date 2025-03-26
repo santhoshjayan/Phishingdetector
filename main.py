@@ -16,6 +16,37 @@ app.secret_key = os.environ.get("SESSION_SECRET", "temporary_secret_key")
 HISTORY_DIR = "analysis_history"
 os.makedirs(HISTORY_DIR, exist_ok=True)
 
+def json_serializable_results(results):
+    """
+    Convert any non-JSON serializable objects in the results to their string 
+    representation to make the entire results dictionary JSON serializable.
+    """
+    # Create a copy of the results to avoid modifying the original
+    processed_results = results.copy()
+    
+    # Process domain_info section which contains datetime objects
+    if 'domain_info' in processed_results and 'whois_info' in processed_results['domain_info']:
+        whois_info = processed_results['domain_info']['whois_info'].copy()
+        
+        # Convert creation_date to string
+        if 'creation_date' in whois_info and whois_info['creation_date'] is not None:
+            if isinstance(whois_info['creation_date'], list):
+                whois_info['creation_date'] = [str(d) for d in whois_info['creation_date']]
+            else:
+                whois_info['creation_date'] = str(whois_info['creation_date'])
+        
+        # Convert expiration_date to string
+        if 'expiration_date' in whois_info and whois_info['expiration_date'] is not None:
+            if isinstance(whois_info['expiration_date'], list):
+                whois_info['expiration_date'] = [str(d) for d in whois_info['expiration_date']]
+            else:
+                whois_info['expiration_date'] = str(whois_info['expiration_date'])
+        
+        # Update the results with the processed whois_info
+        processed_results['domain_info']['whois_info'] = whois_info
+    
+    return processed_results
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -42,12 +73,15 @@ def analyze():
     try:
         results = analyze_url(url, verbose=False)
         
+        # Make the results JSON serializable
+        serializable_results = json_serializable_results(results)
+        
         # Save the analysis to history
-        save_to_history(url, results)
+        save_to_history(url, serializable_results)
         
         return jsonify({
             'success': True,
-            'results': results
+            'results': serializable_results
         })
     except Exception as e:
         logger.error(f"Error analyzing URL: {str(e)}")
@@ -102,9 +136,11 @@ def api_analyze():
     
     try:
         results = analyze_url(url, verbose=False)
+        # Make the results JSON serializable
+        serializable_results = json_serializable_results(results)
         return jsonify({
             'success': True,
-            'results': results
+            'results': serializable_results
         })
     except Exception as e:
         logger.error(f"API Error analyzing URL: {str(e)}")
