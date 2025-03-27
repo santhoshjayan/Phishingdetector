@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - Phishing URL Detector</title>
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <style>
+        .api-endpoint {
+            background-color: #212529;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .method {
+            font-weight: bold;
+            color: #6610f2;
+        }
+        .endpoint {
+            font-family: monospace;
+        }
+        pre {
+            background-color: #343a40;
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+        }
+        code {
+            color: #e83e8c;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Phishing URL Detector</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/history">History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/batch_analysis">Batch Analysis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/api/docs">API</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h1 class="h4 mb-0">API Documentation</h1>
+                    </div>
+                    <div class="card-body">
+                        <p class="lead">
+                            The Phishing URL Detector provides a simple API to analyze URLs programmatically.
+                            This documentation explains how to use the API endpoints.
+                        </p>
+                        
+                        <div class="alert alert-info mb-4">
+                            <h3 class="h6">Base URL</h3>
+                            <p class="mb-0">All API endpoints are relative to <code>https://your-app-domain.replit.app/api</code></p>
+                        </div>
+                        
+                        <h2 class="h5 mb-4">Endpoints</h2>
+                        
+                        <div class="api-endpoint">
+                            <h3 class="h6"><span class="method">GET</span> <span class="endpoint">/analyze</span></h3>
+                            <p>Analyzes a URL for phishing indicators and returns a risk assessment.</p>
+                            
+                            <h4 class="h6 mt-4">Parameters</h4>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>url</code></td>
+                                        <td>string</td>
+                                        <td>Yes</td>
+                                        <td>The URL to analyze</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <h4 class="h6 mt-4">Example Request</h4>
+                            <pre><code>GET /api/analyze?url=https://example.com</code></pre>
+                            
+                            <h4 class="h6 mt-4">Example Response</h4>
+                            <pre><code>{
+  "success": true,
+  "results": {
+    "url": "https://example.com",
+    "risk_level": "Low",
+    "suspicious_indicators": 1,
+    "pattern_analysis": {
+      "findings": ["No suspicious URL patterns detected"]
+    },
+    "domain_info": {
+      "findings": ["Domain is older than 30 days which is good"],
+      "whois_info": {
+        "registrar": "Example Registrar",
+        "creation_date": "2010-01-01",
+        "expiration_date": "2025-01-01",
+        "country": "US",
+        "organization": "Example Organization"
+      }
+    },
+    "reputation": {
+      "findings": ["Website contains sensitive terms: login"]
+    },
+    "recommendation": "This URL has minor suspicious indicators but appears relatively safe."
+  }
+}</code></pre>
+                            
+                            <h4 class="h6 mt-4">Error Response</h4>
+                            <pre><code>{
+  "success": false,
+  "message": "Error message explaining what went wrong"
+}</code></pre>
+                        </div>
+                        
+                        <h2 class="h5 mb-4">Response Fields</h2>
+                        
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Field</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>success</code></td>
+                                    <td>boolean</td>
+                                    <td>Indicates whether the request was successful</td>
+                                </tr>
+                                <tr>
+                                    <td><code>results</code></td>
+                                    <td>object</td>
+                                    <td>Contains the analysis results (only present if success is true)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>results.url</code></td>
+                                    <td>string</td>
+                                    <td>The URL that was analyzed</td>
+                                </tr>
+                                <tr>
+                                    <td><code>results.risk_level</code></td>
+                                    <td>string</td>
+                                    <td>The overall risk assessment (High, Medium, Low, or Safe)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>results.suspicious_indicators</code></td>
+                                    <td>number</td>
+                                    <td>The number of suspicious indicators found</td>
+                                </tr>
+                                <tr>
+                                    <td><code>results.pattern_analysis</code></td>
+                                    <td>object</td>
+                                    <td>Results from URL pattern analysis</td>
+                                </tr>
+                                <tr>
+                                    <td><code>results.domain_info</code></td>
+                                    <td>object</td>
+                                    <td>Domain registration and WHOIS information</td>
+                                </tr>
+                                <tr>
+                                    <td><code>results.reputation</code></td>
+                                    <td>object</td>
+                                    <td>Domain reputation analysis results</td>
+                                </tr>
+                                <tr>
+                                    <td><code>results.recommendation</code></td>
+                                    <td>string</td>
+                                    <td>A human-readable recommendation based on the risk level</td>
+                                </tr>
+                                <tr>
+                                    <td><code>message</code></td>
+                                    <td>string</td>
+                                    <td>Error message (only present if success is false)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h2 class="h5 mb-4">Example Usage</h2>
+                        
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h3 class="h6 mb-0">Python Example</h3>
+                            </div>
+                            <div class="card-body">
+                                <pre><code>import requests
+
+url_to_check = 'https://example.com'
+api_url = 'https://your-app-domain.replit.app/api/analyze'
+
+response = requests.get(api_url, params={'url': url_to_check})
+data = response.json()
+
+if data['success']:
+    results = data['results']
+    print(f"URL: {results['url']}")
+    print(f"Risk Level: {results['risk_level']}")
+    print(f"Suspicious Indicators: {results['suspicious_indicators']}")
+    print(f"Recommendation: {results['recommendation']}")
+else:
+    print(f"Error: {data['message']}")
+</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h3 class="h6 mb-0">JavaScript Example</h3>
+                            </div>
+                            <div class="card-body">
+                                <pre><code>const urlToCheck = 'https://example.com';
+const apiUrl = `https://your-app-domain.replit.app/api/analyze?url=${encodeURIComponent(urlToCheck)}`;
+
+fetch(apiUrl)
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      const results = data.results;
+      console.log(`URL: ${results.url}`);
+      console.log(`Risk Level: ${results.risk_level}`);
+      console.log(`Suspicious Indicators: ${results.suspicious_indicators}`);
+      console.log(`Recommendation: ${results.recommendation}`);
+    } else {
+      console.error(`Error: ${data.message}`);
+    }
+  })
+  .catch(error => {
+    console.error('Failed to fetch data:', error);
+  });
+</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-warning">
+                            <h3 class="h6">Rate Limiting</h3>
+                            <p class="mb-0">
+                                To prevent abuse, API usage may be rate-limited. Please implement reasonable delays between requests
+                                and cache results when appropriate.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Phishing URL Detector</h5>
+                    <p>A comprehensive tool for analyzing URLs and detecting potential phishing attempts.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; 2025 Phishing URL Detector</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

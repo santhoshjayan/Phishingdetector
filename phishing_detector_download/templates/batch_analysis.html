@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch Analysis - Phishing URL Detector</title>
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <style>
+        .risk-high {
+            background-color: #dc3545 !important;
+        }
+        .risk-medium {
+            background-color: #fd7e14 !important;
+        }
+        .risk-low {
+            background-color: #ffc107 !important;
+            color: #212529 !important;
+        }
+        .risk-safe {
+            background-color: #28a745 !important;
+        }
+        .risk-unknown {
+            background-color: #6c757d !important;
+        }
+        .loader {
+            display: none;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Phishing URL Detector</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/history">History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/batch_analysis">Batch Analysis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/api/docs">API</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h1 class="h4 mb-0">Batch URL Analysis</h1>
+                    </div>
+                    <div class="card-body">
+                        <p class="lead">Enter multiple URLs (one per line) to analyze them for potential phishing indicators</p>
+                        
+                        <form id="batchUrlForm" class="mb-4">
+                            <div class="mb-3">
+                                <textarea class="form-control" id="urlInput" rows="10" placeholder="https://example1.com&#10;https://example2.com&#10;https://example3.com" required></textarea>
+                                <div class="form-text">Enter one URL per line, maximum 20 URLs at a time.</div>
+                            </div>
+                            <button class="btn btn-primary" type="submit">Analyze All URLs</button>
+                        </form>
+                        
+                        <div id="loader" class="loader"></div>
+                        
+                        <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
+                        
+                        <div id="resultSection" style="display: none;">
+                            <h2 class="h5 mb-3">Analysis Results</h2>
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="resultsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>URL</th>
+                                            <th>Risk Level</th>
+                                            <th>Suspicious Indicators</th>
+                                            <th>Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="resultsBody">
+                                        <!-- Results will be added here dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div id="summarySection" class="mt-4">
+                                <h3 class="h6 mb-3">Summary</h3>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="card bg-danger text-white mb-3">
+                                            <div class="card-body text-center">
+                                                <h5 class="card-title">High Risk</h5>
+                                                <p class="card-text display-4" id="highRiskCount">0</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-warning text-dark mb-3">
+                                            <div class="card-body text-center">
+                                                <h5 class="card-title">Medium Risk</h5>
+                                                <p class="card-text display-4" id="mediumRiskCount">0</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-info text-dark mb-3">
+                                            <div class="card-body text-center">
+                                                <h5 class="card-title">Low Risk</h5>
+                                                <p class="card-text display-4" id="lowRiskCount">0</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-success text-white mb-3">
+                                            <div class="card-body text-center">
+                                                <h5 class="card-title">Safe</h5>
+                                                <p class="card-text display-4" id="safeCount">0</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Phishing URL Detector</h5>
+                    <p>A comprehensive tool for analyzing URLs and detecting potential phishing attempts.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; 2025 Phishing URL Detector</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const batchUrlForm = document.getElementById('batchUrlForm');
+            const urlInput = document.getElementById('urlInput');
+            const loader = document.getElementById('loader');
+            const errorMessage = document.getElementById('errorMessage');
+            const resultSection = document.getElementById('resultSection');
+            const resultsBody = document.getElementById('resultsBody');
+            
+            // Summary counters
+            const highRiskCount = document.getElementById('highRiskCount');
+            const mediumRiskCount = document.getElementById('mediumRiskCount');
+            const lowRiskCount = document.getElementById('lowRiskCount');
+            const safeCount = document.getElementById('safeCount');
+            
+            batchUrlForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const urlText = urlInput.value.trim();
+                if (!urlText) {
+                    showError('Please enter at least one URL to analyze');
+                    return;
+                }
+                
+                // Split the input by new lines
+                const urls = urlText.split('\n')
+                    .map(url => url.trim())
+                    .filter(url => url !== '');
+                
+                if (urls.length === 0) {
+                    showError('Please enter at least one valid URL');
+                    return;
+                }
+                
+                if (urls.length > 20) {
+                    showError('Maximum 20 URLs allowed for batch processing');
+                    return;
+                }
+                
+                // Reset UI
+                resetUI();
+                
+                // Show loader
+                loader.style.display = 'block';
+                
+                // Initialize counters
+                let highCount = 0;
+                let mediumCount = 0;
+                let lowCount = 0;
+                let safeCount = 0;
+                
+                // Track completed analyses
+                let completedCount = 0;
+                
+                // Process each URL
+                urls.forEach((url, index) => {
+                    // Send the URL to the backend for analysis
+                    fetch('/analyze', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ url: url }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        completedCount++;
+                        
+                        if (data.success) {
+                            const results = data.results;
+                            
+                            // Add row to the results table
+                            addResultRow(results, index);
+                            
+                            // Update risk level counters
+                            const riskLevel = results.risk_level;
+                            if (riskLevel === 'High') {
+                                highCount++;
+                            } else if (riskLevel === 'Medium') {
+                                mediumCount++;
+                            } else if (riskLevel === 'Low') {
+                                lowCount++;
+                            } else if (riskLevel === 'Safe') {
+                                safeCount++;
+                            }
+                        } else {
+                            // Add error row
+                            addErrorRow(url, data.message, index);
+                        }
+                        
+                        // Check if all URLs have been processed
+                        if (completedCount === urls.length) {
+                            updateSummary(highCount, mediumCount, lowCount, safeCount);
+                            loader.style.display = 'none';
+                            resultSection.style.display = 'block';
+                        }
+                    })
+                    .catch(error => {
+                        completedCount++;
+                        
+                        // Add error row
+                        addErrorRow(url, error.message, index);
+                        
+                        // Check if all URLs have been processed
+                        if (completedCount === urls.length) {
+                            updateSummary(highCount, mediumCount, lowCount, safeCount);
+                            loader.style.display = 'none';
+                            resultSection.style.display = 'block';
+                        }
+                    });
+                });
+            });
+            
+            function resetUI() {
+                errorMessage.style.display = 'none';
+                resultSection.style.display = 'none';
+                resultsBody.innerHTML = '';
+                highRiskCount.textContent = '0';
+                mediumRiskCount.textContent = '0';
+                lowRiskCount.textContent = '0';
+                safeCount.textContent = '0';
+            }
+            
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+            }
+            
+            function addResultRow(results, index) {
+                const row = document.createElement('tr');
+                
+                // URL cell
+                const urlCell = document.createElement('td');
+                urlCell.textContent = results.url;
+                row.appendChild(urlCell);
+                
+                // Risk level cell
+                const riskCell = document.createElement('td');
+                const riskBadge = document.createElement('span');
+                riskBadge.className = `badge risk-${results.risk_level.toLowerCase()}`;
+                riskBadge.textContent = results.risk_level;
+                riskCell.appendChild(riskBadge);
+                row.appendChild(riskCell);
+                
+                // Suspicious indicators cell
+                const indicatorsCell = document.createElement('td');
+                indicatorsCell.textContent = results.suspicious_indicators;
+                row.appendChild(indicatorsCell);
+                
+                // Details cell
+                const detailsCell = document.createElement('td');
+                const detailsButton = document.createElement('button');
+                detailsButton.className = 'btn btn-sm btn-primary';
+                detailsButton.textContent = 'Show Details';
+                detailsButton.setAttribute('type', 'button');
+                detailsButton.setAttribute('data-bs-toggle', 'collapse');
+                detailsButton.setAttribute('data-bs-target', `#details-${index}`);
+                detailsCell.appendChild(detailsButton);
+                row.appendChild(detailsCell);
+                
+                // Add the row to the table
+                resultsBody.appendChild(row);
+                
+                // Create details row
+                const detailsRow = document.createElement('tr');
+                detailsRow.className = 'collapse';
+                detailsRow.id = `details-${index}`;
+                
+                const detailsContent = document.createElement('td');
+                detailsContent.setAttribute('colspan', '4');
+                
+                const card = document.createElement('div');
+                card.className = 'card card-body bg-dark';
+                
+                // Pattern analysis
+                card.innerHTML += `<h5>Pattern Analysis</h5>`;
+                const patternList = document.createElement('ul');
+                patternList.className = 'list-group list-group-flush mb-3';
+                
+                if (results.pattern_analysis && results.pattern_analysis.findings) {
+                    results.pattern_analysis.findings.forEach(finding => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.textContent = finding;
+                        patternList.appendChild(li);
+                    });
+                }
+                
+                card.appendChild(patternList);
+                
+                // Domain information
+                card.innerHTML += `<h5>Domain Information</h5>`;
+                const domainList = document.createElement('ul');
+                domainList.className = 'list-group list-group-flush mb-3';
+                
+                if (results.domain_info && results.domain_info.findings) {
+                    results.domain_info.findings.forEach(finding => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.textContent = finding;
+                        domainList.appendChild(li);
+                    });
+                }
+                
+                card.appendChild(domainList);
+                
+                // Reputation information
+                card.innerHTML += `<h5>Reputation Information</h5>`;
+                const reputationList = document.createElement('ul');
+                reputationList.className = 'list-group list-group-flush';
+                
+                if (results.reputation && results.reputation.findings) {
+                    results.reputation.findings.forEach(finding => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.textContent = finding;
+                        reputationList.appendChild(li);
+                    });
+                }
+                
+                card.appendChild(reputationList);
+                
+                detailsContent.appendChild(card);
+                detailsRow.appendChild(detailsContent);
+                
+                // Add the details row to the table
+                resultsBody.appendChild(detailsRow);
+            }
+            
+            function addErrorRow(url, errorMessage, index) {
+                const row = document.createElement('tr');
+                row.className = 'table-danger';
+                
+                // URL cell
+                const urlCell = document.createElement('td');
+                urlCell.textContent = url;
+                row.appendChild(urlCell);
+                
+                // Risk level cell
+                const riskCell = document.createElement('td');
+                const riskBadge = document.createElement('span');
+                riskBadge.className = 'badge risk-unknown';
+                riskBadge.textContent = 'Error';
+                riskCell.appendChild(riskBadge);
+                row.appendChild(riskCell);
+                
+                // Error message cell
+                const errorCell = document.createElement('td');
+                errorCell.setAttribute('colspan', '2');
+                errorCell.textContent = errorMessage;
+                row.appendChild(errorCell);
+                
+                // Add the row to the table
+                resultsBody.appendChild(row);
+            }
+            
+            function updateSummary(high, medium, low, safe) {
+                highRiskCount.textContent = high;
+                mediumRiskCount.textContent = medium;
+                lowRiskCount.textContent = low;
+                safeCount.textContent = safe;
+            }
+        });
+    </script>
+</body>
+</html>

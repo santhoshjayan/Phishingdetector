@@ -1,0 +1,37 @@
+# Known phishing domains list
+# One domain per line
+
+# Common phishing domains
+example-phishing.com
+badwebsite.com
+phishingsite.net
+
+# Typosquatting financial services
+paypa1.com
+amaz0n.com
+appleid-verify.com
+bank0famerica.com
+chasebank-secure.com
+wellsfargo-secure.net
+
+# Typosquatting tech companies
+g00gle.com
+faceboook.com
+micosoft.com
+mircosoft.com
+twltter.com
+instagramverify.net
+
+# Fake login sites
+login-account-verify.com
+secure-login-access.net
+verification-required.com
+account-update-required.net
+password-reset-secure.com
+
+# Suspicious domains with common patterns
+secure-verification-center.com
+account-security-alert.net
+banking-alert-system.com
+verify-your-identity-now.net
+urgent-security-update.com
