@@ -1,0 +1,44 @@
+{
+  "url": "https://phishing-example.com",
+  "risk_level": "High",
+  "suspicious_indicators": 5,
+  "pattern_analysis": {
+    "findings": [
+      "URL has a secure protocol (https)",
+      "Domain contains suspicious keywords (phishing)",
+      "Domain uses hyphens which can be suspicious",
+      "Domain length is appropriate (19 characters)",
+      "URL does not contain suspicious TLDs"
+    ]
+  },
+  "domain_info": {
+    "findings": [
+      "Domain was created recently (less than 30 days ago)",
+      "Domain is registered with a less known registrar",
+      "Domain is set to expire within 1 year"
+    ],
+    "whois_info": {
+      "registrar": "NameCheap Inc.",
+      "creation_date": "2025-03-15 10:30:00",
+      "expiration_date": "2026-03-15 10:30:00",
+      "updated_date": "2025-03-15 10:30:00"
+    }
+  },
+  "reputation": {
+    "findings": [
+      "Domain has valid DNS records",
+      "Domain is found in known blacklists",
+      "Domain has a poor reputation score"
+    ]
+  },
+  "url_patterns": {
+    "suspicious_patterns": [
+      "Domain contains 'phishing' keyword",
+      "Domain uses hyphens",
+      "Domain was registered recently",
+      "Domain found in blacklists",
+      "Domain has poor reputation"
+    ]
+  },
+  "timestamp": "2025-04-02 10:00:00"
+}

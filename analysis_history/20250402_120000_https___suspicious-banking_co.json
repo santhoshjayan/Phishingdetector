@@ -1,0 +1,42 @@
+{
+  "url": "https://suspicious-banking.co",
+  "risk_level": "Medium",
+  "suspicious_indicators": 3,
+  "pattern_analysis": {
+    "findings": [
+      "URL has a secure protocol (https)",
+      "Domain contains suspicious keywords (banking)",
+      "Domain uses hyphens which can be suspicious",
+      "Domain uses less common TLD (.co)",
+      "No IP address used in domain"
+    ]
+  },
+  "domain_info": {
+    "findings": [
+      "Domain was created within the last 6 months",
+      "Domain is registered with a less known registrar",
+      "Domain is set to expire within 1 year"
+    ],
+    "whois_info": {
+      "registrar": "NameSilo LLC",
+      "creation_date": "2024-11-15 08:45:00",
+      "expiration_date": "2025-11-15 08:45:00",
+      "updated_date": "2024-11-15 08:45:00"
+    }
+  },
+  "reputation": {
+    "findings": [
+      "Domain has valid DNS records",
+      "Domain is not found in known blacklists",
+      "Domain has a moderate reputation score"
+    ]
+  },
+  "url_patterns": {
+    "suspicious_patterns": [
+      "Domain contains financial keyword (banking)",
+      "Domain uses hyphens",
+      "Domain was registered recently"
+    ]
+  },
+  "timestamp": "2025-04-02 12:00:00"
+}

@@ -1,0 +1,40 @@
+{
+  "url": "https://facebook.com",
+  "risk_level": "Low",
+  "suspicious_indicators": 1,
+  "pattern_analysis": {
+    "findings": [
+      "URL has a secure protocol (https)",
+      "Domain length is appropriate (12 characters)",
+      "URL does not contain suspicious TLDs",
+      "No IP address used in domain",
+      "No suspicious keywords in URL"
+    ]
+  },
+  "domain_info": {
+    "findings": [
+      "Domain is registered with a known registrar",
+      "Domain was created more than 1 year ago (established domain)",
+      "Domain is not set to expire soon"
+    ],
+    "whois_info": {
+      "registrar": "MarkMonitor Inc.",
+      "creation_date": "1997-03-29 05:00:00",
+      "expiration_date": "2028-03-30 04:00:00",
+      "updated_date": "2019-09-09 15:39:04"
+    }
+  },
+  "reputation": {
+    "findings": [
+      "Domain has valid DNS records",
+      "Domain is not found in known blacklists",
+      "Domain has a good reputation score"
+    ]
+  },
+  "url_patterns": {
+    "suspicious_patterns": [
+      "Domain contains common brand name"
+    ]
+  },
+  "timestamp": "2025-04-01 13:00:00"
+}

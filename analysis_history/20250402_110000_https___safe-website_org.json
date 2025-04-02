@@ -1,0 +1,38 @@
+{
+  "url": "https://safe-website.org",
+  "risk_level": "Safe",
+  "suspicious_indicators": 0,
+  "pattern_analysis": {
+    "findings": [
+      "URL has a secure protocol (https)",
+      "Domain length is appropriate (16 characters)",
+      "URL uses reputable TLD (.org)",
+      "No IP address used in domain",
+      "No suspicious keywords in URL"
+    ]
+  },
+  "domain_info": {
+    "findings": [
+      "Domain is registered with a known registrar",
+      "Domain was created more than 2 years ago (established domain)",
+      "Domain is not set to expire soon"
+    ],
+    "whois_info": {
+      "registrar": "Public Interest Registry",
+      "creation_date": "2022-03-15 10:30:00",
+      "expiration_date": "2027-03-15 10:30:00",
+      "updated_date": "2024-03-15 10:30:00"
+    }
+  },
+  "reputation": {
+    "findings": [
+      "Domain has valid DNS records",
+      "Domain is not found in known blacklists",
+      "Domain has a good reputation score"
+    ]
+  },
+  "url_patterns": {
+    "suspicious_patterns": []
+  },
+  "timestamp": "2025-04-02 11:00:00"
+}

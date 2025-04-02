@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 import logging
 import os
 import json
-from datetime import datetime
+import collections
+from datetime import datetime, timedelta
 from phishing_detector import analyze_url, is_valid_url
 
 # Configure logging
@@ -113,6 +114,79 @@ def batch_analysis():
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+@app.route('/dashboard')
+def dashboard():
+    # Get all history files
+    history_files = [f for f in os.listdir(HISTORY_DIR) if f.endswith('.json')]
+    
+    # Initialize analytics data
+    analytics = {
+        'total_urls': len(history_files),
+        'risk_levels': {'High': 0, 'Medium': 0, 'Low': 0, 'Safe': 0},
+        'suspicious_patterns': collections.Counter(),
+        'tld_distribution': collections.Counter(),
+        'daily_scans': collections.Counter(),
+        'recent_high_risk': []
+    }
+    
+    # Process each history file
+    for file in history_files:
+        with open(os.path.join(HISTORY_DIR, file), 'r') as f:
+            try:
+                data = json.load(f)
+                
+                # Count risk levels
+                risk_level = data.get('risk_level', 'Unknown')
+                analytics['risk_levels'][risk_level] = analytics['risk_levels'].get(risk_level, 0) + 1
+                
+                # Extract date for daily scans
+                timestamp = data.get('timestamp', '')
+                if timestamp:
+                    date = timestamp.split(' ')[0]  # Extract just the date part
+                    analytics['daily_scans'][date] += 1
+                
+                # Extract TLD
+                url = data.get('url', '')
+                if '.' in url:
+                    tld = url.split('.')[-1].split('/')[0]  # Get the TLD
+                    analytics['tld_distribution'][tld] += 1
+                
+                # Count suspicious patterns
+                for pattern in data.get('url_patterns', {}).get('suspicious_patterns', []):
+                    analytics['suspicious_patterns'][pattern] += 1
+                
+                # Collect recent high risk URLs (up to 5)
+                if risk_level == 'High' and len(analytics['recent_high_risk']) < 5:
+                    analytics['recent_high_risk'].append({
+                        'url': data.get('url', ''),
+                        'timestamp': timestamp,
+                        'indicators': data.get('suspicious_indicators', 0)
+                    })
+                
+            except Exception as e:
+                logger.error(f"Error processing history file {file}: {str(e)}")
+    
+    # Get last 7 days for chart
+    today = datetime.now().date()
+    last_7_days = [(today - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(7)]
+    last_7_days.reverse()  # Order from oldest to newest
+    
+    # Prepare daily scan data for chart
+    daily_scan_data = [analytics['daily_scans'].get(day, 0) for day in last_7_days]
+    
+    # Get top suspicious patterns (top 5)
+    top_patterns = dict(analytics['suspicious_patterns'].most_common(5))
+    
+    # Get TLD distribution (top 5)
+    top_tlds = dict(analytics['tld_distribution'].most_common(5))
+    
+    return render_template('dashboard.html', 
+                          analytics=analytics, 
+                          daily_scan_labels=json.dumps(last_7_days),
+                          daily_scan_data=json.dumps(daily_scan_data),
+                          top_patterns=json.dumps(top_patterns),
+                          top_tlds=json.dumps(top_tlds))
 
 @app.route('/api/docs')
 def api_docs():

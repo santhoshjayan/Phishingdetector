@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SpeeDefender</title>
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <style>
+        .gradient-card {
+            background: linear-gradient(135deg, #18226B 0%, #2D3A8C 100%);
+            border: none;
+        }
+        .risk-high {
+            background-color: #dc3545 !important;
+        }
+        .risk-medium {
+            background-color: #fd7e14 !important;
+        }
+        .risk-low {
+            background-color: #ffc107 !important;
+            color: #212529 !important;
+        }
+        .risk-safe {
+            background-color: #28a745 !important;
+        }
+        .stat-card {
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 30px;
+        }
+        .dashboard-header {
+            background: linear-gradient(90deg, #18226B 0%, #4169E1 100%);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .icon-bg {
+            height: 64px;
+            width: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        .high-risk-bg {
+            background-color: rgba(220, 53, 69, 0.2);
+        }
+        .medium-risk-bg {
+            background-color: rgba(253, 126, 20, 0.2);
+        }
+        .low-risk-bg {
+            background-color: rgba(255, 193, 7, 0.2);
+        }
+        .safe-bg {
+            background-color: rgba(40, 167, 69, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/"><i class="fas fa-shield-alt me-2"></i>SpeeDefender</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/history"><i class="fas fa-history me-1"></i> History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/batch_analysis"><i class="fas fa-layer-group me-1"></i> Batch Analysis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/dashboard"><i class="fas fa-chart-line me-1"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about"><i class="fas fa-info-circle me-1"></i> About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/api/docs"><i class="fas fa-code me-1"></i> API</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="dashboard-header text-white">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-5 fw-bold"><i class="fas fa-tachometer-alt me-3"></i>Security Analytics Dashboard</h1>
+                    <p class="lead">Comprehensive overview of URL security analysis and threat detection metrics</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <h3 class="mb-0">Total URLs Analyzed: <span class="badge bg-light text-primary">{{ analytics.total_urls }}</span></h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Risk Level Distribution -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-chart-pie me-2"></i>Risk Level Distribution</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <div class="card bg-danger text-white text-center stat-card h-100">
+                                    <div class="card-body">
+                                        <div class="icon-bg high-risk-bg mx-auto">
+                                            <i class="fas fa-exclamation-triangle fa-2x text-danger"></i>
+                                        </div>
+                                        <h3 class="h2">{{ analytics.risk_levels.High }}</h3>
+                                        <p class="mb-0">High Risk</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card bg-warning text-dark text-center stat-card h-100">
+                                    <div class="card-body">
+                                        <div class="icon-bg medium-risk-bg mx-auto">
+                                            <i class="fas fa-exclamation-circle fa-2x text-warning"></i>
+                                        </div>
+                                        <h3 class="h2">{{ analytics.risk_levels.Medium }}</h3>
+                                        <p class="mb-0">Medium Risk</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card bg-info text-dark text-center stat-card h-100">
+                                    <div class="card-body">
+                                        <div class="icon-bg low-risk-bg mx-auto">
+                                            <i class="fas fa-info-circle fa-2x text-info"></i>
+                                        </div>
+                                        <h3 class="h2">{{ analytics.risk_levels.Low }}</h3>
+                                        <p class="mb-0">Low Risk</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card bg-success text-white text-center stat-card h-100">
+                                    <div class="card-body">
+                                        <div class="icon-bg safe-bg mx-auto">
+                                            <i class="fas fa-check-circle fa-2x text-success"></i>
+                                        </div>
+                                        <h3 class="h2">{{ analytics.risk_levels.Safe }}</h3>
+                                        <p class="mb-0">Safe</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row mb-4">
+            <div class="col-md-8 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-calendar-alt me-2"></i>Daily Scan Activity</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="dailyScanChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-globe me-2"></i>Top TLDs</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="tldChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Row -->
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-bug me-2"></i>Top Suspicious Patterns</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="patternsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Recent High Risk URLs</h2>
+                    </div>
+                    <div class="card-body">
+                        {% if analytics.recent_high_risk %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>URL</th>
+                                        <th>Date</th>
+                                        <th>Indicators</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in analytics.recent_high_risk %}
+                                    <tr>
+                                        <td class="text-truncate" style="max-width: 200px;">{{ item.url }}</td>
+                                        <td>{{ item.timestamp }}</td>
+                                        <td>{{ item.indicators }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>No high risk URLs detected yet.
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="fas fa-shield-alt me-2"></i>SpeeDefender</h5>
+                    <p>A comprehensive tool for analyzing URLs and detecting potential phishing attempts.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; 2025 SpeeDefender</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Daily Scan Chart
+            const dailyScanCtx = document.getElementById('dailyScanChart').getContext('2d');
+            const dailyScanChart = new Chart(dailyScanCtx, {
+                type: 'line',
+                data: {
+                    labels: {{ daily_scan_labels|safe }},
+                    datasets: [{
+                        label: 'URLs Scanned',
+                        data: {{ daily_scan_data|safe }},
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Top TLDs Chart
+            const tldData = {{ top_tlds|safe }};
+            const tldCtx = document.getElementById('tldChart').getContext('2d');
+            const tldChart = new Chart(tldCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(tldData),
+                    datasets: [{
+                        data: Object.values(tldData),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
+                    }
+                }
+            });
+
+            // Suspicious Patterns Chart
+            const patternsData = {{ top_patterns|safe }};
+            const patternsCtx = document.getElementById('patternsChart').getContext('2d');
+            const patternsChart = new Chart(patternsCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(patternsData),
+                    datasets: [{
+                        label: 'Occurrences',
+                        data: Object.values(patternsData),
+                        backgroundColor: 'rgba(255, 159, 64, 0.8)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
