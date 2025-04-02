@@ -5,6 +5,7 @@ import json
 import collections
 from datetime import datetime, timedelta
 from phishing_detector import analyze_url, is_valid_url
+from utils.email_analyzer import analyze_email
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -110,6 +111,45 @@ def history():
 @app.route('/batch_analysis')
 def batch_analysis():
     return render_template('batch_analysis.html')
+
+@app.route('/email_analysis', methods=['GET', 'POST'])
+def email_analysis():
+    if request.method == 'POST':
+        try:
+            # Get form data
+            sender = request.form.get('sender', '')
+            subject = request.form.get('subject', '')
+            headers_text = request.form.get('headers', '')
+            content = request.form.get('content', '')
+            
+            # Parse headers
+            headers = {}
+            if headers_text:
+                for line in headers_text.strip().split('\n'):
+                    if ':' in line:
+                        key, value = line.split(':', 1)
+                        headers[key.strip().lower()] = value.strip()
+            
+            # Create email data dictionary
+            email_data = {
+                'from': sender,
+                'subject': subject,
+                'headers': headers,
+                'content': content
+            }
+            
+            # Analyze the email
+            results = analyze_email(email_data)
+            
+            # Save to history (could be implemented similar to URL history)
+            # save_email_to_history(email_data, results)
+            
+            return render_template('email_analysis.html', results=results)
+        except Exception as e:
+            logger.error(f"Error analyzing email: {str(e)}")
+            return render_template('email_analysis.html', error=f"Error analyzing email: {str(e)}")
+    
+    return render_template('email_analysis.html')
 
 @app.route('/about')
 def about():
