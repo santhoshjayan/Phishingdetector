@@ -3,89 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Documentation - Phishing URL Detector</title>
+    <title>API Documentation - SpeeDefender</title>
     <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .api-endpoint {
-            background-color: #212529;
-            border-radius: 4px;
-            padding: 15px;
-            margin-bottom: 20px;
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #224abe;
+            --accent-color: #36b9cc;
+            --danger-color: #e74a3b;
+            --warning-color: #f6c23e;
+            --success-color: #1cc88a;
         }
+        
+        body {
+            background-color: #121212;
+        }
+        
+        .api-endpoint {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border-left: 4px solid var(--primary-color);
+            transition: transform 0.3s;
+        }
+        
+        .api-endpoint:hover {
+            transform: translateY(-5px);
+        }
+        
         .method {
             font-weight: bold;
-            color: #6610f2;
+            color: var(--primary-color);
+            background: rgba(78, 115, 223, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
         }
+        
         .endpoint {
             font-family: monospace;
+            background-color: #2a2a2a;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: #e9ecef;
+            font-size: 1.1em;
         }
+        
         pre {
-            background-color: #343a40;
-            border-radius: 4px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
             padding: 15px;
             overflow-x: auto;
+            border-left: 4px solid var(--accent-color);
         }
+        
         code {
             color: #e83e8c;
+        }
+        
+        .navbar {
+            padding: 1rem 0;
+            background: #1a1a1a !important;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-brand i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 5px;
+            margin: 0 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .nav-link i {
+            margin-right: 6px;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+        }
+        
+        .card-header {
+            font-weight: 600;
+            border-bottom: none;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="/">Phishing URL Detector</a>
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shield-alt"></i> SpeeDefender
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
+                        <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/history">History</a>
+                        <a class="nav-link" href="/history"><i class="fas fa-history"></i> History</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/batch_analysis">Batch Analysis</a>
+                        <a class="nav-link" href="/batch_analysis"><i class="fas fa-tasks"></i> Batch Analysis</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/about">About</a>
+                        <a class="nav-link" href="/dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="/api/docs">API</a>
+                        <a class="nav-link" href="/about"><i class="fas fa-info-circle"></i> About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/api/docs"><i class="fas fa-code"></i> API</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
+    
+    <div class="hero-section text-center text-white">
+        <div class="container">
+            <h1 class="h2 fw-bold mb-2">API Documentation</h1>
+            <p class="lead mb-0">Integrate SpeeDefender's powerful phishing detection into your applications</p>
+        </div>
+    </div>
 
     <div class="container my-5">
         <div class="row">
             <div class="col-12">
                 <div class="card shadow">
-                    <div class="card-header bg-primary text-white">
-                        <h1 class="h4 mb-0">API Documentation</h1>
+                    <div class="card-header">
+                        <h1 class="h4 mb-0"><i class="fas fa-plug me-2"></i>REST API Reference</h1>
                     </div>
                     <div class="card-body">
                         <p class="lead">
-                            The Phishing URL Detector provides a simple API to analyze URLs programmatically.
-                            This documentation explains how to use the API endpoints.
+                            SpeeDefender provides a simple API to analyze URLs programmatically.
+                            This documentation explains how to use the API endpoints for your applications.
                         </p>
                         
                         <div class="alert alert-info mb-4">
-                            <h3 class="h6">Base URL</h3>
-                            <p class="mb-0">All API endpoints are relative to <code>https://your-app-domain.replit.app/api</code></p>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-info-circle fa-2x me-3"></i>
+                                <div>
+                                    <h3 class="h6">Base URL</h3>
+                                    <p class="mb-0">All API endpoints are relative to <code>https://your-app-domain.replit.app/api</code></p>
+                                </div>
+                            </div>
                         </div>
                         
-                        <h2 class="h5 mb-4">Endpoints</h2>
+                        <h2 class="h5 mb-4"><i class="fas fa-server me-2"></i>Endpoints</h2>
                         
                         <div class="api-endpoint">
-                            <h3 class="h6"><span class="method">GET</span> <span class="endpoint">/analyze</span></h3>
+                            <h3 class="h5"><span class="method">GET</span> <span class="endpoint">/analyze</span></h3>
                             <p>Analyzes a URL for phishing indicators and returns a risk assessment.</p>
                             
-                            <h4 class="h6 mt-4">Parameters</h4>
+                            <h4 class="h6 mt-4"><i class="fas fa-list-ul me-2"></i>Parameters</h4>
                             <table class="table table-bordered">
-                                <thead>
+                                <thead class="bg-dark">
                                     <tr>
                                         <th>Name</th>
                                         <th>Type</th>
@@ -103,10 +215,10 @@
                                 </tbody>
                             </table>
                             
-                            <h4 class="h6 mt-4">Example Request</h4>
+                            <h4 class="h6 mt-4"><i class="fas fa-exchange-alt me-2"></i>Example Request</h4>
                             <pre><code>GET /api/analyze?url=https://example.com</code></pre>
                             
-                            <h4 class="h6 mt-4">Example Response</h4>
+                            <h4 class="h6 mt-4"><i class="fas fa-reply me-2"></i>Example Response</h4>
                             <pre><code>{
   "success": true,
   "results": {
@@ -114,157 +226,104 @@
     "risk_level": "Low",
     "suspicious_indicators": 1,
     "pattern_analysis": {
-      "findings": ["No suspicious URL patterns detected"]
+      "findings": [
+        "URL has a secure protocol (https)",
+        "Domain length is appropriate (11 characters)",
+        "No IP address used in domain",
+        "No suspicious keywords in URL"
+      ]
     },
     "domain_info": {
-      "findings": ["Domain is older than 30 days which is good"],
+      "findings": [
+        "Domain is registered with a known registrar",
+        "Domain was created more than 1 year ago"
+      ],
       "whois_info": {
-        "registrar": "Example Registrar",
-        "creation_date": "2010-01-01",
-        "expiration_date": "2025-01-01",
-        "country": "US",
-        "organization": "Example Organization"
+        "registrar": "Some Registrar, Inc.",
+        "creation_date": "2000-01-01 00:00:00",
+        "expiration_date": "2030-01-01 00:00:00"
       }
     },
     "reputation": {
-      "findings": ["Website contains sensitive terms: login"]
+      "findings": [
+        "Domain has valid DNS records",
+        "Domain is not found in known blacklists"
+      ]
     },
-    "recommendation": "This URL has minor suspicious indicators but appears relatively safe."
-  }
-}</code></pre>
-                            
-                            <h4 class="h6 mt-4">Error Response</h4>
-                            <pre><code>{
-  "success": false,
-  "message": "Error message explaining what went wrong"
+    "url_patterns": {
+      "suspicious_patterns": [
+        "Domain registered relatively recently"
+      ]
+    }
+  },
+  "product": "SpeeDefender API",
+  "version": "1.0"
 }</code></pre>
                         </div>
                         
-                        <h2 class="h5 mb-4">Response Fields</h2>
+                        <h2 class="h5 mb-4"><i class="fas fa-code me-2"></i>Code Examples</h2>
                         
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Field</th>
-                                    <th>Type</th>
-                                    <th>Description</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><code>success</code></td>
-                                    <td>boolean</td>
-                                    <td>Indicates whether the request was successful</td>
-                                </tr>
-                                <tr>
-                                    <td><code>results</code></td>
-                                    <td>object</td>
-                                    <td>Contains the analysis results (only present if success is true)</td>
-                                </tr>
-                                <tr>
-                                    <td><code>results.url</code></td>
-                                    <td>string</td>
-                                    <td>The URL that was analyzed</td>
-                                </tr>
-                                <tr>
-                                    <td><code>results.risk_level</code></td>
-                                    <td>string</td>
-                                    <td>The overall risk assessment (High, Medium, Low, or Safe)</td>
-                                </tr>
-                                <tr>
-                                    <td><code>results.suspicious_indicators</code></td>
-                                    <td>number</td>
-                                    <td>The number of suspicious indicators found</td>
-                                </tr>
-                                <tr>
-                                    <td><code>results.pattern_analysis</code></td>
-                                    <td>object</td>
-                                    <td>Results from URL pattern analysis</td>
-                                </tr>
-                                <tr>
-                                    <td><code>results.domain_info</code></td>
-                                    <td>object</td>
-                                    <td>Domain registration and WHOIS information</td>
-                                </tr>
-                                <tr>
-                                    <td><code>results.reputation</code></td>
-                                    <td>object</td>
-                                    <td>Domain reputation analysis results</td>
-                                </tr>
-                                <tr>
-                                    <td><code>results.recommendation</code></td>
-                                    <td>string</td>
-                                    <td>A human-readable recommendation based on the risk level</td>
-                                </tr>
-                                <tr>
-                                    <td><code>message</code></td>
-                                    <td>string</td>
-                                    <td>Error message (only present if success is false)</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        
-                        <h2 class="h5 mb-4">Example Usage</h2>
-                        
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <h3 class="h6 mb-0">Python Example</h3>
-                            </div>
-                            <div class="card-body">
-                                <pre><code>import requests
-
-url_to_check = 'https://example.com'
-api_url = 'https://your-app-domain.replit.app/api/analyze'
-
-response = requests.get(api_url, params={'url': url_to_check})
-data = response.json()
-
-if data['success']:
-    results = data['results']
-    print(f"URL: {results['url']}")
-    print(f"Risk Level: {results['risk_level']}")
-    print(f"Suspicious Indicators: {results['suspicious_indicators']}")
-    print(f"Recommendation: {results['recommendation']}")
-else:
-    print(f"Error: {data['message']}")
-</code></pre>
-                            </div>
-                        </div>
-                        
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <h3 class="h6 mb-0">JavaScript Example</h3>
-                            </div>
-                            <div class="card-body">
-                                <pre><code>const urlToCheck = 'https://example.com';
-const apiUrl = `https://your-app-domain.replit.app/api/analyze?url=${encodeURIComponent(urlToCheck)}`;
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-dark">
+                                        <h3 class="h6 mb-0"><i class="fab fa-js me-2"></i>JavaScript</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <pre><code>// Using fetch API
+const apiUrl = 'https://your-app-domain.replit.app/api/analyze?url=https://example.com';
 
 fetch(apiUrl)
   .then(response => response.json())
   .then(data => {
     if (data.success) {
       const results = data.results;
-      console.log(`URL: ${results.url}`);
-      console.log(`Risk Level: ${results.risk_level}`);
-      console.log(`Suspicious Indicators: ${results.suspicious_indicators}`);
-      console.log(`Recommendation: ${results.recommendation}`);
+      console.log(`SpeeDefender API v${data.version}`);
+      console.log(`Risk level: ${results.risk_level}`);
+      console.log(`Suspicious indicators: ${results.suspicious_indicators}`);
     } else {
       console.error(`Error: ${data.message}`);
     }
   })
-  .catch(error => {
-    console.error('Failed to fetch data:', error);
-  });
-</code></pre>
+  .catch(error => console.error('API call failed:', error));</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-dark">
+                                        <h3 class="h6 mb-0"><i class="fab fa-python me-2"></i>Python</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <pre><code>import requests
+
+api_url = 'https://your-app-domain.replit.app/api/analyze'
+params = {'url': 'https://example.com'}
+
+response = requests.get(api_url, params=params)
+data = response.json()
+
+if data['success']:
+    results = data['results']
+    print(f"Using {data['product']} v{data['version']}")
+    print(f"Risk level: {results['risk_level']}")
+    print(f"Suspicious indicators: {results['suspicious_indicators']}")
+else:
+    print(f"Error: {data['message']}")</code></pre>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
                         <div class="alert alert-warning">
-                            <h3 class="h6">Rate Limiting</h3>
-                            <p class="mb-0">
-                                To prevent abuse, API usage may be rate-limited. Please implement reasonable delays between requests
-                                and cache results when appropriate.
-                            </p>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+                                <div>
+                                    <h3 class="h6">Note</h3>
+                                    <p class="mb-0">This API is for demonstration purposes. In a production environment, consider implementing rate limiting and API key authentication.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -276,11 +335,18 @@ fetch(apiUrl)
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h5>Phishing URL Detector</h5>
-                    <p>A comprehensive tool for analyzing URLs and detecting potential phishing attempts.</p>
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-shield-alt me-2" style="color: var(--primary-color); font-size: 1.5rem;"></i>
+                        <h5 class="mb-0">SpeeDefender</h5>
+                    </div>
+                    <p>A comprehensive tool for analyzing URLs and detecting potential phishing attempts, helping you stay safe online.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p>&copy; 2025 Phishing URL Detector</p>
+                    <div class="mb-3">
+                        <a href="/about" class="btn btn-outline-light btn-sm me-2"><i class="fas fa-info-circle me-1"></i> About</a>
+                        <a href="/api/docs" class="btn btn-outline-light btn-sm"><i class="fas fa-code me-1"></i> API</a>
+                    </div>
+                    <p>&copy; 2025 SpeeDefender - Advanced Phishing Protection</p>
                 </div>
             </div>
         </div>

@@ -199,13 +199,15 @@ def api_analyze():
     if not url:
         return jsonify({
             'success': False,
-            'message': 'No URL provided. Please add ?url=https://example.com to your request.'
+            'message': 'No URL provided. Please add ?url=https://example.com to your request.',
+            'product': 'SpeeDefender API'
         }), 400
     
     if not is_valid_url(url):
         return jsonify({
             'success': False,
-            'message': 'Invalid URL format'
+            'message': 'Invalid URL format',
+            'product': 'SpeeDefender API'
         }), 400
     
     try:
@@ -214,13 +216,16 @@ def api_analyze():
         serializable_results = json_serializable_results(results)
         return jsonify({
             'success': True,
-            'results': serializable_results
+            'results': serializable_results,
+            'product': 'SpeeDefender API',
+            'version': '1.0'
         })
     except Exception as e:
         logger.error(f"API Error analyzing URL: {str(e)}")
         return jsonify({
             'success': False,
-            'message': f'Error analyzing URL: {str(e)}'
+            'message': f'Error analyzing URL: {str(e)}',
+            'product': 'SpeeDefender API'
         }), 500
 
 def save_to_history(url, results):
