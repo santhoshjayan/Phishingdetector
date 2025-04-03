@@ -251,9 +251,23 @@
                                                 </td>
                                                 <td>{{ item.suspicious_indicators }}</td>
                                                 <td>
-                                                    <button class="btn btn-sm btn-details" type="button" data-bs-toggle="collapse" data-bs-target="#details-{{ loop.index }}">
-                                                        <i class="fas fa-search-plus me-1"></i> Show Details
-                                                    </button>
+                                                    <div class="d-flex gap-2">
+                                                        <button class="btn btn-sm btn-details" type="button" data-bs-toggle="collapse" data-bs-target="#details-{{ loop.index }}">
+                                                            <i class="fas fa-search-plus me-1"></i> Show Details
+                                                        </button>
+                                                        {% if 'timestamp' in item %}
+                                                            {% set timestamp_id = item.timestamp.replace(' ', '_').replace(':', '').replace('-', '') %}
+                                                            {% if 'url' in item %}
+                                                                <a href="{{ url_for('export_url_report', id=timestamp_id[:13]) }}" class="btn btn-sm btn-secondary">
+                                                                    <i class="fas fa-file-pdf me-1"></i> PDF
+                                                                </a>
+                                                            {% elif 'email' in item %}
+                                                                <a href="{{ url_for('export_email_report', id=timestamp_id[:13]) }}" class="btn btn-sm btn-secondary">
+                                                                    <i class="fas fa-file-pdf me-1"></i> PDF
+                                                                </a>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr class="collapse" id="details-{{ loop.index }}">

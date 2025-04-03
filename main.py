@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for, send_from_directory
 import logging
 import os
 import json
@@ -6,6 +6,7 @@ import collections
 from datetime import datetime, timedelta
 from phishing_detector import analyze_url, is_valid_url
 from utils.email_analyzer import analyze_email
+from utils.pdf_generator import generate_report_pdf
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -410,6 +411,89 @@ def save_email_to_history(email_data, results):
     
     with open(os.path.join(HISTORY_DIR, filename), 'w') as f:
         json.dump(results, f)
+
+# Routes for PDF reports
+@app.route('/export/url_report/<path:id>', methods=['GET'])
+def export_url_report(id):
+    """Generate and download a PDF report for URL analysis"""
+    try:
+        # Find the URL analysis result by ID (timestamp)
+        for file in os.listdir(HISTORY_DIR):
+            if file.startswith(id) and file.endswith('.json') and '_email_' not in file:
+                with open(os.path.join(HISTORY_DIR, file), 'r') as f:
+                    results = json.load(f)
+                    
+                    # Generate PDF report
+                    success, pdf_path = generate_report_pdf(results, 'url')
+                    
+                    if success:
+                        # Extract filename from path
+                        filename = os.path.basename(pdf_path)
+                        # Return the PDF file
+                        return send_from_directory(
+                            os.path.join(os.getcwd(), 'static', 'reports'),
+                            filename,
+                            as_attachment=True,
+                            attachment_filename=f"SpeeDefender_URL_Report_{id}.pdf"
+                        )
+                    else:
+                        return jsonify({
+                            'success': False,
+                            'message': f'Error generating PDF report: {pdf_path}'
+                        }), 500
+                
+        # If no matching file found
+        return jsonify({
+            'success': False,
+            'message': 'Analysis not found'
+        }), 404
+    except Exception as e:
+        logger.error(f"Error exporting URL report: {str(e)}")
+        return jsonify({
+            'success': False,
+            'message': f'Error exporting PDF report: {str(e)}'
+        }), 500
+
+@app.route('/export/email_report/<path:id>', methods=['GET'])
+def export_email_report(id):
+    """Generate and download a PDF report for email analysis"""
+    try:
+        # Find the email analysis result by ID (timestamp)
+        for file in os.listdir(HISTORY_DIR):
+            if file.startswith(id) and file.endswith('.json') and '_email_' in file:
+                with open(os.path.join(HISTORY_DIR, file), 'r') as f:
+                    results = json.load(f)
+                    
+                    # Generate PDF report
+                    success, pdf_path = generate_report_pdf(results, 'email')
+                    
+                    if success:
+                        # Extract filename from path
+                        filename = os.path.basename(pdf_path)
+                        # Return the PDF file
+                        return send_from_directory(
+                            os.path.join(os.getcwd(), 'static', 'reports'),
+                            filename,
+                            as_attachment=True,
+                            attachment_filename=f"SpeeDefender_Email_Report_{id}.pdf"
+                        )
+                    else:
+                        return jsonify({
+                            'success': False,
+                            'message': f'Error generating PDF report: {pdf_path}'
+                        }), 500
+                
+        # If no matching file found
+        return jsonify({
+            'success': False,
+            'message': 'Analysis not found'
+        }), 404
+    except Exception as e:
+        logger.error(f"Error exporting email report: {str(e)}")
+        return jsonify({
+            'success': False,
+            'message': f'Error exporting PDF report: {str(e)}'
+        }), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

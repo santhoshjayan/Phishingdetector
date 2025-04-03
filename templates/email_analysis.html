@@ -415,7 +415,15 @@
                             </div>
                             
                             <div class="text-center mb-4">
-                                <a href="/email_analysis" class="btn btn-analyze">Analyze Another Email</a>
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a href="/email_analysis" class="btn btn-analyze">Analyze Another Email</a>
+                                    {% if 'timestamp' in results %}
+                                        {% set timestamp_id = results.timestamp.replace(' ', '_').replace(':', '').replace('-', '') %}
+                                        <a href="{{ url_for('export_email_report', id=timestamp_id[:13]) }}" class="btn btn-secondary">
+                                            <i class="fas fa-file-pdf me-1"></i> Export PDF Report
+                                        </a>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                         {% else %}
