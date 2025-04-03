@@ -272,6 +272,7 @@
                                                         <th>URL</th>
                                                         <th>Date</th>
                                                         <th>Indicators</th>
+                                                        <th>Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -280,6 +281,12 @@
                                                         <td class="text-truncate" style="max-width: 200px;">{{ item.url }}</td>
                                                         <td>{{ item.timestamp }}</td>
                                                         <td>{{ item.indicators }}</td>
+                                                        <td>
+                                                            {% set timestamp_id = item.timestamp.replace(' ', '_').replace(':', '').replace('-', '') %}
+                                                            <a href="{{ url_for('export_url_report', id=timestamp_id[:13]) }}" class="btn btn-sm btn-secondary">
+                                                                <i class="fas fa-file-pdf me-1"></i> Export PDF
+                                                            </a>
+                                                        </td>
                                                     </tr>
                                                     {% endfor %}
                                                 </tbody>
@@ -334,6 +341,7 @@
                                                         <th>Email/Subject</th>
                                                         <th>Date</th>
                                                         <th>Indicators</th>
+                                                        <th>Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -345,6 +353,12 @@
                                                         </td>
                                                         <td>{{ item.timestamp }}</td>
                                                         <td>{{ item.indicators }}</td>
+                                                        <td>
+                                                            {% set timestamp_id = item.timestamp.replace(' ', '_').replace(':', '').replace('-', '') %}
+                                                            <a href="{{ url_for('export_email_report', id=timestamp_id[:13]) }}" class="btn btn-sm btn-secondary">
+                                                                <i class="fas fa-file-pdf me-1"></i> Export PDF
+                                                            </a>
+                                                        </td>
                                                     </tr>
                                                     {% endfor %}
                                                 </tbody>
