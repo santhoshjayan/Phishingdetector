@@ -237,28 +237,75 @@
                             <div class="card mb-4">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h2 class="h5 mb-0">Analysis Results</h2>
-                                    <span class="badge {% if results.risk_level == 'High' %}bg-danger{% elif results.risk_level == 'Medium' %}bg-warning text-dark{% elif results.risk_level == 'Low' %}bg-info{% elif results.risk_level == 'Very Low' %}bg-info text-white{% elif results.risk_level == 'Safe' %}bg-success{% else %}bg-secondary{% endif %}">{{ results.risk_level }}</span>
+                                    <span class="badge {% if results.risk_level == 'Critical' %}bg-dark text-white{% elif results.risk_level == 'High' %}bg-danger{% elif results.risk_level == 'Medium' %}bg-warning text-dark{% elif results.risk_level == 'Low' %}bg-info{% elif results.risk_level == 'Very Low' %}bg-info text-white{% elif results.risk_level == 'Safe' %}bg-success{% else %}bg-secondary{% endif %}">{{ results.risk_level }}</span>
                                 </div>
                                 <div class="card-body">
                                     <h3 class="h6">Email: <span class="text-primary">{{ results.email }}</span></h3>
                                     <h3 class="h6">Subject: <span class="text-primary">{{ results.subject }}</span></h3>
-                                    <p>Suspicious Indicators: <span>{{ results.suspicious_indicators }}</span></p>
+                                    <p>Suspicious Indicators Score: <span>{{ results.suspicious_indicators }}</span></p>
                                     
-                                    <div class="alert {% if results.risk_level == 'High' %}alert-danger{% elif results.risk_level == 'Medium' %}alert-warning{% elif results.risk_level == 'Low' %}alert-info{% elif results.risk_level == 'Very Low' %}alert-info{% elif results.risk_level == 'Safe' %}alert-success{% else %}alert-secondary{% endif %}">
-                                        {% if results.risk_level == 'High' %}
-                                            This email has a high likelihood of being a phishing attempt. <strong>Do not interact with it or click any links.</strong>
-                                        {% elif results.risk_level == 'Medium' %}
-                                            This email shows some suspicious characteristics. <strong>Proceed with caution and verify its authenticity before responding.</strong>
-                                        {% elif results.risk_level == 'Low' %}
-                                            This email has minor suspicious indicators but appears relatively safe. Still, exercise normal caution.
-                                        {% elif results.risk_level == 'Very Low' %}
-                                            This email has very few suspicious elements but it's always good to remain vigilant.
-                                        {% elif results.risk_level == 'Safe' %}
-                                            This email appears to be safe based on our analysis.
-                                        {% else %}
-                                            Unable to determine risk level.
+                                    {% if results.risk_summary %}
+                                    <p><strong>{{ results.risk_summary }}</strong></p>
+                                    {% endif %}
+                                    
+                                    <div class="alert {% if results.risk_level == 'Critical' %}alert-dark{% elif results.risk_level == 'High' %}alert-danger{% elif results.risk_level == 'Medium' %}alert-warning{% elif results.risk_level == 'Low' %}alert-info{% elif results.risk_level == 'Very Low' %}alert-info{% elif results.risk_level == 'Safe' %}alert-success{% else %}alert-secondary{% endif %}">
+                                        <h4 class="alert-heading">
+                                            {% if results.risk_level == 'Critical' %}
+                                                <i class="fas fa-skull-crossbones me-2"></i>Critical Risk
+                                            {% elif results.risk_level == 'High' %}
+                                                <i class="fas fa-exclamation-triangle me-2"></i>High Risk
+                                            {% elif results.risk_level == 'Medium' %}
+                                                <i class="fas fa-exclamation-circle me-2"></i>Medium Risk
+                                            {% elif results.risk_level == 'Low' %}
+                                                <i class="fas fa-info-circle me-2"></i>Low Risk
+                                            {% elif results.risk_level == 'Very Low' %}
+                                                <i class="fas fa-info me-2"></i>Very Low Risk
+                                            {% elif results.risk_level == 'Safe' %}
+                                                <i class="fas fa-check-circle me-2"></i>Safe
+                                            {% else %}
+                                                <i class="fas fa-question-circle me-2"></i>Unknown Risk
+                                            {% endif %}
+                                        </h4>
+                                        
+                                        {% if results.safety_advice %}
+                                        <ul class="mb-0">
+                                            {% for advice in results.safety_advice %}
+                                            <li>{{ advice }}</li>
+                                            {% endfor %}
+                                        </ul>
                                         {% endif %}
                                     </div>
+                                    
+                                    {% if results.risk_factors %}
+                                    <div class="mb-4">
+                                        <h4 class="h6">Risk Factor Breakdown</h4>
+                                        <div class="row">
+                                            {% for category, score in results.risk_factors.items() %}
+                                                {% if score > 0 %}
+                                                <div class="col-md-6 mb-2">
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>{{ category.replace('_risk', '').title() }}</span>
+                                                        <span class="text-muted">{{ score }} pts</span>
+                                                    </div>
+                                                    <div class="progress" style="height: 10px;">
+                                                        <div class="progress-bar 
+                                                            {% if score >= 5 %}bg-danger
+                                                            {% elif score >= 3 %}bg-warning
+                                                            {% elif score >= 1 %}bg-info
+                                                            {% else %}bg-success{% endif %}" 
+                                                            role="progressbar" 
+                                                            style="width: {{ score * 100 // 10 if score <= 10 else 100 }}%;"
+                                                            aria-valuenow="{{ score }}"
+                                                            aria-valuemin="0" 
+                                                            aria-valuemax="10">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
                                     
                                     <div class="accordion" id="analysisAccordion">
                                         {% if results.findings %}
