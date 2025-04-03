@@ -434,7 +434,7 @@ def export_url_report(id):
                             os.path.join(os.getcwd(), 'static', 'reports'),
                             filename,
                             as_attachment=True,
-                            attachment_filename=f"SpeeDefender_URL_Report_{id}.pdf"
+                            download_name=f"SpeeDefender_URL_Report_{id}.pdf"
                         )
                     else:
                         return jsonify({
@@ -475,7 +475,7 @@ def export_email_report(id):
                             os.path.join(os.getcwd(), 'static', 'reports'),
                             filename,
                             as_attachment=True,
-                            attachment_filename=f"SpeeDefender_Email_Report_{id}.pdf"
+                            download_name=f"SpeeDefender_Email_Report_{id}.pdf"
                         )
                     else:
                         return jsonify({
