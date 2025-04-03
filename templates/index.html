@@ -20,6 +20,10 @@
             background-color: #121212;
         }
         
+        /* Risk level colors for text */
+        .risk-critical {
+            color: #212529;
+        }
         .risk-high {
             color: var(--danger-color);
         }
@@ -27,13 +31,39 @@
             color: var(--warning-color);
         }
         .risk-low {
-            color: var(--accent-color);
+            color: #0dcaf0;
+        }
+        .risk-very-low {
+            color: #adb5bd;
         }
         .risk-safe {
             color: var(--success-color);
         }
         .risk-unknown {
             color: #6c757d;
+        }
+        
+        /* Risk level colors for background */
+        .bg-risk-critical {
+            background-color: #212529 !important;
+        }
+        .bg-risk-high {
+            background-color: var(--danger-color) !important;
+        }
+        .bg-risk-medium {
+            background-color: var(--warning-color) !important;
+            color: #212529 !important;
+        }
+        .bg-risk-low {
+            background-color: #0dcaf0 !important;
+            color: #212529 !important;
+        }
+        .bg-risk-very-low {
+            background-color: #adb5bd !important;
+            color: #212529 !important;
+        }
+        .bg-risk-safe {
+            background-color: var(--success-color) !important;
         }
         
         .hero-section {
@@ -327,7 +357,7 @@
                         <i class="fas fa-shield-alt me-2" style="color: var(--primary-color); font-size: 1.5rem;"></i>
                         <h5 class="mb-0">SpeeDefender</h5>
                     </div>
-                    <p>A comprehensive security platform for analyzing URLs and emails to detect potential phishing attempts, helping you stay safe online.</p>
+                    <p>A comprehensive tool for analyzing URLs and emails to detect potential phishing attempts, helping you stay safe online.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <div class="mb-3">

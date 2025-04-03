@@ -1,27 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SpeeDefender - Email Analysis</title>
-    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
-            --primary-color: #4e54c8;
-            --secondary-color: #8f94fb;
-            --accent-color: #ff7676;
-            --success-color: #28a745;
-            --warning-color: #ffc107;
-            --danger-color: #dc3545;
+            --primary-color: #4e73df;
+            --secondary-color: #224abe;
+            --accent-color: #36b9cc;
+            --danger-color: #e74a3b;
+            --warning-color: #f6c23e;
+            --success-color: #1cc88a;
         }
         
         body {
             background-color: #121212;
-            color: #e1e1e1;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
+        /* Risk level colors for text */
+        .risk-critical {
+            color: #212529;
+        }
         .risk-high {
             color: var(--danger-color);
         }
@@ -29,16 +31,39 @@
             color: var(--warning-color);
         }
         .risk-low {
-            color: var(--accent-color);
+            color: #0dcaf0;
         }
         .risk-very-low {
-            color: #17a2b8;
+            color: #adb5bd;
         }
         .risk-safe {
             color: var(--success-color);
         }
         .risk-unknown {
             color: #6c757d;
+        }
+        
+        /* Risk level colors for background */
+        .bg-risk-critical {
+            background-color: #212529 !important;
+        }
+        .bg-risk-high {
+            background-color: var(--danger-color) !important;
+        }
+        .bg-risk-medium {
+            background-color: var(--warning-color) !important;
+            color: #212529 !important;
+        }
+        .bg-risk-low {
+            background-color: #0dcaf0 !important;
+            color: #212529 !important;
+        }
+        .bg-risk-very-low {
+            background-color: #adb5bd !important;
+            color: #212529 !important;
+        }
+        .bg-risk-safe {
+            background-color: var(--success-color) !important;
         }
         
         .hero-section {
@@ -450,7 +475,7 @@ Click here to verify: https://legitimate-bank.secure-verify.com" required></text
                         <i class="fas fa-shield-alt me-2" style="color: var(--primary-color); font-size: 1.5rem;"></i>
                         <h5 class="mb-0">SpeeDefender</h5>
                     </div>
-                    <p>A comprehensive security platform for analyzing URLs and emails to detect potential phishing attempts, helping you stay safe online.</p>
+                    <p>A comprehensive tool for analyzing URLs and emails to detect potential phishing attempts, helping you stay safe online.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <div class="mb-3">

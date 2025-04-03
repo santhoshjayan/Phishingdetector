@@ -141,8 +141,11 @@ def email_analysis():
             # Analyze the email
             results = analyze_email(email_data)
             
-            # Save to history (could be implemented similar to URL history)
-            # save_email_to_history(email_data, results)
+            # Make the results JSON serializable
+            serializable_results = json_serializable_results(results)
+            
+            # Save to history
+            save_email_to_history(email_data, serializable_results)
             
             return render_template('email_analysis.html', results=results)
         except Exception as e:
@@ -330,11 +333,77 @@ def api_analyze():
             'product': 'SpeeDefender API'
         }), 500
 
+@app.route('/api/analyze_email', methods=['POST'])
+def api_analyze_email():
+    """API endpoint for analyzing emails"""
+    if not request.is_json:
+        return jsonify({
+            'success': False,
+            'message': 'Request must be JSON format',
+            'product': 'SpeeDefender API'
+        }), 400
+    
+    data = request.get_json()
+    
+    # Check required fields
+    required_fields = ['from', 'headers', 'content']
+    for field in required_fields:
+        if field not in data:
+            return jsonify({
+                'success': False,
+                'message': f'Missing required field: {field}',
+                'product': 'SpeeDefender API'
+            }), 400
+    
+    try:
+        # Create email data dictionary
+        email_data = {
+            'from': data.get('from', ''),
+            'subject': data.get('headers', {}).get('Subject', '') or data.get('headers', {}).get('subject', ''),
+            'headers': data.get('headers', {}),
+            'content': data.get('content', '')
+        }
+        
+        # Analyze the email
+        results = analyze_email(email_data)
+        
+        # Make the results JSON serializable
+        serializable_results = json_serializable_results(results)
+        
+        # Save the analysis to history
+        save_email_to_history(email_data, serializable_results)
+        
+        return jsonify({
+            'success': True,
+            'results': serializable_results,
+            'product': 'SpeeDefender API',
+            'version': '1.0'
+        })
+    except Exception as e:
+        logger.error(f"API Error analyzing email: {str(e)}")
+        return jsonify({
+            'success': False,
+            'message': f'Error analyzing email: {str(e)}',
+            'product': 'SpeeDefender API'
+        }), 500
+
 def save_to_history(url, results):
-    """Save the analysis results to a JSON file in the history directory"""
+    """Save the URL analysis results to a JSON file in the history directory"""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     domain = url.replace("://", "_").replace("/", "_").replace(".", "_")
     filename = f"{timestamp}_{domain}.json"
+    
+    # Add timestamp to results
+    results['timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    with open(os.path.join(HISTORY_DIR, filename), 'w') as f:
+        json.dump(results, f)
+
+def save_email_to_history(email_data, results):
+    """Save the email analysis results to a JSON file in the history directory"""
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    sender = email_data.get('from', '').replace("@", "_at_").replace(".", "_")
+    filename = f"{timestamp}_email_{sender}.json"
     
     # Add timestamp to results
     results['timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

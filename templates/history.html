@@ -20,21 +20,53 @@
             background-color: #121212;
         }
         
+        /* Risk level colors for text */
+        .risk-critical {
+            color: #212529;
+            font-weight: bold;
+        }
         .risk-high {
-            background-color: var(--danger-color) !important;
+            color: var(--danger-color);
+            font-weight: bold;
         }
         .risk-medium {
+            color: var(--warning-color);
+            font-weight: bold;
+        }
+        .risk-low {
+            color: #0dcaf0;
+        }
+        .risk-very-low {
+            color: #adb5bd;
+        }
+        .risk-safe {
+            color: var(--success-color);
+        }
+        .risk-unknown {
+            color: #6c757d;
+        }
+        
+        /* Risk level colors for background */
+        .bg-risk-critical {
+            background-color: #212529 !important;
+        }
+        .bg-risk-high {
+            background-color: var(--danger-color) !important;
+        }
+        .bg-risk-medium {
             background-color: var(--warning-color) !important;
             color: #212529 !important;
         }
-        .risk-low {
-            background-color: var(--accent-color) !important;
+        .bg-risk-low {
+            background-color: #0dcaf0 !important;
+            color: #212529 !important;
         }
-        .risk-safe {
+        .bg-risk-very-low {
+            background-color: #adb5bd !important;
+            color: #212529 !important;
+        }
+        .bg-risk-safe {
             background-color: var(--success-color) !important;
-        }
-        .risk-unknown {
-            background-color: #6c757d !important;
         }
         
         .hero-section {
@@ -154,6 +186,12 @@
                         <a class="nav-link" href="/batch_analysis"><i class="fas fa-tasks"></i> Batch Analysis</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="/dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/email_analysis"><i class="fas fa-envelope"></i> Email Scanner</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/about"><i class="fas fa-info-circle"></i> About</a>
                     </li>
                     <li class="nav-item">
@@ -262,7 +300,7 @@
                         <i class="fas fa-shield-alt me-2" style="color: var(--primary-color); font-size: 1.5rem;"></i>
                         <h5 class="mb-0">SpeeDefender</h5>
                     </div>
-                    <p>A comprehensive tool for analyzing URLs and detecting potential phishing attempts, helping you stay safe online.</p>
+                    <p>A comprehensive tool for analyzing URLs and emails to detect potential phishing attempts, helping you stay safe online.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <div class="mb-3">

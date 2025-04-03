@@ -149,6 +149,9 @@
                         <a class="nav-link" href="/dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="/email_analysis"><i class="fas fa-envelope"></i> Email Scanner</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/about"><i class="fas fa-info-circle"></i> About</a>
                     </li>
                     <li class="nav-item">
@@ -162,7 +165,7 @@
     <div class="hero-section text-center text-white">
         <div class="container">
             <h1 class="h2 fw-bold mb-2">API Documentation</h1>
-            <p class="lead mb-0">Integrate SpeeDefender's powerful phishing detection into your applications</p>
+            <p class="lead mb-0">Integrate SpeeDefender's powerful URL and email phishing detection into your applications</p>
         </div>
     </div>
 
@@ -175,7 +178,7 @@
                     </div>
                     <div class="card-body">
                         <p class="lead">
-                            SpeeDefender provides a simple API to analyze URLs programmatically.
+                            SpeeDefender provides a simple API to analyze URLs and emails programmatically.
                             This documentation explains how to use the API endpoints for your applications.
                         </p>
                         
@@ -260,6 +263,96 @@
   "version": "1.0"
 }</code></pre>
                         </div>
+
+                        <div class="api-endpoint">
+                            <h3 class="h5"><span class="method">POST</span> <span class="endpoint">/analyze_email</span></h3>
+                            <p>Analyzes an email for phishing indicators and returns a risk assessment.</p>
+                            
+                            <h4 class="h6 mt-4"><i class="fas fa-list-ul me-2"></i>Request Body</h4>
+                            <table class="table table-bordered">
+                                <thead class="bg-dark">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>from</code></td>
+                                        <td>string</td>
+                                        <td>Yes</td>
+                                        <td>The sender's email address</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>headers</code></td>
+                                        <td>object</td>
+                                        <td>Yes</td>
+                                        <td>Email headers as key-value pairs</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>content</code></td>
+                                        <td>string</td>
+                                        <td>Yes</td>
+                                        <td>The email body content to analyze</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <h4 class="h6 mt-4"><i class="fas fa-exchange-alt me-2"></i>Example Request</h4>
+                            <pre><code>POST /api/analyze_email
+Content-Type: application/json
+
+{
+  "from": "service@example-bank.com",
+  "headers": {
+    "Return-Path": "<different-address@suspicious-domain.com>",
+    "Received": "from mail.suspicious-server.net",
+    "Subject": "Urgent: Your Account Needs Attention",
+    "Date": "Mon, 3 Apr 2025 10:15:30 -0400"
+  },
+  "content": "Dear Valued Customer, We have detected suspicious activity on your account. Please click the link below to verify your information: https://secure-banking.example-b4nk.com/login"
+}</code></pre>
+                            
+                            <h4 class="h6 mt-4"><i class="fas fa-reply me-2"></i>Example Response</h4>
+                            <pre><code>{
+  "success": true,
+  "results": {
+    "from": "service@example-bank.com",
+    "risk_level": "High",
+    "suspicious_indicators": 4,
+    "sender_analysis": {
+      "findings": [
+        "Sender domain appears suspicious",
+        "Mismatch between Return-Path and From address",
+        "Sender domain created recently"
+      ]
+    },
+    "header_analysis": {
+      "findings": [
+        "Suspicious mail server in routing path",
+        "Header inconsistencies detected"
+      ]
+    },
+    "content_analysis": {
+      "findings": [
+        "Contains urgent language patterns",
+        "Contains suspicious links",
+        "Contains sensitive information requests",
+        "URL in content leads to suspicious domain"
+      ],
+      "suspicious_keywords": [
+        "urgent",
+        "verify",
+        "suspicious activity"
+      ]
+    }
+  },
+  "product": "SpeeDefender API",
+  "version": "1.0"
+}</code></pre>
+                        </div>
                         
                         <h2 class="h5 mb-4"><i class="fas fa-code me-2"></i>Code Examples</h2>
                         
@@ -267,10 +360,10 @@
                             <div class="col-md-6 mb-4">
                                 <div class="card h-100">
                                     <div class="card-header bg-dark">
-                                        <h3 class="h6 mb-0"><i class="fab fa-js me-2"></i>JavaScript</h3>
+                                        <h3 class="h6 mb-0"><i class="fab fa-js me-2"></i>JavaScript - URL Analysis</h3>
                                     </div>
                                     <div class="card-body">
-                                        <pre><code>// Using fetch API
+                                        <pre><code>// Using fetch API for URL analysis
 const apiUrl = 'https://your-app-domain.replit.app/api/analyze?url=https://example.com';
 
 fetch(apiUrl)
@@ -293,11 +386,12 @@ fetch(apiUrl)
                             <div class="col-md-6 mb-4">
                                 <div class="card h-100">
                                     <div class="card-header bg-dark">
-                                        <h3 class="h6 mb-0"><i class="fab fa-python me-2"></i>Python</h3>
+                                        <h3 class="h6 mb-0"><i class="fab fa-python me-2"></i>Python - URL Analysis</h3>
                                     </div>
                                     <div class="card-body">
                                         <pre><code>import requests
 
+# URL Analysis Example
 api_url = 'https://your-app-domain.replit.app/api/analyze'
 params = {'url': 'https://example.com'}
 
@@ -309,6 +403,89 @@ if data['success']:
     print(f"Using {data['product']} v{data['version']}")
     print(f"Risk level: {results['risk_level']}")
     print(f"Suspicious indicators: {results['suspicious_indicators']}")
+else:
+    print(f"Error: {data['message']}")</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-dark">
+                                        <h3 class="h6 mb-0"><i class="fab fa-js me-2"></i>JavaScript - Email Analysis</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <pre><code>// Using fetch API for Email Analysis
+const apiUrl = 'https://your-app-domain.replit.app/api/analyze_email';
+const emailData = {
+  from: 'service@example-bank.com',
+  headers: {
+    'Return-Path': '<different-address@suspicious-domain.com>',
+    'Received': 'from mail.suspicious-server.net',
+    'Subject': 'Urgent: Your Account Needs Attention',
+    'Date': 'Mon, 3 Apr 2025 10:15:30 -0400'
+  },
+  content: 'Dear Valued Customer, We have detected suspicious activity on your account. Please click the link below to verify your information: https://secure-banking.example-b4nk.com/login'
+};
+
+fetch(apiUrl, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(emailData)
+})
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      const results = data.results;
+      console.log(`SpeeDefender API v${data.version}`);
+      console.log(`Risk level: ${results.risk_level}`);
+      console.log(`Suspicious indicators: ${results.suspicious_indicators}`);
+      console.log(`Suspicious content: ${results.content_analysis.suspicious_keywords.join(', ')}`);
+    } else {
+      console.error(`Error: ${data.message}`);
+    }
+  })
+  .catch(error => console.error('API call failed:', error));</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-dark">
+                                        <h3 class="h6 mb-0"><i class="fab fa-python me-2"></i>Python - Email Analysis</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <pre><code>import requests
+import json
+
+# Email Analysis Example
+api_url = 'https://your-app-domain.replit.app/api/analyze_email'
+email_data = {
+    'from': 'service@example-bank.com',
+    'headers': {
+        'Return-Path': '<different-address@suspicious-domain.com>',
+        'Received': 'from mail.suspicious-server.net',
+        'Subject': 'Urgent: Your Account Needs Attention',
+        'Date': 'Mon, 3 Apr 2025 10:15:30 -0400'
+    },
+    'content': 'Dear Valued Customer, We have detected suspicious activity on your account. Please click the link below to verify your information: https://secure-banking.example-b4nk.com/login'
+}
+
+headers = {'Content-Type': 'application/json'}
+response = requests.post(api_url, data=json.dumps(email_data), headers=headers)
+data = response.json()
+
+if data['success']:
+    results = data['results']
+    print(f"Using {data['product']} v{data['version']}")
+    print(f"Risk level: {results['risk_level']}")
+    print(f"Suspicious indicators: {results['suspicious_indicators']}")
+    print(f"Suspicious keywords: {', '.join(results['content_analysis']['suspicious_keywords'])}")
 else:
     print(f"Error: {data['message']}")</code></pre>
                                     </div>
@@ -339,7 +516,7 @@ else:
                         <i class="fas fa-shield-alt me-2" style="color: var(--primary-color); font-size: 1.5rem;"></i>
                         <h5 class="mb-0">SpeeDefender</h5>
                     </div>
-                    <p>A comprehensive tool for analyzing URLs and detecting potential phishing attempts, helping you stay safe online.</p>
+                    <p>A comprehensive tool for analyzing URLs and emails to detect potential phishing attempts, helping you stay safe online.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <div class="mb-3">
