@@ -205,7 +205,7 @@
     <div class="hero-section text-center text-white">
         <div class="container">
             <h1 class="hero-title mb-1">Analysis History</h1>
-            <p class="mb-0">View your past URL analysis results and track suspicious websites</p>
+            <p class="mb-0">View your past URL and email analysis results to track suspicious content</p>
         </div>
     </div>
 
@@ -223,7 +223,7 @@
                                     <thead>
                                         <tr>
                                             <th>Time</th>
-                                            <th>URL</th>
+                                            <th>Target</th>
                                             <th>Risk Level</th>
                                             <th>Suspicious Indicators</th>
                                             <th>Details</th>
@@ -233,7 +233,17 @@
                                         {% for item in history %}
                                             <tr>
                                                 <td>{{ item.timestamp }}</td>
-                                                <td>{{ item.url }}</td>
+                                                <td>
+                                                    {% if 'url' in item %}
+                                                        <i class="fas fa-link me-1"></i> {{ item.url }}
+                                                    {% elif 'email' in item %}
+                                                        <i class="fas fa-envelope me-1"></i> 
+                                                        {{ item.email }}
+                                                        {% if 'subject' in item and item.subject %}
+                                                            <br><small class="text-muted">{{ item.subject }}</small>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </td>
                                                 <td>
                                                     <span class="badge risk-{{ item.risk_level|lower }}">
                                                         {{ item.risk_level }}
@@ -249,26 +259,66 @@
                                             <tr class="collapse" id="details-{{ loop.index }}">
                                                 <td colspan="5">
                                                     <div class="card card-body bg-dark">
-                                                        <h5>Pattern Analysis</h5>
-                                                        <ul class="list-group list-group-flush mb-3">
-                                                            {% for finding in item.pattern_analysis.findings %}
-                                                                <li class="list-group-item">{{ finding }}</li>
-                                                            {% endfor %}
-                                                        </ul>
-                                                        
-                                                        <h5>Domain Information</h5>
-                                                        <ul class="list-group list-group-flush mb-3">
-                                                            {% for finding in item.domain_info.findings %}
-                                                                <li class="list-group-item">{{ finding }}</li>
-                                                            {% endfor %}
-                                                        </ul>
-                                                        
-                                                        <h5>Reputation Information</h5>
-                                                        <ul class="list-group list-group-flush">
-                                                            {% for finding in item.reputation.findings %}
-                                                                <li class="list-group-item">{{ finding }}</li>
-                                                            {% endfor %}
-                                                        </ul>
+                                                        {% if 'url' in item and 'pattern_analysis' in item %}
+                                                            <!-- URL analysis details -->
+                                                            <h5>Pattern Analysis</h5>
+                                                            <ul class="list-group list-group-flush mb-3">
+                                                                {% for finding in item.pattern_analysis.findings %}
+                                                                    <li class="list-group-item">{{ finding }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                            
+                                                            <h5>Domain Information</h5>
+                                                            <ul class="list-group list-group-flush mb-3">
+                                                                {% for finding in item.domain_info.findings %}
+                                                                    <li class="list-group-item">{{ finding }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                            
+                                                            <h5>Reputation Information</h5>
+                                                            <ul class="list-group list-group-flush">
+                                                                {% for finding in item.reputation.findings %}
+                                                                    <li class="list-group-item">{{ finding }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        {% elif 'email' in item %}
+                                                            <!-- Email analysis details -->
+                                                            {% if 'sender_analysis' in item and item.sender_analysis.findings %}
+                                                                <h5>Sender Analysis</h5>
+                                                                <ul class="list-group list-group-flush mb-3">
+                                                                    {% for finding in item.sender_analysis.findings %}
+                                                                        <li class="list-group-item">{{ finding }}</li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            {% endif %}
+                                                            
+                                                            {% if 'header_analysis' in item and item.header_analysis.findings %}
+                                                                <h5>Header Analysis</h5>
+                                                                <ul class="list-group list-group-flush mb-3">
+                                                                    {% for finding in item.header_analysis.findings %}
+                                                                        <li class="list-group-item">{{ finding }}</li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            {% endif %}
+                                                            
+                                                            {% if 'content_analysis' in item and item.content_analysis.findings %}
+                                                                <h5>Content Analysis</h5>
+                                                                <ul class="list-group list-group-flush mb-3">
+                                                                    {% for finding in item.content_analysis.findings %}
+                                                                        <li class="list-group-item">{{ finding }}</li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            {% endif %}
+                                                            
+                                                            {% if 'subject_analysis' in item and item.subject_analysis.findings %}
+                                                                <h5>Subject Analysis</h5>
+                                                                <ul class="list-group list-group-flush">
+                                                                    {% for finding in item.subject_analysis.findings %}
+                                                                        <li class="list-group-item">{{ finding }}</li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            {% endif %}
+                                                        {% endif %}
                                                     </div>
                                                 </td>
                                             </tr>
@@ -280,10 +330,15 @@
                             <div class="text-center py-5">
                                 <i class="fas fa-history" style="font-size: 3rem; color: var(--primary-color); opacity: 0.6;"></i>
                                 <h4 class="mt-3">No Analysis History</h4>
-                                <p class="text-muted mb-4">You haven't analyzed any URLs yet. Start by analyzing some URLs to build your history.</p>
-                                <a href="/" class="btn btn-details px-4 py-2">
-                                    <i class="fas fa-search me-2"></i> Analyze a URL
-                                </a>
+                                <p class="text-muted mb-4">You haven't analyzed any URLs or emails yet. Start analyzing content to build your history.</p>
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a href="/" class="btn btn-details px-4 py-2">
+                                        <i class="fas fa-link me-2"></i> Analyze URL
+                                    </a>
+                                    <a href="/email_analysis" class="btn btn-details px-4 py-2">
+                                        <i class="fas fa-envelope me-2"></i> Analyze Email
+                                    </a>
+                                </div>
                             </div>
                         {% endif %}
                     </div>
