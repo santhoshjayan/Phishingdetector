@@ -162,12 +162,15 @@ def dashboard():
     
     # Initialize analytics data
     analytics = {
-        'total_urls': len(history_files),
-        'risk_levels': {'High': 0, 'Medium': 0, 'Low': 0, 'Safe': 0},
+        'total_urls': 0,
+        'total_emails': 0,
+        'risk_levels': {'Critical': 0, 'High': 0, 'Medium': 0, 'Low': 0, 'Very Low': 0, 'Safe': 0},
         'suspicious_patterns': collections.Counter(),
         'tld_distribution': collections.Counter(),
         'daily_scans': collections.Counter(),
-        'recent_high_risk': []
+        'email_indicators': collections.Counter(),
+        'recent_high_risk': [],
+        'recent_high_risk_emails': []
     }
     
     # Process each history file
@@ -176,9 +179,19 @@ def dashboard():
             try:
                 data = json.load(f)
                 
+                # Determine if this is a URL or email analysis
+                is_email = 'email' in data and 'subject' in data
+                
+                # Count total items by type
+                if is_email:
+                    analytics['total_emails'] += 1
+                else:
+                    analytics['total_urls'] += 1
+                
                 # Count risk levels
                 risk_level = data.get('risk_level', 'Unknown')
-                analytics['risk_levels'][risk_level] = analytics['risk_levels'].get(risk_level, 0) + 1
+                if risk_level in analytics['risk_levels']:
+                    analytics['risk_levels'][risk_level] += 1
                 
                 # Extract date for daily scans
                 timestamp = data.get('timestamp', '')
@@ -186,23 +199,45 @@ def dashboard():
                     date = timestamp.split(' ')[0]  # Extract just the date part
                     analytics['daily_scans'][date] += 1
                 
-                # Extract TLD
-                url = data.get('url', '')
-                if '.' in url:
-                    tld = url.split('.')[-1].split('/')[0]  # Get the TLD
-                    analytics['tld_distribution'][tld] += 1
+                if is_email:
+                    # Process email-specific data
+                    
+                    # Extract top email risk factors
+                    if 'risk_factors' in data:
+                        for factor, score in data['risk_factors'].items():
+                            if score > 0:
+                                factor_name = factor.replace('_risk', '').title()
+                                analytics['email_indicators'][factor_name] += score
+                    
+                    # Collect recent high risk emails (up to 5)
+                    if risk_level in ['Critical', 'High'] and len(analytics['recent_high_risk_emails']) < 5:
+                        analytics['recent_high_risk_emails'].append({
+                            'email': data.get('email', ''),
+                            'subject': data.get('subject', ''),
+                            'timestamp': timestamp,
+                            'indicators': data.get('suspicious_indicators', 0)
+                        })
                 
-                # Count suspicious patterns
-                for pattern in data.get('url_patterns', {}).get('suspicious_patterns', []):
-                    analytics['suspicious_patterns'][pattern] += 1
-                
-                # Collect recent high risk URLs (up to 5)
-                if risk_level == 'High' and len(analytics['recent_high_risk']) < 5:
-                    analytics['recent_high_risk'].append({
-                        'url': data.get('url', ''),
-                        'timestamp': timestamp,
-                        'indicators': data.get('suspicious_indicators', 0)
-                    })
+                else:
+                    # Process URL-specific data
+                    
+                    # Extract TLD
+                    url = data.get('url', '')
+                    if '.' in url:
+                        tld = url.split('.')[-1].split('/')[0]  # Get the TLD
+                        analytics['tld_distribution'][tld] += 1
+                    
+                    # Count suspicious patterns
+                    for pattern in data.get('url_patterns', {}).get('suspicious_patterns', []):
+                        analytics['suspicious_patterns'][pattern] += 1
+                    
+                    # Collect recent high risk URLs (up to 5)
+                    if risk_level in ['Critical', 'High'] and len(analytics['recent_high_risk']) < 5:
+                        analytics['recent_high_risk'].append({
+                            'url': data.get('url', ''),
+                            'timestamp': timestamp,
+                            'indicators': data.get('suspicious_indicators', 0)
+                        })
                 
             except Exception as e:
                 logger.error(f"Error processing history file {file}: {str(e)}")
@@ -212,8 +247,30 @@ def dashboard():
     last_7_days = [(today - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(7)]
     last_7_days.reverse()  # Order from oldest to newest
     
+    # Separate URLs and emails for each day
+    daily_url_scans = collections.Counter()
+    daily_email_scans = collections.Counter()
+    
+    # Process each history file to count URLs and emails by date
+    for file in history_files:
+        with open(os.path.join(HISTORY_DIR, file), 'r') as f:
+            try:
+                data = json.load(f)
+                timestamp = data.get('timestamp', '')
+                if timestamp:
+                    date = timestamp.split(' ')[0]  # Extract just the date part
+                    # Determine if this is a URL or email analysis
+                    is_email = 'email' in data and 'subject' in data
+                    if is_email:
+                        daily_email_scans[date] += 1
+                    else:
+                        daily_url_scans[date] += 1
+            except Exception as e:
+                pass  # Already logged above
+    
     # Prepare daily scan data for chart
-    daily_scan_data = [analytics['daily_scans'].get(day, 0) for day in last_7_days]
+    daily_url_data = [daily_url_scans.get(day, 0) for day in last_7_days]
+    daily_email_data = [daily_email_scans.get(day, 0) for day in last_7_days]
     
     # Get top suspicious patterns (top 5)
     top_patterns = dict(analytics['suspicious_patterns'].most_common(5))
@@ -221,12 +278,17 @@ def dashboard():
     # Get TLD distribution (top 5)
     top_tlds = dict(analytics['tld_distribution'].most_common(5))
     
+    # Get top email indicators (top 5)
+    top_email_indicators = dict(analytics['email_indicators'].most_common(5))
+    
     return render_template('dashboard.html', 
                           analytics=analytics, 
                           daily_scan_labels=json.dumps(last_7_days),
-                          daily_scan_data=json.dumps(daily_scan_data),
+                          daily_url_data=json.dumps(daily_url_data),
+                          daily_email_data=json.dumps(daily_email_data),
                           top_patterns=json.dumps(top_patterns),
-                          top_tlds=json.dumps(top_tlds))
+                          top_tlds=json.dumps(top_tlds),
+                          top_email_indicators=json.dumps(top_email_indicators))
 
 @app.route('/api/docs')
 def api_docs():
