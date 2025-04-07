@@ -54,3 +54,7 @@ args = "python phishing_detector.py https://google.com -v"
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 5001
+externalPort = 3000

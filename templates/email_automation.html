@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeeDefender - Email Automation</title>
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #224abe;
+            --accent-color: #36b9cc;
+            --danger-color: #e74a3b;
+            --warning-color: #f6c23e;
+            --success-color: #1cc88a;
+        }
+        
+        body {
+            background-color: #121212;
+        }
+        
+        /* Risk level colors for text */
+        .risk-critical {
+            color: #212529;
+        }
+        .risk-high {
+            color: var(--danger-color);
+        }
+        .risk-medium {
+            color: var(--warning-color);
+        }
+        .risk-low {
+            color: #0dcaf0;
+        }
+        .risk-very-low {
+            color: #adb5bd;
+        }
+        .risk-safe {
+            color: var(--success-color);
+        }
+        .risk-unknown {
+            color: #6c757d;
+        }
+        
+        /* Risk level colors for background */
+        .bg-risk-critical {
+            background-color: #212529 !important;
+        }
+        .bg-risk-high {
+            background-color: var(--danger-color) !important;
+        }
+        .bg-risk-medium {
+            background-color: var(--warning-color) !important;
+        }
+        .bg-risk-low {
+            background-color: #0dcaf0 !important;
+        }
+        .bg-risk-very-low {
+            background-color: #adb5bd !important;
+        }
+        .bg-risk-safe {
+            background-color: var(--success-color) !important;
+        }
+        .bg-risk-unknown {
+            background-color: #6c757d !important;
+        }
+        
+        /* Status Indicators */
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .status-active {
+            background-color: var(--success-color);
+        }
+        .status-inactive {
+            background-color: var(--danger-color);
+        }
+        
+        .card {
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: none;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(0, 0, 0, 0.15);
+        }
+        .card-header {
+            border-radius: 10px 10px 0 0 !important;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .card-header i {
+            margin-right: 10px;
+        }
+        .card-body {
+            padding: 1.5rem;
+        }
+        .card-footer {
+            border-radius: 0 0 10px 10px !important;
+            padding: 0.75rem 1.25rem;
+        }
+        
+        /* Logo styling */
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .shield-icon {
+            color: var(--primary-color);
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        /* Control panel styling */
+        .control-panel {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        /* Switch styling */
+        .form-switch .form-check-input {
+            width: 3em;
+            height: 1.5em;
+        }
+        
+        /* Settings form */
+        .settings-form label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        /* Action buttons */
+        .action-btn {
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        /* Action history table */
+        .action-table th {
+            font-weight: bold;
+        }
+        
+        /* Statistics cards */
+        .stat-card {
+            text-align: center;
+            border-left: 5px solid var(--primary-color);
+        }
+        .stat-card-header {
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .stat-card-number {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        /* Tabs styling */
+        .nav-tabs .nav-link {
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            border-bottom: 3px solid transparent;
+            padding: 0.5rem 1rem;
+            margin-right: 5px;
+        }
+        .nav-tabs .nav-link:hover {
+            border-color: transparent;
+            color: rgba(255, 255, 255, 0.75);
+        }
+        .nav-tabs .nav-link.active {
+            border-color: transparent;
+            border-bottom: 3px solid var(--primary-color);
+            color: white;
+            background-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shield-alt shield-icon"></i>
+                SpeeDefender
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/history"><i class="fas fa-history"></i> History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/batch_analysis"><i class="fas fa-tasks"></i> Batch Analysis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/email_analysis"><i class="fas fa-envelope"></i> Email Scanner</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/email_automation"><i class="fas fa-robot"></i> Email Automation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about"><i class="fas fa-info-circle"></i> About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/api/docs"><i class="fas fa-code"></i> API</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <!-- Page Header -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-light"><i class="fas fa-robot me-2"></i>Email Automation Control</h1>
+        </div>
+        
+        <!-- Status Panel -->
+        <div class="card mb-4">
+            <div class="card-header bg-dark">
+                <span><i class="fas fa-tachometer-alt"></i> Automation Status</span>
+                <div class="float-end">
+                    <span id="automation-status-badge" class="badge bg-danger">Inactive</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Automation Status:</label>
+                            <div class="d-flex align-items-center">
+                                <div id="status-indicator" class="status-dot status-inactive"></div>
+                                <span id="status-text" class="ms-2">Inactive</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Last Scan:</label>
+                            <span id="last-scan-time">Never</span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Next Scan:</label>
+                            <span id="next-scan-time">N/A</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Scan Interval:</label>
+                            <span id="scan-interval">5 minutes</span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Emails Scanned:</label>
+                            <span id="emails-scanned">0</span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Threats Detected:</label>
+                            <span id="threats-detected">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 d-flex justify-content-center">
+                        <button id="start-automation-btn" class="btn btn-success action-btn">
+                            <i class="fas fa-play me-2"></i>Start Automation
+                        </button>
+                        <button id="stop-automation-btn" class="btn btn-danger action-btn" disabled>
+                            <i class="fas fa-stop me-2"></i>Stop Automation
+                        </button>
+                        <button id="manual-scan-btn" class="btn btn-primary action-btn">
+                            <i class="fas fa-search me-2"></i>Run Manual Scan
+                        </button>
+                        <button id="test-connection-btn" class="btn btn-info action-btn">
+                            <i class="fas fa-plug me-2"></i>Test Connection
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabs -->
+        <ul class="nav nav-tabs mb-4" id="automationTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="config-tab" data-bs-toggle="tab" data-bs-target="#config" type="button" role="tab" aria-controls="config" aria-selected="true">
+                    <i class="fas fa-cogs me-2"></i>Configuration
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="actions-tab" data-bs-toggle="tab" data-bs-target="#actions" type="button" role="tab" aria-controls="actions" aria-selected="false">
+                    <i class="fas fa-list me-2"></i>Action History
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="stats-tab" data-bs-toggle="tab" data-bs-target="#stats" type="button" role="tab" aria-controls="stats" aria-selected="false">
+                    <i class="fas fa-chart-pie me-2"></i>Statistics
+                </button>
+            </li>
+        </ul>
+        
+        <!-- Tab Content -->
+        <div class="tab-content" id="automationTabsContent">
+            <!-- Configuration Tab -->
+            <div class="tab-pane fade show active" id="config" role="tabpanel" aria-labelledby="config-tab">
+                <div class="card">
+                    <div class="card-header bg-dark">
+                        <span><i class="fas fa-cogs"></i> Email Automation Configuration</span>
+                    </div>
+                    <div class="card-body">
+                        <form id="automation-config-form" class="settings-form">
+                            <!-- Email Server Settings -->
+                            <h5 class="border-bottom pb-2 mb-3">Email Server Settings</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="email-protocol" class="form-label">Email Protocol</label>
+                                        <select id="email-protocol" class="form-select">
+                                            <option value="imap">IMAP</option>
+                                            <option value="pop3">POP3</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email-server" class="form-label">Email Server</label>
+                                        <input type="text" id="email-server" class="form-control" placeholder="mail.example.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email-port" class="form-label">Server Port</label>
+                                        <input type="number" id="email-port" class="form-control" placeholder="993">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="email-username" class="form-label">Email Username</label>
+                                        <input type="text" id="email-username" class="form-control" placeholder="user@example.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email-password" class="form-label">Email Password</label>
+                                        <input type="password" id="email-password" class="form-control">
+                                    </div>
+                                    <div class="mb-3 form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="use-ssl" checked>
+                                        <label class="form-check-label" for="use-ssl">Use SSL/TLS</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- SMTP Settings for Notifications -->
+                            <h5 class="border-bottom pb-2 mb-3 mt-4">SMTP Settings for Notifications</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="smtp-server" class="form-label">SMTP Server</label>
+                                        <input type="text" id="smtp-server" class="form-control" placeholder="smtp.example.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="smtp-port" class="form-label">SMTP Port</label>
+                                        <input type="number" id="smtp-port" class="form-control" placeholder="587">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="smtp-username" class="form-label">SMTP Username</label>
+                                        <input type="text" id="smtp-username" class="form-control" placeholder="user@example.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="smtp-password" class="form-label">SMTP Password</label>
+                                        <input type="password" id="smtp-password" class="form-control">
+                                    </div>
+                                    <div class="mb-3 form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="smtp-use-ssl" checked>
+                                        <label class="form-check-label" for="smtp-use-ssl">Use SSL/TLS</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Automation Settings -->
+                            <h5 class="border-bottom pb-2 mb-3 mt-4">Automation Settings</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="scan-interval-minutes" class="form-label">Scan Interval (minutes)</label>
+                                        <select id="scan-interval-minutes" class="form-select">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="5" selected>5</option>
+                                            <option value="10">10</option>
+                                            <option value="15">15</option>
+                                            <option value="30">30</option>
+                                            <option value="60">60</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="emails-per-scan" class="form-label">Maximum Emails per Scan</label>
+                                        <input type="number" id="emails-per-scan" class="form-control" value="10">
+                                    </div>
+                                    <div class="mb-3 form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="scan-unread-only" checked>
+                                        <label class="form-check-label" for="scan-unread-only">Scan Unread Emails Only</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="folder-to-scan" class="form-label">Folder to Scan</label>
+                                        <input type="text" id="folder-to-scan" class="form-control" value="INBOX">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="notification-email" class="form-label">Notification Email</label>
+                                        <input type="email" id="notification-email" class="form-control" placeholder="notifications@example.com">
+                                    </div>
+                                    <div class="mb-3 form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="send-notifications" checked>
+                                        <label class="form-check-label" for="send-notifications">Send Email Notifications</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Rules -->
+                            <h5 class="border-bottom pb-2 mb-3 mt-4">Action Rules</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="critical-action" class="form-label">Critical Risk Action</label>
+                                        <select id="critical-action" class="form-select">
+                                            <option value="quarantine" selected>Move to Quarantine</option>
+                                            <option value="spam">Move to Spam</option>
+                                            <option value="tag">Tag as Suspicious</option>
+                                            <option value="none">No Action</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="high-action" class="form-label">High Risk Action</label>
+                                        <select id="high-action" class="form-select">
+                                            <option value="quarantine">Move to Quarantine</option>
+                                            <option value="spam" selected>Move to Spam</option>
+                                            <option value="tag">Tag as Suspicious</option>
+                                            <option value="none">No Action</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="medium-action" class="form-label">Medium Risk Action</label>
+                                        <select id="medium-action" class="form-select">
+                                            <option value="quarantine">Move to Quarantine</option>
+                                            <option value="spam">Move to Spam</option>
+                                            <option value="tag" selected>Tag as Suspicious</option>
+                                            <option value="none">No Action</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="low-action" class="form-label">Low Risk Action</label>
+                                        <select id="low-action" class="form-select">
+                                            <option value="quarantine">Move to Quarantine</option>
+                                            <option value="spam">Move to Spam</option>
+                                            <option value="tag">Tag as Suspicious</option>
+                                            <option value="none" selected>No Action</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="quarantine-folder" class="form-label">Quarantine Folder</label>
+                                        <input type="text" id="quarantine-folder" class="form-control" value="Quarantine">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="spam-folder" class="form-label">Spam Folder</label>
+                                        <input type="text" id="spam-folder" class="form-control" value="Spam">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                <button type="button" id="reset-defaults-btn" class="btn btn-secondary">
+                                    <i class="fas fa-undo me-2"></i>Reset to Defaults
+                                </button>
+                                <button type="button" id="save-config-btn" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Save Configuration
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action History Tab -->
+            <div class="tab-pane fade" id="actions" role="tabpanel" aria-labelledby="actions-tab">
+                <div class="card">
+                    <div class="card-header bg-dark">
+                        <span><i class="fas fa-list"></i> Action History</span>
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="table table-hover action-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Email</th>
+                                    <th>Risk Level</th>
+                                    <th>Action Taken</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="action-history-tbody">
+                                <!-- Action history will be populated here via JavaScript -->
+                                <tr>
+                                    <td colspan="5" class="text-center">No actions recorded yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Statistics Tab -->
+            <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats-tab">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card stat-card mb-4">
+                            <div class="card-body">
+                                <div class="stat-card-header text-muted">Total Emails Scanned</div>
+                                <div class="stat-card-number" id="stat-total-scanned">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card mb-4">
+                            <div class="card-body">
+                                <div class="stat-card-header text-muted">Threats Detected</div>
+                                <div class="stat-card-number" id="stat-total-threats">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card mb-4">
+                            <div class="card-body">
+                                <div class="stat-card-header text-muted">Actions Taken</div>
+                                <div class="stat-card-number" id="stat-total-actions">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card mb-4">
+                            <div class="card-body">
+                                <div class="stat-card-header text-muted">Success Rate</div>
+                                <div class="stat-card-number" id="stat-success-rate">0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header bg-dark">
+                                <span><i class="fas fa-chart-pie"></i> Risk Level Distribution</span>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="riskDistributionChart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header bg-dark">
+                                <span><i class="fas fa-chart-line"></i> Activity Over Time</span>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="activityTimelineChart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header bg-dark">
+                        <span><i class="fas fa-chart-bar"></i> Action Type Distribution</span>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="actionTypeChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Feedback/Success/Error Messages -->
+        <div id="alert-container">
+            <!-- Alerts will be dynamically inserted here -->
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer mt-5 py-3 bg-dark">
+        <div class="container text-center">
+            <span class="text-muted">SpeeDefender &copy; 2025 - Advanced Phishing Protection</span>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialize UI elements based on current status
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch current automation status
+            fetchAutomationStatus();
+            
+            // Set up event listeners for buttons
+            document.getElementById('start-automation-btn').addEventListener('click', startAutomation);
+            document.getElementById('stop-automation-btn').addEventListener('click', stopAutomation);
+            document.getElementById('manual-scan-btn').addEventListener('click', runManualScan);
+            document.getElementById('test-connection-btn').addEventListener('click', testConnection);
+            document.getElementById('save-config-btn').addEventListener('click', saveConfiguration);
+            document.getElementById('reset-defaults-btn').addEventListener('click', resetToDefaults);
+            
+            // Load initial data
+            loadConfiguration();
+            loadActionHistory();
+            loadStatistics();
+            
+            // Initialize charts
+            initializeCharts();
+        });
+        
+        // Fetch automation status from the API
+        function fetchAutomationStatus() {
+            fetch('/api/email_automation/status')
+                .then(response => response.json())
+                .then(data => {
+                    updateStatusDisplay(data);
+                })
+                .catch(error => {
+                    showAlert('Error fetching automation status: ' + error.message, 'danger');
+                });
+        }
+        
+        // Update status display based on API response
+        function updateStatusDisplay(statusData) {
+            const isRunning = statusData.running;
+            const statusDot = document.getElementById('status-indicator');
+            const statusText = document.getElementById('status-text');
+            const statusBadge = document.getElementById('automation-status-badge');
+            const startBtn = document.getElementById('start-automation-btn');
+            const stopBtn = document.getElementById('stop-automation-btn');
+            
+            if (isRunning) {
+                statusDot.className = 'status-dot status-active';
+                statusText.textContent = 'Active';
+                statusBadge.className = 'badge bg-success';
+                statusBadge.textContent = 'Active';
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+            } else {
+                statusDot.className = 'status-dot status-inactive';
+                statusText.textContent = 'Inactive';
+                statusBadge.className = 'badge bg-danger';
+                statusBadge.textContent = 'Inactive';
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+            
+            // Update other status information
+            document.getElementById('last-scan-time').textContent = statusData.last_scan || 'Never';
+            document.getElementById('next-scan-time').textContent = statusData.next_scan || 'N/A';
+            document.getElementById('scan-interval').textContent = statusData.scan_interval || '5 minutes';
+            document.getElementById('emails-scanned').textContent = statusData.emails_scanned || '0';
+            document.getElementById('threats-detected').textContent = statusData.threats_detected || '0';
+        }
+        
+        // Start email automation
+        function startAutomation() {
+            fetch('/api/email_automation/start', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('Email automation started successfully', 'success');
+                    fetchAutomationStatus();
+                } else {
+                    showAlert('Failed to start automation: ' + data.message, 'danger');
+                }
+            })
+            .catch(error => {
+                showAlert('Error starting automation: ' + error.message, 'danger');
+            });
+        }
+        
+        // Stop email automation
+        function stopAutomation() {
+            fetch('/api/email_automation/stop', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('Email automation stopped successfully', 'success');
+                    fetchAutomationStatus();
+                } else {
+                    showAlert('Failed to stop automation: ' + data.message, 'danger');
+                }
+            })
+            .catch(error => {
+                showAlert('Error stopping automation: ' + error.message, 'danger');
+            });
+        }
+        
+        // Run a manual email scan
+        function runManualScan() {
+            showAlert('Running manual scan...', 'info');
+            fetch('/api/email_automation/manual_scan', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('Manual scan completed: ' + data.message, 'success');
+                    loadActionHistory();
+                    loadStatistics();
+                    fetchAutomationStatus();
+                } else {
+                    showAlert('Manual scan failed: ' + data.message, 'danger');
+                }
+            })
+            .catch(error => {
+                showAlert('Error running manual scan: ' + error.message, 'danger');
+            });
+        }
+        
+        // Test email connection
+        function testConnection() {
+            showAlert('Testing email connection...', 'info');
+            fetch('/api/email_automation/test_connection', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('Connection test successful', 'success');
+                } else {
+                    showAlert('Connection test failed: ' + data.message, 'danger');
+                }
+            })
+            .catch(error => {
+                showAlert('Error testing connection: ' + error.message, 'danger');
+            });
+        }
+        
+        // Load configuration from API
+        function loadConfiguration() {
+            fetch('/api/email_automation/config')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        populateConfigForm(data.config);
+                    } else {
+                        showAlert('Failed to load configuration: ' + data.message, 'warning');
+                    }
+                })
+                .catch(error => {
+                    showAlert('Error loading configuration: ' + error.message, 'danger');
+                });
+        }
+        
+        // Populate configuration form with data from API
+        function populateConfigForm(config) {
+            // Email server settings
+            document.getElementById('email-protocol').value = config.email_protocol || 'imap';
+            document.getElementById('email-server').value = config.email_server || '';
+            document.getElementById('email-port').value = config.email_port || '';
+            document.getElementById('email-username').value = config.email_username || '';
+            document.getElementById('email-password').value = config.email_password || '';
+            document.getElementById('use-ssl').checked = config.use_ssl !== false;
+            
+            // SMTP settings
+            document.getElementById('smtp-server').value = config.smtp_server || '';
+            document.getElementById('smtp-port').value = config.smtp_port || '';
+            document.getElementById('smtp-username').value = config.smtp_username || '';
+            document.getElementById('smtp-password').value = config.smtp_password || '';
+            document.getElementById('smtp-use-ssl').checked = config.smtp_use_ssl !== false;
+            
+            // Automation settings
+            document.getElementById('scan-interval-minutes').value = config.scan_interval_minutes || '5';
+            document.getElementById('emails-per-scan').value = config.emails_per_scan || '10';
+            document.getElementById('scan-unread-only').checked = config.scan_unread_only !== false;
+            document.getElementById('folder-to-scan').value = config.folder_to_scan || 'INBOX';
+            document.getElementById('notification-email').value = config.notification_email || '';
+            document.getElementById('send-notifications').checked = config.send_notifications !== false;
+            
+            // Action rules
+            document.getElementById('critical-action').value = config.actions?.critical || 'quarantine';
+            document.getElementById('high-action').value = config.actions?.high || 'spam';
+            document.getElementById('medium-action').value = config.actions?.medium || 'tag';
+            document.getElementById('low-action').value = config.actions?.low || 'none';
+            document.getElementById('quarantine-folder').value = config.quarantine_folder || 'Quarantine';
+            document.getElementById('spam-folder').value = config.spam_folder || 'Spam';
+        }
+        
+        // Save configuration
+        function saveConfiguration() {
+            // Collect configuration data from form
+            const config = {
+                // Email server settings
+                email_protocol: document.getElementById('email-protocol').value,
+                email_server: document.getElementById('email-server').value,
+                email_port: parseInt(document.getElementById('email-port').value) || null,
+                email_username: document.getElementById('email-username').value,
+                email_password: document.getElementById('email-password').value,
+                use_ssl: document.getElementById('use-ssl').checked,
+                
+                // SMTP settings
+                smtp_server: document.getElementById('smtp-server').value,
+                smtp_port: parseInt(document.getElementById('smtp-port').value) || null,
+                smtp_username: document.getElementById('smtp-username').value,
+                smtp_password: document.getElementById('smtp-password').value,
+                smtp_use_ssl: document.getElementById('smtp-use-ssl').checked,
+                
+                // Automation settings
+                scan_interval_minutes: parseInt(document.getElementById('scan-interval-minutes').value) || 5,
+                emails_per_scan: parseInt(document.getElementById('emails-per-scan').value) || 10,
+                scan_unread_only: document.getElementById('scan-unread-only').checked,
+                folder_to_scan: document.getElementById('folder-to-scan').value,
+                notification_email: document.getElementById('notification-email').value,
+                send_notifications: document.getElementById('send-notifications').checked,
+                
+                // Action rules
+                actions: {
+                    critical: document.getElementById('critical-action').value,
+                    high: document.getElementById('high-action').value,
+                    medium: document.getElementById('medium-action').value,
+                    low: document.getElementById('low-action').value
+                },
+                quarantine_folder: document.getElementById('quarantine-folder').value,
+                spam_folder: document.getElementById('spam-folder').value
+            };
+            
+            // Send configuration to API
+            fetch('/api/email_automation/config', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(config)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('Configuration saved successfully', 'success');
+                } else {
+                    showAlert('Failed to save configuration: ' + data.message, 'danger');
+                }
+            })
+            .catch(error => {
+                showAlert('Error saving configuration: ' + error.message, 'danger');
+            });
+        }
+        
+        // Reset configuration to defaults
+        function resetToDefaults() {
+            if (confirm('Are you sure you want to reset all settings to default values?')) {
+                const defaultConfig = {
+                    email_protocol: 'imap',
+                    email_port: 993,
+                    use_ssl: true,
+                    smtp_port: 587,
+                    smtp_use_ssl: true,
+                    scan_interval_minutes: 5,
+                    emails_per_scan: 10,
+                    scan_unread_only: true,
+                    folder_to_scan: 'INBOX',
+                    send_notifications: true,
+                    actions: {
+                        critical: 'quarantine',
+                        high: 'spam',
+                        medium: 'tag',
+                        low: 'none'
+                    },
+                    quarantine_folder: 'Quarantine',
+                    spam_folder: 'Spam'
+                };
+                
+                populateConfigForm(defaultConfig);
+                showAlert('Settings reset to default values. Click Save to apply these changes.', 'info');
+            }
+        }
+        
+        // Load action history from API
+        function loadActionHistory() {
+            fetch('/api/email_automation/history')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        populateActionHistory(data.history);
+                    } else {
+                        showAlert('Failed to load action history: ' + data.message, 'warning');
+                    }
+                })
+                .catch(error => {
+                    showAlert('Error loading action history: ' + error.message, 'danger');
+                });
+        }
+        
+        // Populate action history table with data from API
+        function populateActionHistory(history) {
+            const tbody = document.getElementById('action-history-tbody');
+            if (!history || history.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">No actions recorded yet</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = '';
+            history.forEach(item => {
+                const row = document.createElement('tr');
+                
+                // Time column
+                const timeCell = document.createElement('td');
+                timeCell.textContent = new Date(item.timestamp).toLocaleString();
+                row.appendChild(timeCell);
+                
+                // Email column
+                const emailCell = document.createElement('td');
+                emailCell.textContent = item.email_from || 'Unknown';
+                row.appendChild(emailCell);
+                
+                // Risk level column
+                const riskCell = document.createElement('td');
+                const riskBadge = document.createElement('span');
+                riskBadge.className = `badge bg-risk-${item.risk_level.toLowerCase()}`;
+                riskBadge.textContent = item.risk_level;
+                riskCell.appendChild(riskBadge);
+                row.appendChild(riskCell);
+                
+                // Action taken column
+                const actionCell = document.createElement('td');
+                actionCell.textContent = item.action_taken || 'None';
+                row.appendChild(actionCell);
+                
+                // Details column
+                const detailsCell = document.createElement('td');
+                const detailsButton = document.createElement('button');
+                detailsButton.className = 'btn btn-sm btn-outline-info';
+                detailsButton.innerHTML = '<i class="fas fa-info-circle"></i>';
+                detailsButton.addEventListener('click', () => {
+                    alert(`Subject: ${item.subject || 'Unknown'}\nDetails: ${item.details || 'No additional details'}`);
+                });
+                detailsCell.appendChild(detailsButton);
+                row.appendChild(detailsCell);
+                
+                tbody.appendChild(row);
+            });
+        }
+        
+        // Load statistics from API
+        function loadStatistics() {
+            fetch('/api/email_automation/statistics')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateStatistics(data.statistics);
+                        updateCharts(data.statistics);
+                    } else {
+                        showAlert('Failed to load statistics: ' + data.message, 'warning');
+                    }
+                })
+                .catch(error => {
+                    showAlert('Error loading statistics: ' + error.message, 'danger');
+                });
+        }
+        
+        // Update statistics display based on API response
+        function updateStatistics(stats) {
+            document.getElementById('stat-total-scanned').textContent = stats.total_emails_scanned || '0';
+            document.getElementById('stat-total-threats').textContent = stats.total_threats_detected || '0';
+            document.getElementById('stat-total-actions').textContent = stats.total_actions_taken || '0';
+            document.getElementById('stat-success-rate').textContent = `${stats.success_rate || '0'}%`;
+        }
+        
+        // Initialize charts
+        function initializeCharts() {
+            // Risk Distribution Chart
+            window.riskDistributionChart = new Chart(
+                document.getElementById('riskDistributionChart'),
+                {
+                    type: 'pie',
+                    data: {
+                        labels: ['Critical', 'High', 'Medium', 'Low', 'Safe'],
+                        datasets: [{
+                            data: [0, 0, 0, 0, 0],
+                            backgroundColor: [
+                                '#212529',       // Critical
+                                '#e74a3b',       // High
+                                '#f6c23e',       // Medium
+                                '#0dcaf0',       // Low
+                                '#1cc88a',       // Safe
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                            }
+                        }
+                    }
+                }
+            );
+            
+            // Activity Timeline Chart
+            window.activityTimelineChart = new Chart(
+                document.getElementById('activityTimelineChart'),
+                {
+                    type: 'line',
+                    data: {
+                        labels: Array(7).fill(0).map((_, i) => {
+                            const d = new Date();
+                            d.setDate(d.getDate() - (6 - i));
+                            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                        }),
+                        datasets: [{
+                            label: 'Emails Scanned',
+                            data: [0, 0, 0, 0, 0, 0, 0],
+                            borderColor: '#4e73df',
+                            backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }, {
+                            label: 'Threats Detected',
+                            data: [0, 0, 0, 0, 0, 0, 0],
+                            borderColor: '#e74a3b',
+                            backgroundColor: 'rgba(231, 74, 59, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                }
+            );
+            
+            // Action Type Chart
+            window.actionTypeChart = new Chart(
+                document.getElementById('actionTypeChart'),
+                {
+                    type: 'bar',
+                    data: {
+                        labels: ['Quarantine', 'Spam', 'Tag', 'No Action'],
+                        datasets: [{
+                            label: 'Actions Taken',
+                            data: [0, 0, 0, 0],
+                            backgroundColor: [
+                                '#e74a3b',       // Quarantine
+                                '#f6c23e',       // Spam
+                                '#4e73df',       // Tag
+                                '#adb5bd',       // No Action
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                }
+            );
+        }
+        
+        // Update charts with new data
+        function updateCharts(stats) {
+            // Update Risk Distribution Chart
+            if (window.riskDistributionChart) {
+                window.riskDistributionChart.data.datasets[0].data = [
+                    stats.risk_critical || 0,
+                    stats.risk_high || 0,
+                    stats.risk_medium || 0,
+                    stats.risk_low || 0,
+                    stats.risk_safe || 0
+                ];
+                window.riskDistributionChart.update();
+            }
+            
+            // Update Activity Timeline Chart
+            if (window.activityTimelineChart && stats.daily_activity) {
+                window.activityTimelineChart.data.datasets[0].data = stats.daily_activity.scanned || [0, 0, 0, 0, 0, 0, 0];
+                window.activityTimelineChart.data.datasets[1].data = stats.daily_activity.threats || [0, 0, 0, 0, 0, 0, 0];
+                window.activityTimelineChart.update();
+            }
+            
+            // Update Action Type Chart
+            if (window.actionTypeChart) {
+                window.actionTypeChart.data.datasets[0].data = [
+                    stats.action_quarantine || 0,
+                    stats.action_spam || 0,
+                    stats.action_tag || 0,
+                    stats.action_none || 0
+                ];
+                window.actionTypeChart.update();
+            }
+        }
+        
+        // Helper function to show alerts
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alert-container');
+            const alertElement = document.createElement('div');
+            alertElement.className = `alert alert-${type} alert-dismissible fade show`;
+            alertElement.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            alertContainer.appendChild(alertElement);
+            
+            // Auto-dismiss after 5 seconds
+            setTimeout(() => {
+                alertElement.classList.remove('show');
+                setTimeout(() => {
+                    alertContainer.removeChild(alertElement);
+                }, 150);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

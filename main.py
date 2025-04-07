@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from phishing_detector import analyze_url, is_valid_url
 from utils.email_analyzer import analyze_email
 from utils.pdf_generator import generate_report_pdf
+from api_routes import api_bp
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -15,9 +16,14 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "temporary_secret_key")
 
-# Create a directory to store analysis history
+# Register API blueprint
+app.register_blueprint(api_bp)
+
+# Create necessary directories
 HISTORY_DIR = "analysis_history"
 os.makedirs(HISTORY_DIR, exist_ok=True)
+os.makedirs("config", exist_ok=True)
+os.makedirs("data/scanned_emails", exist_ok=True)
 
 def json_serializable_results(results):
     """
@@ -495,5 +501,11 @@ def export_email_report(id):
             'message': f'Error exporting PDF report: {str(e)}'
         }), 500
 
+# Email Automation route
+@app.route('/email_automation')
+def email_automation():
+    """Email Automation Dashboard"""
+    return render_template('email_automation.html')
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)

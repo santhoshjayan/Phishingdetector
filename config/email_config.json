@@ -1,0 +1,33 @@
+{
+    "email_connection": {
+        "email_protocol": "imap",
+        "email_server": "",
+        "email_port": 993,
+        "email_username": "",
+        "email_password": "",
+        "use_ssl": true,
+        "smtp_server": "",
+        "smtp_port": 587,
+        "smtp_username": "",
+        "smtp_password": "",
+        "smtp_use_ssl": true
+    },
+    "automation_settings": {
+        "scan_interval_minutes": 5,
+        "emails_per_scan": 10,
+        "scan_unread_only": true,
+        "folder_to_scan": "INBOX",
+        "notification_email": "",
+        "send_notifications": true
+    },
+    "action_rules": {
+        "actions": {
+            "critical": "quarantine",
+            "high": "spam",
+            "medium": "tag",
+            "low": "none"
+        },
+        "quarantine_folder": "Quarantine",
+        "spam_folder": "Spam"
+    }
+}

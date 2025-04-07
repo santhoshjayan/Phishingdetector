@@ -1,0 +1,30 @@
+{
+    "email_connection": {
+        "imap_server": "imap.example.com",
+        "imap_port": 993,
+        "smtp_server": "smtp.example.com",
+        "smtp_port": 587,
+        "email": "your_email@example.com",
+        "password": "your_password",
+        "use_ssl": true,
+        "scan_folder": "INBOX",
+        "spam_folder": "Spam",
+        "quarantine_folder": "Quarantine"
+    },
+    "scanning": {
+        "scan_interval": 300,
+        "max_emails_per_scan": 20,
+        "unread_only": true
+    },
+    "actions": {
+        "critical_action": "quarantine",
+        "high_action": "quarantine",
+        "medium_action": "tag",
+        "low_action": "tag",
+        "safe_action": "none",
+        "send_notifications": true,
+        "notification_recipients": [
+            "admin@example.com"
+        ]
+    }
+}
