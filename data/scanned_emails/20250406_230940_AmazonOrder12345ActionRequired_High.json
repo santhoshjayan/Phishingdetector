@@ -1,0 +1,38 @@
+{
+    "email_data": {
+        "from": "amazon-orders@shipping-update.com",
+        "to": "user@example.com",
+        "subject": "Amazon Order #12345: Action Required",
+        "date": "2025-04-06T23:09:40.719614"
+    },
+    "analysis_results": {
+        "risk_level": "High",
+        "findings": [
+            "Sender domain mimics legitimate business",
+            "Email contains urgent call to action",
+            "Contains suspicious links",
+            "Requests sensitive information",
+            "Suspicious subject line",
+            "Contains unusual attachments",
+            "Sender domain registered recently"
+        ],
+        "sender_analysis": {
+            "domain": "shipping-update.com",
+            "suspicious": true
+        },
+        "content_analysis": {
+            "suspicious_links": true,
+            "suspicious_keywords": true
+        }
+    },
+    "action_taken": {
+        "timestamp": "2025-04-06T23:09:40.719614",
+        "email_id": "email_20250406_230940",
+        "from": "amazon-orders@shipping-update.com",
+        "subject": "Amazon Order #12345: Action Required",
+        "risk_level": "High",
+        "action_taken": "spam",
+        "success": true,
+        "used_predetermined_rules": true
+    }
+}

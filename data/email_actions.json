@@ -1,1 +1,102 @@
-[]
+[
+    {
+        "timestamp": "2025-04-06T17:59:40.719614",
+        "email_id": "email_20250406_175940",
+        "from": "security@paypal-account-verify.com",
+        "subject": "URGENT: Your PayPal account has been limited",
+        "risk_level": "Critical",
+        "action_taken": "quarantine",
+        "success": true,
+        "used_predetermined_rules": true
+    },
+    {
+        "timestamp": "2025-04-07T02:52:40.719614",
+        "email_id": "email_20250407_025240",
+        "from": "support@microsoft365-password-reset.net",
+        "subject": "Microsoft 365: Password reset required immediately",
+        "risk_level": "Critical",
+        "action_taken": "quarantine",
+        "success": true,
+        "used_predetermined_rules": true
+    },
+    {
+        "timestamp": "2025-04-07T04:12:40.719614",
+        "email_id": "email_20250407_041240",
+        "from": "amazon-orders@shipping-update.com",
+        "subject": "Amazon Order #12345: Action Required",
+        "risk_level": "High",
+        "action_taken": "spam",
+        "success": true,
+        "used_predetermined_rules": true
+    },
+    {
+        "timestamp": "2025-04-07T06:06:40.719614",
+        "email_id": "email_20250407_060640",
+        "from": "helpdesk@account-security-alert.net",
+        "subject": "Security Alert: Unusual Sign-in Activity",
+        "risk_level": "High",
+        "action_taken": "spam",
+        "success": true,
+        "used_predetermined_rules": true
+    },
+    {
+        "timestamp": "2025-04-06T19:39:40.719614",
+        "email_id": "email_20250406_193940",
+        "from": "newsletter@special-offers.com",
+        "subject": "Exclusive Limited Time Offer Inside!",
+        "risk_level": "Medium",
+        "action_taken": "spam",
+        "success": true,
+        "used_predetermined_rules": true
+    },
+    {
+        "timestamp": "2025-04-06T18:36:40.719614",
+        "email_id": "email_20250406_183640",
+        "from": "support@subscription-renewal.net",
+        "subject": "Your subscription is about to expire",
+        "risk_level": "Medium",
+        "action_taken": "spam",
+        "success": true,
+        "used_predetermined_rules": true
+    },
+    {
+        "timestamp": "2025-04-06T21:38:40.719614",
+        "email_id": "email_20250406_213840",
+        "from": "newsletter@retail-store.com",
+        "subject": "This Week's Deals and Promotions",
+        "risk_level": "Low",
+        "action_taken": "tag",
+        "success": true,
+        "used_predetermined_rules": true
+    },
+    {
+        "timestamp": "2025-04-06T16:18:40.719614",
+        "email_id": "email_20250406_161840",
+        "from": "updates@business-newsletter.net",
+        "subject": "Industry Updates and News",
+        "risk_level": "Low",
+        "action_taken": "tag",
+        "success": true,
+        "used_predetermined_rules": true
+    },
+    {
+        "timestamp": "2025-04-06T22:04:40.719614",
+        "email_id": "email_20250406_220440",
+        "from": "no-reply@google.com",
+        "subject": "Your Google Account: monthly security update",
+        "risk_level": "Safe",
+        "action_taken": "none",
+        "success": true,
+        "used_predetermined_rules": true
+    },
+    {
+        "timestamp": "2025-04-06T22:43:40.719614",
+        "email_id": "email_20250406_224340",
+        "from": "news@microsoft.com",
+        "subject": "Microsoft Developer Newsletter",
+        "risk_level": "Safe",
+        "action_taken": "none",
+        "success": true,
+        "used_predetermined_rules": true
+    }
+]

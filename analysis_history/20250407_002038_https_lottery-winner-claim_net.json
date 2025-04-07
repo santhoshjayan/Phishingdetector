@@ -1,0 +1,19 @@
+{
+    "timestamp": "2025-04-07T00:20:38.206968",
+    "url": "https://lottery-winner-claim.net",
+    "risk_level": "Medium",
+    "suspicious_indicators": 4,
+    "findings": [
+        "Website requests sensitive information",
+        "Contains suspicious keywords",
+        "Missing HTTPS"
+    ],
+    "domain_info": {
+        "registrar": "Example Registrar, Inc.",
+        "creation_date": "2024-04-07T00:20:38.206968",
+        "expiration_date": "2026-04-07T00:20:38.206968",
+        "country": "US",
+        "organization": "Example Org"
+    },
+    "screenshot": null
+}

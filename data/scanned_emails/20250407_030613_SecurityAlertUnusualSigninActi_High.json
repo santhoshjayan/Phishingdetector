@@ -1,0 +1,38 @@
+{
+    "email_data": {
+        "from": "helpdesk@account-security-alert.net",
+        "to": "user@example.com",
+        "subject": "Security Alert: Unusual Sign-in Activity",
+        "date": "2025-04-07T03:06:13.030382"
+    },
+    "analysis_results": {
+        "risk_level": "High",
+        "findings": [
+            "Sender domain mimics legitimate business",
+            "Email contains urgent call to action",
+            "Contains suspicious links",
+            "Requests sensitive information",
+            "Suspicious subject line",
+            "Contains unusual attachments",
+            "Sender domain registered recently"
+        ],
+        "sender_analysis": {
+            "domain": "account-security-alert.net",
+            "suspicious": true
+        },
+        "content_analysis": {
+            "suspicious_links": true,
+            "suspicious_keywords": true
+        }
+    },
+    "action_taken": {
+        "timestamp": "2025-04-07T03:06:13.030382",
+        "email_id": "email_20250407_030613",
+        "from": "helpdesk@account-security-alert.net",
+        "subject": "Security Alert: Unusual Sign-in Activity",
+        "risk_level": "High",
+        "action_taken": "spam",
+        "success": true,
+        "used_predetermined_rules": true
+    }
+}

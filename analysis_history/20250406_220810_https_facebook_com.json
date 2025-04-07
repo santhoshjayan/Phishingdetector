@@ -1,0 +1,15 @@
+{
+    "timestamp": "2025-04-06T22:08:10.501610",
+    "url": "https://facebook.com",
+    "risk_level": "Safe",
+    "suspicious_indicators": 0,
+    "findings": [],
+    "domain_info": {
+        "registrar": "Example Registrar, Inc.",
+        "creation_date": "2024-04-06T22:08:10.501610",
+        "expiration_date": "2026-04-06T22:08:10.501610",
+        "country": "US",
+        "organization": "Example Org"
+    },
+    "screenshot": null
+}

@@ -1,0 +1,32 @@
+{
+    "email_data": {
+        "from": "newsletter@retail-store.com",
+        "to": "user@example.com",
+        "subject": "This Week's Deals and Promotions",
+        "date": "2025-04-06T21:28:40.719614"
+    },
+    "analysis_results": {
+        "risk_level": "Low",
+        "findings": [
+            "Sender domain registered recently"
+        ],
+        "sender_analysis": {
+            "domain": "retail-store.com",
+            "suspicious": false
+        },
+        "content_analysis": {
+            "suspicious_links": false,
+            "suspicious_keywords": false
+        }
+    },
+    "action_taken": {
+        "timestamp": "2025-04-06T21:28:40.719614",
+        "email_id": "email_20250406_212840",
+        "from": "newsletter@retail-store.com",
+        "subject": "This Week's Deals and Promotions",
+        "risk_level": "Low",
+        "action_taken": "tag",
+        "success": true,
+        "used_predetermined_rules": true
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "email_data": {
+        "from": "news@microsoft.com",
+        "to": "user@example.com",
+        "subject": "Microsoft Developer Newsletter",
+        "date": "2025-04-07T02:04:13.030382"
+    },
+    "analysis_results": {
+        "risk_level": "Safe",
+        "findings": [],
+        "sender_analysis": {
+            "domain": "microsoft.com",
+            "suspicious": false
+        },
+        "content_analysis": {
+            "suspicious_links": false,
+            "suspicious_keywords": false
+        }
+    },
+    "action_taken": {
+        "timestamp": "2025-04-07T02:04:13.030382",
+        "email_id": "email_20250407_020413",
+        "from": "news@microsoft.com",
+        "subject": "Microsoft Developer Newsletter",
+        "risk_level": "Safe",
+        "action_taken": "none",
+        "success": true,
+        "used_predetermined_rules": true
+    }
+}

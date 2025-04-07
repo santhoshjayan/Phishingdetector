@@ -1,0 +1,22 @@
+{
+    "timestamp": "2025-04-07T06:28:38.206968",
+    "url": "https://security-alert-update.com",
+    "risk_level": "High",
+    "suspicious_indicators": 6,
+    "findings": [
+        "Domain registered recently",
+        "Domain mimics a well-known brand",
+        "Uses suspicious URL patterns",
+        "Contains login form with suspicious action URL",
+        "Website requests sensitive information",
+        "Contains suspicious keywords"
+    ],
+    "domain_info": {
+        "registrar": "Example Registrar, Inc.",
+        "creation_date": "2024-04-07T06:28:38.206968",
+        "expiration_date": "2026-04-07T06:28:38.206968",
+        "country": "US",
+        "organization": "Example Org"
+    },
+    "screenshot": null
+}

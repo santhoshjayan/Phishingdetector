@@ -1,0 +1,30 @@
+{
+    "email_data": {
+        "from": "no-reply@google.com",
+        "to": "user@example.com",
+        "subject": "Your Google Account: monthly security update",
+        "date": "2025-04-07T03:19:40.719614"
+    },
+    "analysis_results": {
+        "risk_level": "Safe",
+        "findings": [],
+        "sender_analysis": {
+            "domain": "google.com",
+            "suspicious": false
+        },
+        "content_analysis": {
+            "suspicious_links": false,
+            "suspicious_keywords": false
+        }
+    },
+    "action_taken": {
+        "timestamp": "2025-04-07T03:19:40.719614",
+        "email_id": "email_20250407_031940",
+        "from": "no-reply@google.com",
+        "subject": "Your Google Account: monthly security update",
+        "risk_level": "Safe",
+        "action_taken": "none",
+        "success": true,
+        "used_predetermined_rules": true
+    }
+}

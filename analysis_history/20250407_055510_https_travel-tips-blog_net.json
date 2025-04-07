@@ -1,0 +1,17 @@
+{
+    "timestamp": "2025-04-07T05:55:10.501610",
+    "url": "https://travel-tips-blog.net",
+    "risk_level": "Low",
+    "suspicious_indicators": 3,
+    "findings": [
+        "Missing HTTPS"
+    ],
+    "domain_info": {
+        "registrar": "Example Registrar, Inc.",
+        "creation_date": "2024-04-07T05:55:10.501610",
+        "expiration_date": "2026-04-07T05:55:10.501610",
+        "country": "US",
+        "organization": "Example Org"
+    },
+    "screenshot": null
+}

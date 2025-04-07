@@ -1,0 +1,34 @@
+{
+    "email_data": {
+        "from": "support@subscription-renewal.net",
+        "to": "user@example.com",
+        "subject": "Your subscription is about to expire",
+        "date": "2025-04-06T14:38:40.719614"
+    },
+    "analysis_results": {
+        "risk_level": "Medium",
+        "findings": [
+            "Suspicious subject line",
+            "Contains unusual attachments",
+            "Sender domain registered recently"
+        ],
+        "sender_analysis": {
+            "domain": "subscription-renewal.net",
+            "suspicious": false
+        },
+        "content_analysis": {
+            "suspicious_links": false,
+            "suspicious_keywords": true
+        }
+    },
+    "action_taken": {
+        "timestamp": "2025-04-06T14:38:40.719614",
+        "email_id": "email_20250406_143840",
+        "from": "support@subscription-renewal.net",
+        "subject": "Your subscription is about to expire",
+        "risk_level": "Medium",
+        "action_taken": "spam",
+        "success": true,
+        "used_predetermined_rules": true
+    }
+}

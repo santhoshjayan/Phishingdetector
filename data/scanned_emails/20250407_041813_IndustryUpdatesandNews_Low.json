@@ -1,0 +1,32 @@
+{
+    "email_data": {
+        "from": "updates@business-newsletter.net",
+        "to": "user@example.com",
+        "subject": "Industry Updates and News",
+        "date": "2025-04-07T04:18:13.030382"
+    },
+    "analysis_results": {
+        "risk_level": "Low",
+        "findings": [
+            "Sender domain registered recently"
+        ],
+        "sender_analysis": {
+            "domain": "business-newsletter.net",
+            "suspicious": false
+        },
+        "content_analysis": {
+            "suspicious_links": false,
+            "suspicious_keywords": false
+        }
+    },
+    "action_taken": {
+        "timestamp": "2025-04-07T04:18:13.030382",
+        "email_id": "email_20250407_041813",
+        "from": "updates@business-newsletter.net",
+        "subject": "Industry Updates and News",
+        "risk_level": "Low",
+        "action_taken": "tag",
+        "success": true,
+        "used_predetermined_rules": true
+    }
+}

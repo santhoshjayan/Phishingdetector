@@ -1,0 +1,38 @@
+{
+    "email_data": {
+        "from": "security@paypal-account-verify.com",
+        "to": "user@example.com",
+        "subject": "URGENT: Your PayPal account has been limited",
+        "date": "2025-04-07T03:01:40.719614"
+    },
+    "analysis_results": {
+        "risk_level": "Critical",
+        "findings": [
+            "Sender domain mimics legitimate business",
+            "Email contains urgent call to action",
+            "Contains suspicious links",
+            "Requests sensitive information",
+            "Suspicious subject line",
+            "Contains unusual attachments",
+            "Sender domain registered recently"
+        ],
+        "sender_analysis": {
+            "domain": "paypal-account-verify.com",
+            "suspicious": true
+        },
+        "content_analysis": {
+            "suspicious_links": true,
+            "suspicious_keywords": true
+        }
+    },
+    "action_taken": {
+        "timestamp": "2025-04-07T03:01:40.719614",
+        "email_id": "email_20250407_030140",
+        "from": "security@paypal-account-verify.com",
+        "subject": "URGENT: Your PayPal account has been limited",
+        "risk_level": "Critical",
+        "action_taken": "quarantine",
+        "success": true,
+        "used_predetermined_rules": true
+    }
+}
