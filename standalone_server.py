@@ -234,4 +234,4 @@ if __name__ == "__main__":
     print("SpeeDefender v1.0")
     print("A comprehensive phishing detection platform")
     print("=========================================")
-    app.run(host='0.0.0.0', port=PORT, debug=True)
+    app.run(host='0.0.0.0', port=PORT, debug=False)

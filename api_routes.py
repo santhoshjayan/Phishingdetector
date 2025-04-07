@@ -8,6 +8,7 @@ from flask import Blueprint, request, jsonify
 import json
 import os
 from utils.email_automation.controller import AutomationController
+from utils.email_automation.email_notifications import EmailNotifier
 
 # Create API blueprint
 api_bp = Blueprint('api', __name__, url_prefix='/api')
@@ -44,6 +45,73 @@ def test_email_connection():
     """Test the email connection."""
     result = email_automation_controller.test_email_connection()
     return jsonify(result)
+
+@api_bp.route('/email_automation/test_notification', methods=['POST'])
+def test_notification():
+    """Test sending a notification email using SendGrid."""
+    data = request.json
+    
+    # Check if SendGrid API key is provided in request or available in environment
+    api_key = data.get('api_key') or os.environ.get('SENDGRID_API_KEY')
+    
+    if not api_key:
+        return jsonify({
+            'success': False, 
+            'message': 'SendGrid API key is required. Please provide it in the request or set the SENDGRID_API_KEY environment variable.'
+        })
+    
+    # Required parameters
+    recipient = data.get('recipient')
+    if not recipient:
+        return jsonify({
+            'success': False, 
+            'message': 'Recipient email address is required'
+        })
+    
+    # Configure sender (use default if not provided)
+    sender_email = data.get('sender_email', 'noreply@speedefender.com')
+    sender_name = data.get('sender_name', 'SpeeDefender')
+    
+    # Create notifier with the provided API key
+    notifier = EmailNotifier({
+        'sendgrid_api_key': api_key,
+        'sender_email': sender_email,
+        'sender_name': sender_name
+    })
+    
+    # Send a test email
+    subject = "SpeeDefender Notification Test"
+    html_content = """
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+        <h2 style="color: #4a6ee0;">SpeeDefender Notification Test</h2>
+        <p>This is a test email from SpeeDefender to verify your notification settings.</p>
+        <p>If you received this email, your notification system is configured correctly.</p>
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #666;">
+            <p>This is an automated message from SpeeDefender. Please do not reply to this email.</p>
+        </div>
+    </div>
+    """
+    
+    text_content = "SpeeDefender Notification Test\n\nThis is a test email from SpeeDefender to verify your notification settings.\nIf you received this email, your notification system is configured correctly."
+    
+    try:
+        success = notifier.send_notification(recipient, subject, html_content, text_content)
+        
+        if success:
+            return jsonify({
+                'success': True,
+                'message': f'Test email sent successfully to {recipient}'
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Failed to send test email. Please check your SendGrid configuration.'
+            })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Error sending test email: {str(e)}'
+        })
 
 @api_bp.route('/email_automation/start', methods=['POST'])
 def start_email_automation():

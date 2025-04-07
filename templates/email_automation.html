@@ -358,20 +358,56 @@
                                 </div>
                             </div>
                             
-                            <!-- SMTP Settings for Notifications -->
-                            <h5 class="border-bottom pb-2 mb-3 mt-4">SMTP Settings for Notifications</h5>
+                            <!-- Notification Settings -->
+                            <h5 class="border-bottom pb-2 mb-3 mt-4">Notification Settings</h5>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="smtp-server" class="form-label">SMTP Server</label>
-                                        <input type="text" id="smtp-server" class="form-control" placeholder="smtp.example.com">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="enable-sendgrid" checked>
+                                        <label class="form-check-label" for="enable-sendgrid">Use SendGrid for Email Notifications</label>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="smtp-port" class="form-label">SMTP Port</label>
-                                        <input type="number" id="smtp-port" class="form-control" placeholder="587">
+                                    <small class="text-muted">SendGrid provides reliable email delivery for security alerts.</small>
+                                </div>
+                            </div>
+                            
+                            <!-- SendGrid Settings -->
+                            <div id="sendgrid-settings">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="sendgrid-api-key" class="form-label">SendGrid API Key</label>
+                                            <input type="password" id="sendgrid-api-key" class="form-control" placeholder="Your SendGrid API Key">
+                                            <small class="text-muted">Leave blank to use the SENDGRID_API_KEY environment variable.</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="sender-email" class="form-label">Sender Email</label>
+                                            <input type="email" id="sender-email" class="form-control" placeholder="noreply@speedefender.com" value="noreply@speedefender.com">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="sender-name" class="form-label">Sender Name</label>
+                                            <input type="text" id="sender-name" class="form-control" placeholder="SpeeDefender" value="SpeeDefender">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                            </div>
+                            
+                            <!-- SMTP Settings for Notifications (Alternative) -->
+                            <div id="smtp-settings" style="display: none;">
+                                <h6 class="mt-2 mb-3">SMTP Server Settings</h6>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="smtp-server" class="form-label">SMTP Server</label>
+                                            <input type="text" id="smtp-server" class="form-control" placeholder="smtp.example.com">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="smtp-port" class="form-label">SMTP Port</label>
+                                            <input type="number" id="smtp-port" class="form-control" placeholder="587">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="smtp-username" class="form-label">SMTP Username</label>
                                         <input type="text" id="smtp-username" class="form-control" placeholder="user@example.com">
@@ -420,10 +456,18 @@
                                     <div class="mb-3">
                                         <label for="notification-email" class="form-label">Notification Email</label>
                                         <input type="email" id="notification-email" class="form-control" placeholder="notifications@example.com">
+                                        <small class="text-muted">Alerts will be sent to this email address</small>
                                     </div>
                                     <div class="mb-3 form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="send-notifications" checked>
                                         <label class="form-check-label" for="send-notifications">Send Email Notifications</label>
+                                    </div>
+                                    
+                                    <div class="mt-3">
+                                        <button id="test-notification-btn" type="button" class="btn btn-info btn-sm">
+                                            <i class="fas fa-paper-plane me-1"></i> Test Notification
+                                        </button>
+                                        <small class="text-muted ms-2">Send a test email to verify settings</small>
                                     </div>
                                 </div>
                             </div>
@@ -621,6 +665,7 @@
             document.getElementById('test-connection-btn').addEventListener('click', testConnection);
             document.getElementById('save-config-btn').addEventListener('click', saveConfiguration);
             document.getElementById('reset-defaults-btn').addEventListener('click', resetToDefaults);
+            document.getElementById('enable-sendgrid').addEventListener('change', toggleNotificationMethod);
             
             // Load initial data
             loadConfiguration();

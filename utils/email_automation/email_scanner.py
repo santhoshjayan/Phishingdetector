@@ -18,6 +18,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 
 from utils.email_analyzer import analyze_email
 from utils.email_automation.email_connector import EmailConnector
+from utils.email_automation.email_notifications import EmailNotifier
 
 # Set up logging
 logging.basicConfig(
@@ -43,6 +44,7 @@ class EmailScanner:
         """
         self.config = config or self._load_config()
         self.email_connector = EmailConnector(self.config.get('email_connection', {}))
+        self.email_notifier = EmailNotifier(self.config.get('notifications', {}))
         self.actions_taken = []
         self.running = False
         self.scan_thread = None
@@ -90,6 +92,13 @@ class EmailScanner:
                     "safe_action": "none",
                     "send_notifications": True,
                     "notification_recipients": ["admin@example.com"]
+                },
+                "notifications": {
+                    "sendgrid_api_key": "",  # Will use environment variable if not set
+                    "sender_email": "noreply@speedefender.com",
+                    "sender_name": "SpeeDefender",
+                    "alerts_enabled": True,
+                    "system_alerts_enabled": True
                 }
             }
             
@@ -209,28 +218,19 @@ class EmailScanner:
             recipients = self.config.get('actions', {}).get('notification_recipients', [])
             
             for recipient in recipients:
-                subject = f"[ALERT] {risk_level} Risk Email Detected"
-                message = f"""
-                <html>
-                <body>
-                    <h2>Suspicious Email Detected</h2>
-                    <p><strong>Risk Level:</strong> {risk_level}</p>
-                    <p><strong>From:</strong> {email_data.get('from', '')}</p>
-                    <p><strong>Subject:</strong> {email_data.get('subject', '')}</p>
-                    <p><strong>Action Taken:</strong> {action_type}</p>
-                    <hr>
-                    <h3>Analysis Details:</h3>
-                    <ul>
-                        <li><strong>Suspicious Indicators:</strong> {analysis_results.get('suspicious_indicators', 0)}</li>
-                    </ul>
-                    <p>For more details, please check the security dashboard.</p>
-                </body>
-                </html>
-                """
+                # Use the EmailNotifier to send a formatted phishing alert
+                sent = self.email_notifier.send_phishing_alert(
+                    recipient=recipient,
+                    email_data=email_data,
+                    analysis_results=analysis_results,
+                    action_taken=action_details
+                )
                 
-                sent = self.email_connector.send_notification(recipient, subject, message)
                 if sent:
                     action_details["notification_sent"] = True
+                    logger.info(f"Sent phishing alert notification to {recipient}")
+                else:
+                    logger.warning(f"Failed to send phishing alert notification to {recipient}")
         
         # Save the action to the log
         self._save_action_log(action_details)
