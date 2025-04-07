@@ -1,4 +1,9 @@
-# SpeeDefender: Phishing Detection Platform
+#!/usr/bin/env python3
+"""
+Update the README.md file with SpeeDefender documentation
+"""
+
+readme_content = """# SpeeDefender: Phishing Detection Platform
 
 ## Overview
 
@@ -84,3 +89,10 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+"""
+
+# Write the new README.md
+with open('README.md', 'w') as f:
+    f.write(readme_content)
+
+print("README.md updated successfully with SpeeDefender documentation.")
