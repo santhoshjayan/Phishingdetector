@@ -56,6 +56,14 @@ class AutomationController:
             
             if 'actions' in config_data:
                 self.scanner.config['actions'] = config_data['actions']
+                
+            # Add support for predetermined rules configuration
+            if 'predetermined_rules' in config_data:
+                self.scanner.config['predetermined_rules'] = config_data['predetermined_rules']
+                
+            # Add support for notification settings
+            if 'notifications' in config_data:
+                self.scanner.config['notifications'] = config_data['notifications']
             
             # Save to file
             config_path = 'config/email_scanner_config.json'
@@ -65,6 +73,10 @@ class AutomationController:
             # Update scanner's email connector with new config if needed
             if 'email_connection' in config_data:
                 self.scanner.email_connector.config = config_data['email_connection']
+                
+            # Update the email notifier with new config if needed
+            if 'notifications' in config_data:
+                self.scanner.email_notifier.config = config_data['notifications']
             
             logger.info("Email scanner configuration updated")
             return True
@@ -279,7 +291,15 @@ class AutomationController:
                         "tag": 0,
                         "none": 0
                     },
-                    "success_rate": 0
+                    "success_rate": 0,
+                    "predetermined_analysis": {
+                        "enabled": self.scanner.config.get('scanning', {}).get('use_predetermined_analysis', False),
+                        "emails_processed": 0
+                    },
+                    "auto_handling": {
+                        "enabled": self.scanner.config.get('actions', {}).get('automatically_handle_threats', False),
+                        "emails_auto_processed": 0
+                    }
                 }
             
             # Count by risk level
@@ -302,6 +322,9 @@ class AutomationController:
             # Count successful actions
             success_count = 0
             
+            # Stats for predetermined rules
+            predetermined_count = 0
+            
             for action in actions:
                 # Count by risk level
                 risk_level = action.get('risk_level', 'Unknown')
@@ -316,15 +339,39 @@ class AutomationController:
                 # Count successful actions
                 if action.get('success', False):
                     success_count += 1
+                    
+                # Check if this email was processed using predetermined rules
+                if action.get('used_predetermined_rules', False):
+                    predetermined_count += 1
             
             # Calculate success rate
             success_rate = (success_count / len(actions)) * 100 if actions else 0
+            
+            # Get current configuration state
+            predetermined_enabled = self.scanner.config.get('scanning', {}).get('use_predetermined_analysis', False)
+            auto_handling_enabled = self.scanner.config.get('actions', {}).get('automatically_handle_threats', False)
             
             return {
                 "total_emails": len(actions),
                 "by_risk_level": risk_counts,
                 "by_action": action_counts,
-                "success_rate": success_rate
+                "success_rate": success_rate,
+                "predetermined_analysis": {
+                    "enabled": predetermined_enabled,
+                    "emails_processed": predetermined_count,
+                    "percentage": (predetermined_count / len(actions) * 100) if actions else 0
+                },
+                "auto_handling": {
+                    "enabled": auto_handling_enabled,
+                    "emails_auto_processed": success_count if auto_handling_enabled else 0,
+                    "percentage": (success_count / len(actions) * 100) if actions and auto_handling_enabled else 0
+                },
+                "configuration": {
+                    "scanning_interval": self.scanner.config.get('scanning', {}).get('scan_interval', 300),
+                    "rules_count": len(self.scanner.config.get('predetermined_rules', {}).get('suspicious_keywords', [])),
+                    "blocklist_domains_count": len(self.scanner.config.get('predetermined_rules', {}).get('blocklist_domains', [])),
+                    "trusted_domains_count": len(self.scanner.config.get('predetermined_rules', {}).get('trusted_domains', []))
+                }
             }
         except Exception as e:
             logger.error(f"Error getting statistics: {str(e)}")

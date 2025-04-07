@@ -82,23 +82,49 @@ class EmailScanner:
                 "scanning": {
                     "scan_interval": 300,  # seconds
                     "max_emails_per_scan": 20,
-                    "unread_only": True
+                    "unread_only": True,
+                    "use_predetermined_analysis": True  # Use predetermined rules for faster processing
                 },
                 "actions": {
                     "critical_action": "quarantine",  # quarantine, spam, tag, none
-                    "high_action": "quarantine",
-                    "medium_action": "tag",
+                    "high_action": "spam",  # Changed default to move to spam 
+                    "medium_action": "spam",  # Changed default to move to spam
                     "low_action": "tag",
                     "safe_action": "none",
-                    "send_notifications": True,
-                    "notification_recipients": ["admin@example.com"]
+                    "send_notifications": False,  # Disabled by default to avoid requiring SendGrid
+                    "notification_recipients": ["admin@example.com"],
+                    "automatically_handle_threats": True  # Automatically process emails without confirmation
                 },
                 "notifications": {
                     "sendgrid_api_key": "",  # Will use environment variable if not set
                     "sender_email": "noreply@speedefender.com",
                     "sender_name": "SpeeDefender",
-                    "alerts_enabled": True,
-                    "system_alerts_enabled": True
+                    "alerts_enabled": False,  # Disabled by default
+                    "system_alerts_enabled": False  # Disabled by default
+                },
+                "predetermined_rules": {
+                    "enabled": True,
+                    "blocklist_domains": [
+                        "suspicious-domain.com",
+                        "phishing-attempt.net",
+                        "malware-link.org"
+                    ],
+                    "suspicious_keywords": [
+                        "urgent action required",
+                        "verify your account immediately",
+                        "unusual sign-in activity",
+                        "password reset required",
+                        "banking information update",
+                        "payment processing failed",
+                        "claim your prize",
+                        "lottery winner",
+                        "bitcoin investment"
+                    ],
+                    "trusted_domains": [
+                        "google.com",
+                        "microsoft.com",
+                        "apple.com"
+                    ]
                 }
             }
             
@@ -254,6 +280,78 @@ class EmailScanner:
         
         return action_details
     
+    def _apply_predetermined_rules(self, email_data):
+        """
+        Apply predetermined rules to quickly analyze an email without full analysis.
+        
+        Args:
+            email_data (dict): Email data including from, subject, content
+            
+        Returns:
+            dict: Preliminary analysis results with risk level
+        """
+        # Get predetermined rules configuration
+        rules = self.config.get('predetermined_rules', {})
+        if not rules.get('enabled', False):
+            return None
+            
+        # Extract email components for analysis
+        from_address = email_data.get('from', '').lower()
+        subject = email_data.get('subject', '').lower()
+        content = email_data.get('content', '').lower()
+        
+        # Initialize the results
+        results = {
+            'risk_level': 'Unknown',
+            'findings': []
+        }
+        
+        # Check sender domain against blocklist
+        blocklist_domains = rules.get('blocklist_domains', [])
+        for domain in blocklist_domains:
+            if domain.lower() in from_address:
+                results['risk_level'] = 'Critical'
+                results['findings'].append(f"Sender domain {domain} is in blocklist")
+                return results
+        
+        # Check for trusted domains (considered safe)
+        trusted_domains = rules.get('trusted_domains', [])
+        sender_is_trusted = False
+        for domain in trusted_domains:
+            if domain.lower() in from_address:
+                sender_is_trusted = True
+                break
+                
+        # Check for suspicious keywords in subject and content
+        suspicious_keywords = rules.get('suspicious_keywords', [])
+        keyword_matches = []
+        
+        for keyword in suspicious_keywords:
+            keyword = keyword.lower()
+            if keyword in subject:
+                keyword_matches.append(f"Subject contains suspicious keyword: {keyword}")
+            if keyword in content:
+                keyword_matches.append(f"Content contains suspicious keyword: {keyword}")
+        
+        # Determine risk level based on findings
+        if len(keyword_matches) > 3:
+            results['risk_level'] = 'High'
+            results['findings'].extend(keyword_matches)
+        elif len(keyword_matches) > 1:
+            results['risk_level'] = 'Medium'
+            results['findings'].extend(keyword_matches)
+        elif len(keyword_matches) > 0:
+            results['risk_level'] = 'Low'
+            results['findings'].extend(keyword_matches)
+        elif sender_is_trusted:
+            results['risk_level'] = 'Safe'
+            results['findings'].append("Sender domain is trusted")
+        else:
+            results['risk_level'] = 'Low'
+            results['findings'].append("No suspicious patterns detected, but sender not in trusted list")
+            
+        return results
+    
     def scan_and_act(self):
         """
         Scan emails and take appropriate actions.
@@ -270,6 +368,7 @@ class EmailScanner:
         max_emails = scan_config.get('max_emails_per_scan', 10)
         unread_only = scan_config.get('unread_only', True)
         scan_folder = self.config.get('email_connection', {}).get('scan_folder', 'INBOX')
+        use_predetermined = scan_config.get('use_predetermined_analysis', False)
         
         emails = self.email_connector.get_emails(
             folder=scan_folder,
@@ -283,21 +382,54 @@ class EmailScanner:
             return []
         
         actions_taken = []
+        auto_handle = self.config.get('actions', {}).get('automatically_handle_threats', True)
         
         # Process each email
         for email_data in emails:
             try:
-                logger.info(f"Analyzing email from {email_data.get('from', '')} with subject: {email_data.get('subject', '')}")
+                from_address = email_data.get('from', '')
+                subject = email_data.get('subject', '')
+                logger.info(f"Analyzing email from {from_address} with subject: {subject}")
                 
-                # Analyze the email
-                analysis_results = analyze_email({
-                    'from': email_data.get('from', ''),
-                    'headers': email_data.get('headers', {}),
-                    'content': email_data.get('content', '')
-                })
+                # Track whether predetermined rules were used
+                used_predetermined = False
+                
+                # Determine if we should use predetermined rules or full analysis
+                if use_predetermined:
+                    # Try predetermined rules first for efficiency
+                    prelim_results = self._apply_predetermined_rules(email_data)
+                    
+                    # If we got valid predetermined results and automatic handling is enabled
+                    if prelim_results and auto_handle:
+                        analysis_results = prelim_results
+                        used_predetermined = True
+                        logger.info(f"Used predetermined rules: {analysis_results['risk_level']} risk for email from {from_address}")
+                    else:
+                        # Fall back to full analysis
+                        analysis_results = analyze_email({
+                            'from': from_address,
+                            'headers': email_data.get('headers', {}),
+                            'content': email_data.get('content', '')
+                        })
+                else:
+                    # Use full analysis
+                    analysis_results = analyze_email({
+                        'from': from_address,
+                        'headers': email_data.get('headers', {}),
+                        'content': email_data.get('content', '')
+                    })
+                
+                # Add flag to indicate if predetermined rules were used
+                if used_predetermined:
+                    analysis_results['used_predetermined_rules'] = True
                 
                 # Take appropriate action
                 action = self._take_action(email_data['id'], email_data, analysis_results)
+                
+                # Add flag to action record
+                if used_predetermined:
+                    action['used_predetermined_rules'] = True
+                    
                 actions_taken.append(action)
                 
             except Exception as e:
