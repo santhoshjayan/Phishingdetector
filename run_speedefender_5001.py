@@ -27,12 +27,12 @@ def check_port_availability(port):
     return available
 
 def run_standalone_server():
-    """Run the standalone server on port 5001"""
-    print("Starting SpeeDefender Standalone Server on port 5001...")
+    """Run the standalone server on port 7856"""
+    print("Starting SpeeDefender Standalone Server on port 7856...")
     
     # Check port availability
-    if not check_port_availability(5001):
-        print("Error: Port 5001 is already in use!")
+    if not check_port_availability(7856):
+        print("Error: Port 7856 is already in use!")
         print("Please stop any services using this port first.")
         return False
     
@@ -64,8 +64,8 @@ def run_standalone_server():
         
         # Print URL information
         print("\n=========================================")
-        print("SpeeDefender is running on port 5001!")
-        print("Access the application at: http://localhost:5001/")
+        print("SpeeDefender is running on port 7856!")
+        print("Access the application at: http://localhost:7856/")
         print("Press Ctrl+C to stop the server")
         print("=========================================\n")
         
