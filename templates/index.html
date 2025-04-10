@@ -226,6 +226,7 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="/"><i class="fas fa-home"></i> Home</a>
                     </li>
+                    {% if current_user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="/history"><i class="fas fa-history"></i> History</a>
                     </li>
@@ -241,6 +242,14 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/email_automation"><i class="fas fa-robot"></i> Email Automation</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="/about"><i class="fas fa-info-circle"></i> About</a>
                     </li>

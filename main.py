@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, send_from_directory
+from flask import Flask, render_template, request, jsonify, redirect, url_for, send_from_directory, flash
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
+from werkzeug.security import generate_password_hash, check_password_hash
 import logging
 import os
 import json
@@ -15,6 +17,84 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "temporary_secret_key")
+
+# Configure Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+# Simple user model
+class User(UserMixin):
+    def __init__(self, id):
+        self.id = id
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id)
+
+# Temporary users - replace with database in production
+users = {'admin@example.com': {'password': 'admin123'}}
+
+# Pending access requests
+pending_requests = []
+
+@app.route('/request_access', methods=['GET', 'POST'])
+def request_access():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        organization = request.form.get('organization')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+        reason = request.form.get('reason')
+        
+        # Validate passwords match
+        if password != confirm_password:
+            flash('Passwords do not match', 'error')
+            return redirect(url_for('request_access'))
+            
+        # Validate password strength
+        if len(password) < 8:
+            flash('Password must be at least 8 characters', 'error')
+            return redirect(url_for('request_access'))
+            
+        # Hash the password
+        hashed_password = generate_password_hash(password)
+        
+        # Store the request (in production, save to database)
+        pending_requests.append({
+            'name': name,
+            'email': email,
+            'organization': organization,
+            'password': hashed_password,
+            'reason': reason,
+            'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        })
+        
+        flash('Your access request has been submitted for approval', 'success')
+        return redirect(url_for('login'))
+    
+    return render_template('request_access.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        if email in users and users[email]['password'] == password:
+            user = User(email)
+            login_user(user)
+            return redirect(url_for('index'))
+        else:
+            flash('Invalid email or password')
+    return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 # Register API blueprint
 app.register_blueprint(api_bp)
@@ -57,6 +137,7 @@ def json_serializable_results(results):
     return processed_results
 
 @app.route('/')
+@login_required
 def index():
     return render_template('index.html')
 
@@ -100,6 +181,7 @@ def analyze():
         }), 500
 
 @app.route('/history')
+@login_required
 def history():
     history_files = os.listdir(HISTORY_DIR)
     history_data = []
@@ -116,10 +198,12 @@ def history():
     return render_template('history.html', history=history_data)
 
 @app.route('/batch_analysis')
+@login_required
 def batch_analysis():
     return render_template('batch_analysis.html')
 
 @app.route('/email_analysis', methods=['GET', 'POST'])
+@login_required
 def email_analysis():
     if request.method == 'POST':
         try:
@@ -162,10 +246,12 @@ def email_analysis():
     return render_template('email_analysis.html')
 
 @app.route('/about')
+@login_required
 def about():
     return render_template('about.html')
 
 @app.route('/dashboard')
+@login_required
 def dashboard():
     # Get all history files
     history_files = [f for f in os.listdir(HISTORY_DIR) if f.endswith('.json')]
@@ -301,6 +387,7 @@ def dashboard():
                           top_email_indicators=json.dumps(top_email_indicators))
 
 @app.route('/api/docs')
+@login_required
 def api_docs():
     return render_template('api_docs.html')
 
@@ -502,7 +589,34 @@ def export_email_report(id):
         }), 500
 
 # Email Automation route
+@app.route('/admin/approve_requests')
+@login_required
+def approve_requests():
+    if request.args.get('approve'):
+        email = request.args.get('email')
+        # Find and approve the request
+        for req in pending_requests:
+            if req['email'] == email:
+                users[email] = {'password': req['password']}
+                pending_requests.remove(req)
+                flash(f'Access approved for {email}', 'success')
+                break
+    elif request.args.get('reject'):
+        email = request.args.get('email')
+        reason = request.args.get('reason', 'No reason provided')
+        # Find and reject the request
+        for req in pending_requests:
+            if req['email'] == email:
+                pending_requests.remove(req)
+                flash(f'Request rejected for {email}. Reason: {reason}', 'warning')
+                break
+    if request.args.get('approve') or request.args.get('reject'):
+        return redirect(url_for('approve_requests'))
+    
+    return render_template('admin/approve_requests.html', requests=pending_requests)
+
 @app.route('/email_automation')
+@login_required
 def email_automation():
     """Email Automation Dashboard"""
     return render_template('email_automation.html')
