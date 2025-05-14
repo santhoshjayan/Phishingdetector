@@ -214,22 +214,22 @@ def check_port_availability(port):
     return available
 
 if __name__ == "__main__":
-    PORT = 7856
+    PORT = 8080
     print("=========================================")
-    print("STARTING SPEEDEFENDER ON PORT 7856")
+    print("STARTING SPEEDEFENDER ON PORT 8080")
     print("=========================================")
     
-    # Check if port 7856 is available
+    # Check if port 8080 is available
     if not check_port_availability(PORT):
-        print("ERROR: Port 7856 is already in use!")
+        print("ERROR: Port 8080 is already in use!")
         print("Please stop any services using this port first.")
         print("Alternatively, you can modify this script to use a different port.")
         import sys
         sys.exit(1)
     
-    print("✅ Port 7856 is available")
-    print("To access the application, use port 7856")
-    print("For example: http://localhost:7856/")
+    print("✅ Port 8080 is available")
+    print("To access the application, use port 8080")
+    print("For example: http://localhost:8080/")
     print("=========================================")
     print("SpeeDefender v1.0")
     print("A comprehensive phishing detection platform")

@@ -27,12 +27,12 @@ def check_port_availability(port):
     return available
 
 def run_standalone_server():
-    """Run the standalone server on port 7856"""
-    print("Starting SpeeDefender Standalone Server on port 7856...")
+    """Run the standalone server on port 8080"""
+    print("Starting SpeeDefender Standalone Server on port 8080...")
     
     # Check port availability
-    if not check_port_availability(7856):
-        print("Error: Port 7856 is already in use!")
+    if not check_port_availability(8080):
+        print("Error: Port 8080 is already in use!")
         print("Please stop any services using this port first.")
         return False
     
@@ -83,12 +83,12 @@ def run_standalone_server():
         return False
 
 def run_main_app():
-    """Run the main application on port 5001"""
-    print("Starting SpeeDefender Full Application on port 5001...")
+    """Run the main application on port 8080"""
+    print("Starting SpeeDefender Full Application on port 8080...")
     
     # Check port availability
-    if not check_port_availability(5001):
-        print("Error: Port 5001 is already in use!")
+    if not check_port_availability(8080):
+        print("Error: Port 8080 is already in use!")
         print("Please stop any services using this port first.")
         return False
     
@@ -98,7 +98,7 @@ def run_main_app():
     try:
         # Start the process
         process = subprocess.Popen(
-            ["gunicorn", "--bind", "0.0.0.0:5001", "--reuse-port", "--reload", "main:app"],
+            ["gunicorn", "--bind", "0.0.0.0:8080", "--reuse-port", "--reload", "main:app"],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             universal_newlines=True
