@@ -1,0 +1,57 @@
+# Multi-stage build for smaller image size and better security
+
+# Build stage
+FROM python:3.11-slim as builder
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Set work directory
+WORKDIR /app
+
+# Install system dependencies needed for building packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements.txt
+COPY requirements.txt /app/
+
+# Install Python dependencies in a separate directory to copy later
+RUN pip install --upgrade pip
+RUN pip install --prefix=/install -r requirements.txt
+
+# Final stage
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Create a non-root user and group
+RUN groupadd -r appgroup && useradd -r -g appgroup appuser
+
+# Set work directory
+WORKDIR /app
+
+# Copy installed packages from builder stage
+COPY --from=builder /install /usr/local
+
+# Copy project files
+COPY . /app/
+
+# Change ownership to non-root user
+RUN chown -R appuser:appgroup /app
+
+# Switch to non-root user
+USER appuser
+
+# Expose port 8080 for Google Cloud Run
+EXPOSE 8080
+
+# Set environment variable for Flask
+ENV PORT 8080
+
+# Command to run the app using gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "main:app"]
