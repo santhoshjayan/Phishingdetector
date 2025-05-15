@@ -100,6 +100,7 @@ def logout():
 app.register_blueprint(api_bp)
 
 # Create necessary directories
+# Use consistent history directory matching Dockerfile directory
 HISTORY_DIR = "analysis_history"
 os.makedirs(HISTORY_DIR, exist_ok=True)
 os.makedirs("config", exist_ok=True)
@@ -481,17 +482,30 @@ def api_analyze_email():
             'product': 'SpeeDefender API'
         }), 500
 
+import re
+
+def sanitize_filename(filename):
+    # Remove invalid characters for Windows filenames
+    return re.sub(r'[<>:"/\\|?*]', '_', filename)
+
 def save_to_history(url, results):
     """Save the URL analysis results to a JSON file in the history directory"""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     domain = url.replace("://", "_").replace("/", "_").replace(".", "_")
+    domain = sanitize_filename(domain)
     filename = f"{timestamp}_{domain}.json"
     
     # Add timestamp to results
     results['timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    with open(os.path.join(HISTORY_DIR, filename), 'w') as f:
-        json.dump(results, f)
+    logger.info(f"Saving URL analysis to file: {filename}")
+    
+    try:
+        with open(os.path.join(HISTORY_DIR, filename), 'w') as f:
+            json.dump(results, f)
+    except Exception as e:
+        logger.error(f"Failed to save URL analysis to history file {filename}: {str(e)}")
+        raise
 
 def save_email_to_history(email_data, results):
     """Save the email analysis results to a JSON file in the history directory"""
@@ -502,8 +516,12 @@ def save_email_to_history(email_data, results):
     # Add timestamp to results
     results['timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    with open(os.path.join(HISTORY_DIR, filename), 'w') as f:
-        json.dump(results, f)
+    try:
+        with open(os.path.join(HISTORY_DIR, filename), 'w') as f:
+            json.dump(results, f)
+    except Exception as e:
+        logger.error(f"Failed to save email analysis to history file {filename}: {str(e)}")
+        raise
 
 # Routes for PDF reports
 @app.route('/export/url_report/<path:id>', methods=['GET'])

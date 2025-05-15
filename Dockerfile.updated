@@ -41,6 +41,9 @@ COPY --from=builder /install /usr/local
 # Copy project files
 COPY . /app/
 
+# Create analysis history directory and set ownership to appuser
+RUN mkdir -p /app/analysis_history && chown -R appuser:appgroup /app/analysis_history
+
 # Change ownership to non-root user
 RUN chown -R appuser:appgroup /app
 
