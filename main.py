@@ -82,7 +82,7 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
         
-        if email in users and users[email]['password'] == password:
+        if email in users and check_password_hash(users[email]['password'], password):
             user = User(email)
             login_user(user)
             return redirect(url_for('index'))
