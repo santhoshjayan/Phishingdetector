@@ -84,6 +84,13 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
         
+        # Debug logging for login attempts
+        logger.debug(f"Login attempt for email: {email}")
+        if email in users:
+            logger.debug(f"User found for email: {email}")
+        else:
+            logger.debug(f"No user found for email: {email}")
+        
         if email in users and check_password_hash(users[email]['password'], password):
             user = User(email)
             login_user(user)
