@@ -33,8 +33,10 @@ def load_user(user_id):
     return User(user_id)
 
 # Temporary users - replace with database in production
-users = {'admin@example.com': {'password': 'admin123'}}
-users = {'test@speehive.com': {'password': 'test@123'}}
+users = {
+    'admin@example.com': {'password': generate_password_hash('admin123')},
+    'test@speehive.com': {'password': generate_password_hash('test@123')}
+}
 # Pending access requests
 pending_requests = []
 
