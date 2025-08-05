@@ -33,8 +33,10 @@ def load_user(user_id):
     return User(user_id)
 
 # Temporary users - replace with database in production
-users = {'admin@example.com': {'password': 'admin123'}}
-
+users = {
+    'admin@example.com': {'password': generate_password_hash('admin123')},
+    'test@speehive.com': {'password': generate_password_hash('test@123')}
+}
 # Pending access requests
 pending_requests = []
 
@@ -81,6 +83,13 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
+        
+        # Debug logging for login attempts
+        logger.debug(f"Login attempt for email: {email}")
+        if email in users:
+            logger.debug(f"User found for email: {email}")
+        else:
+            logger.debug(f"No user found for email: {email}")
         
         if email in users and check_password_hash(users[email]['password'], password):
             user = User(email)
