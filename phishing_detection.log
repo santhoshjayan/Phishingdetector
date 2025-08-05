@@ -997,3 +997,18 @@ Registrars.
 2025-05-14 12:44:34,215 - INFO - 127.0.0.1 - - [14/May/2025 12:44:34] "GET /about HTTP/1.1" 200 -
 2025-05-14 12:44:35,438 - INFO - 127.0.0.1 - - [14/May/2025 12:44:35] "GET /api/docs HTTP/1.1" 200 -
 2025-05-14 12:44:38,365 - INFO - 127.0.0.1 - - [14/May/2025 12:44:38] "GET /about HTTP/1.1" 200 -
+2025-08-05 14:37:41,530 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.16.50.35:8080
+2025-08-05 14:37:41,531 - INFO - [33mPress CTRL+C to quit[0m
+2025-08-05 14:37:41,532 - INFO -  * Restarting with stat
+2025-08-05 14:37:43,063 - WARNING -  * Debugger is active!
+2025-08-05 14:37:43,066 - INFO -  * Debugger PIN: 928-245-357
+2025-08-05 14:39:22,187 - INFO - 127.0.0.1 - - [05/Aug/2025 14:39:22] "[32mGET / HTTP/1.1[0m" 302 -
+2025-08-05 14:39:22,241 - INFO - 127.0.0.1 - - [05/Aug/2025 14:39:22] "GET /login?next=/ HTTP/1.1" 200 -
+2025-08-05 14:39:22,868 - INFO - 127.0.0.1 - - [05/Aug/2025 14:39:22] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-05 14:39:30,286 - INFO - 127.0.0.1 - - [05/Aug/2025 14:39:30] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-08-05 14:39:30,325 - INFO - 127.0.0.1 - - [05/Aug/2025 14:39:30] "GET / HTTP/1.1" 200 -
+2025-08-05 14:39:47,824 - INFO - 127.0.0.1 - - [05/Aug/2025 14:39:47] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-08-05 14:39:47,828 - INFO - 127.0.0.1 - - [05/Aug/2025 14:39:47] "GET / HTTP/1.1" 200 -
