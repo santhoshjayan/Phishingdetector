@@ -1,8 +1,8 @@
-# SpeeDefender: Phishing Detection Platform
+# SpeeSecure: Phishing Detection Platform
 
 ## Overview
 
-SpeeDefender is a comprehensive phishing detection platform designed to analyze URLs and emails for potential phishing attempts. It provides detailed analysis reports, batch processing capabilities, and automated email scanning to help protect users from phishing threats.
+SpeeSecure is a comprehensive phishing detection platform designed to analyze URLs and emails for potential phishing attempts. It provides detailed analysis reports, batch processing capabilities, and automated email scanning to help protect users from phishing threats.
 
 ## Features
 
@@ -29,16 +29,16 @@ SpeeDefender is a comprehensive phishing detection platform designed to analyze 
 - Email automation system with filtering capabilities
 - Dashboard with security metrics
 
-## Running SpeeDefender
+## Running SpeeSecure
 
 ### Port 5001 Solution
 
-Due to potential port conflicts with Replit's default port 5000, SpeeDefender now includes multiple options for running on port 5001:
+Due to potential port conflicts with Replit's default port 5000, SpeeSecure now includes multiple options for running on port 5001:
 
 #### Option 1: Use the Launcher Script (Recommended)
 
 ```bash
-python run_speedefender_5001.py
+python run_speeSecure_5001.py
 ```
 
 When prompted, select option 1 to run the standalone server or option 2 to run the full application.
@@ -46,7 +46,7 @@ When prompted, select option 1 to run the standalone server or option 2 to run t
 #### Option 2: Run the Shell Script
 
 ```bash
-./start_speedefender_5001.sh
+./start_speeSecure_5001.sh
 ```
 
 #### Option 3: Run the Standalone Server Directly
@@ -65,7 +65,7 @@ gunicorn --bind 0.0.0.0:5000 --reuse-port --reload main:app
 
 ## API Usage
 
-SpeeDefender provides a REST API for programmatic access:
+SpeeSecure provides a REST API for programmatic access:
 
 ```
 http://localhost:5001/api/analyze?url=https://example.com
