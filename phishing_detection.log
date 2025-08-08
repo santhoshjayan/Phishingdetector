@@ -1012,3 +1012,111 @@ Registrars.
 2025-08-05 14:39:30,325 - INFO - 127.0.0.1 - - [05/Aug/2025 14:39:30] "GET / HTTP/1.1" 200 -
 2025-08-05 14:39:47,824 - INFO - 127.0.0.1 - - [05/Aug/2025 14:39:47] "[32mPOST /login HTTP/1.1[0m" 302 -
 2025-08-05 14:39:47,828 - INFO - 127.0.0.1 - - [05/Aug/2025 14:39:47] "GET / HTTP/1.1" 200 -
+2025-08-05 14:41:59,012 - INFO - 127.0.0.1 - - [05/Aug/2025 14:41:59] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-08-05 14:41:59,018 - INFO - 127.0.0.1 - - [05/Aug/2025 14:41:59] "[32mGET / HTTP/1.1[0m" 302 -
+2025-08-05 14:41:59,023 - INFO - 127.0.0.1 - - [05/Aug/2025 14:41:59] "GET /login?next=/ HTTP/1.1" 200 -
+2025-08-05 14:44:29,614 - INFO - 127.0.0.1 - - [05/Aug/2025 14:44:29] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-08-05 14:44:29,618 - INFO - 127.0.0.1 - - [05/Aug/2025 14:44:29] "GET / HTTP/1.1" 200 -
+2025-08-05 15:02:43,231 - INFO - 127.0.0.1 - - [05/Aug/2025 15:02:43] "[32mGET / HTTP/1.1[0m" 302 -
+2025-08-05 15:02:43,280 - INFO - 127.0.0.1 - - [05/Aug/2025 15:02:43] "GET /login?next=/ HTTP/1.1" 200 -
+2025-08-05 15:02:43,481 - INFO - 127.0.0.1 - - [05/Aug/2025 15:02:43] "[33mGET /static/images/speehive_logo_2024.png HTTP/1.1[0m" 404 -
+2025-08-05 15:02:45,250 - INFO - 127.0.0.1 - - [05/Aug/2025 15:02:45] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-08 13:36:54,390 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.16.50.35:8080
+2025-08-08 13:36:54,390 - INFO - [33mPress CTRL+C to quit[0m
+2025-08-08 13:36:54,391 - INFO -  * Restarting with stat
+2025-08-08 13:36:55,842 - WARNING -  * Debugger is active!
+2025-08-08 13:36:55,845 - INFO -  * Debugger PIN: 928-245-357
+2025-08-08 13:37:16,415 - INFO - 127.0.0.1 - - [08/Aug/2025 13:37:16] "[32mGET / HTTP/1.1[0m" 302 -
+2025-08-08 13:37:16,434 - INFO - 127.0.0.1 - - [08/Aug/2025 13:37:16] "GET /login?next=/ HTTP/1.1" 200 -
+2025-08-08 13:37:16,786 - INFO - 127.0.0.1 - - [08/Aug/2025 13:37:16] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-08 13:37:28,034 - INFO - 127.0.0.1 - - [08/Aug/2025 13:37:28] "POST /login HTTP/1.1" 200 -
+2025-08-08 13:37:38,369 - INFO - 127.0.0.1 - - [08/Aug/2025 13:37:38] "POST /login HTTP/1.1" 200 -
+2025-08-08 13:37:45,011 - INFO - 127.0.0.1 - - [08/Aug/2025 13:37:45] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-08-08 13:37:45,018 - INFO - 127.0.0.1 - - [08/Aug/2025 13:37:45] "GET / HTTP/1.1" 200 -
+2025-08-08 13:37:49,039 - INFO - 127.0.0.1 - - [08/Aug/2025 13:37:49] "GET /batch_analysis HTTP/1.1" 200 -
+2025-08-08 13:37:50,249 - ERROR - Error processing history file 20250326_122354_https_www_google_co_in_.json: Expecting value: line 1 column 430 (char 429)
+2025-08-08 13:37:50,249 - ERROR - Error processing history file 20250326_122401_https_www_google_co_in.json: Expecting value: line 1 column 429 (char 428)
+2025-08-08 13:37:50,250 - ERROR - Error processing history file 20250326_122500_https_speehive_com.json: Expecting value: line 1 column 422 (char 421)
+2025-08-08 13:37:50,250 - ERROR - Error processing history file 20250326_122529_https_google_com.json: Expecting value: line 1 column 401 (char 400)
+2025-08-08 13:37:50,283 - INFO - 127.0.0.1 - - [08/Aug/2025 13:37:50] "GET /dashboard HTTP/1.1" 200 -
+2025-08-08 13:37:51,798 - INFO - 127.0.0.1 - - [08/Aug/2025 13:37:51] "GET / HTTP/1.1" 200 -
+2025-08-08 14:07:07,750 - INFO - 127.0.0.1 - - [08/Aug/2025 14:07:07] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-08 14:27:38,721 - INFO - 127.0.0.1 - - [08/Aug/2025 14:27:38] "GET / HTTP/1.1" 200 -
+2025-08-08 14:27:48,269 - INFO - 127.0.0.1 - - [08/Aug/2025 14:27:48] "GET / HTTP/1.1" 200 -
+2025-08-08 14:27:57,530 - INFO - 127.0.0.1 - - [08/Aug/2025 14:27:57] "[32mGET / HTTP/1.1[0m" 302 -
+2025-08-08 14:27:57,560 - INFO - 127.0.0.1 - - [08/Aug/2025 14:27:57] "GET /login?next=/ HTTP/1.1" 200 -
+2025-08-08 14:28:16,434 - INFO - 127.0.0.1 - - [08/Aug/2025 14:28:16] "POST /login HTTP/1.1" 200 -
+2025-08-08 14:28:22,731 - INFO - 127.0.0.1 - - [08/Aug/2025 14:28:22] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-08-08 14:28:22,735 - INFO - 127.0.0.1 - - [08/Aug/2025 14:28:22] "GET / HTTP/1.1" 200 -
+2025-08-08 14:28:28,016 - INFO - 127.0.0.1 - - [08/Aug/2025 14:28:28] "GET /history HTTP/1.1" 200 -
+2025-08-08 14:28:28,937 - ERROR - Error processing history file 20250326_122354_https_www_google_co_in_.json: Expecting value: line 1 column 430 (char 429)
+2025-08-08 14:28:28,945 - ERROR - Error processing history file 20250326_122401_https_www_google_co_in.json: Expecting value: line 1 column 429 (char 428)
+2025-08-08 14:28:28,952 - ERROR - Error processing history file 20250326_122500_https_speehive_com.json: Expecting value: line 1 column 422 (char 421)
+2025-08-08 14:28:28,961 - ERROR - Error processing history file 20250326_122529_https_google_com.json: Expecting value: line 1 column 401 (char 400)
+2025-08-08 14:28:29,947 - INFO - 127.0.0.1 - - [08/Aug/2025 14:28:29] "GET /email_analysis HTTP/1.1" 200 -
+2025-08-08 14:28:29,962 - INFO - 127.0.0.1 - - [08/Aug/2025 14:28:29] "GET /dashboard HTTP/1.1" 200 -
+2025-08-08 14:28:33,295 - INFO - 127.0.0.1 - - [08/Aug/2025 14:28:33] "GET / HTTP/1.1" 200 -
+2025-08-08 14:28:36,714 - INFO - 127.0.0.1 - - [08/Aug/2025 14:28:36] "GET /history HTTP/1.1" 200 -
+2025-08-08 14:28:37,745 - INFO - 127.0.0.1 - - [08/Aug/2025 14:28:37] "GET /batch_analysis HTTP/1.1" 200 -
+2025-08-08 14:28:39,425 - ERROR - Error processing history file 20250326_122354_https_www_google_co_in_.json: Expecting value: line 1 column 430 (char 429)
+2025-08-08 14:28:39,425 - ERROR - Error processing history file 20250326_122401_https_www_google_co_in.json: Expecting value: line 1 column 429 (char 428)
+2025-08-08 14:28:39,426 - ERROR - Error processing history file 20250326_122500_https_speehive_com.json: Expecting value: line 1 column 422 (char 421)
+2025-08-08 14:28:39,426 - ERROR - Error processing history file 20250326_122529_https_google_com.json: Expecting value: line 1 column 401 (char 400)
+2025-08-08 14:28:39,454 - INFO - 127.0.0.1 - - [08/Aug/2025 14:28:39] "GET /dashboard HTTP/1.1" 200 -
+2025-08-08 14:28:41,061 - INFO - 127.0.0.1 - - [08/Aug/2025 14:28:41] "GET /email_analysis HTTP/1.1" 200 -
+2025-08-08 14:28:42,050 - INFO - 127.0.0.1 - - [08/Aug/2025 14:28:42] "GET /email_analysis HTTP/1.1" 200 -
+2025-08-08 14:28:45,463 - INFO - 127.0.0.1 - - [08/Aug/2025 14:28:45] "GET / HTTP/1.1" 200 -
+2025-08-08 14:29:38,977 - INFO - 127.0.0.1 - - [08/Aug/2025 14:29:38] "GET /email_analysis HTTP/1.1" 200 -
+2025-08-08 14:29:40,666 - ERROR - Error processing history file 20250326_122354_https_www_google_co_in_.json: Expecting value: line 1 column 430 (char 429)
+2025-08-08 14:29:40,666 - ERROR - Error processing history file 20250326_122401_https_www_google_co_in.json: Expecting value: line 1 column 429 (char 428)
+2025-08-08 14:29:40,666 - ERROR - Error processing history file 20250326_122500_https_speehive_com.json: Expecting value: line 1 column 422 (char 421)
+2025-08-08 14:29:40,667 - ERROR - Error processing history file 20250326_122529_https_google_com.json: Expecting value: line 1 column 401 (char 400)
+2025-08-08 14:29:40,690 - INFO - 127.0.0.1 - - [08/Aug/2025 14:29:40] "GET /dashboard HTTP/1.1" 200 -
+2025-08-08 14:29:42,348 - INFO - 127.0.0.1 - - [08/Aug/2025 14:29:42] "GET /batch_analysis HTTP/1.1" 200 -
+2025-08-08 14:29:43,741 - INFO - 127.0.0.1 - - [08/Aug/2025 14:29:43] "GET /history HTTP/1.1" 200 -
+2025-08-08 14:30:06,323 - INFO - 127.0.0.1 - - [08/Aug/2025 14:30:06] "GET /email_analysis HTTP/1.1" 200 -
+2025-08-08 14:30:07,469 - INFO - 127.0.0.1 - - [08/Aug/2025 14:30:07] "GET /about HTTP/1.1" 200 -
+2025-08-08 14:30:14,069 - INFO - 127.0.0.1 - - [08/Aug/2025 14:30:14] "GET /api/docs HTTP/1.1" 200 -
+2025-08-08 14:30:15,404 - INFO - 127.0.0.1 - - [08/Aug/2025 14:30:15] "GET / HTTP/1.1" 200 -
+2025-08-08 14:30:17,895 - INFO - 127.0.0.1 - - [08/Aug/2025 14:30:17] "GET /history HTTP/1.1" 200 -
+2025-08-08 14:30:19,696 - INFO - 127.0.0.1 - - [08/Aug/2025 14:30:19] "GET / HTTP/1.1" 200 -
+2025-08-08 14:30:21,135 - INFO - 127.0.0.1 - - [08/Aug/2025 14:30:21] "GET /history HTTP/1.1" 200 -
+2025-08-08 14:30:21,533 - INFO - 127.0.0.1 - - [08/Aug/2025 14:30:21] "GET /batch_analysis HTTP/1.1" 200 -
+2025-08-08 14:51:47,635 - INFO - 127.0.0.1 - - [08/Aug/2025 14:51:47] "GET / HTTP/1.1" 200 -
+2025-08-08 14:51:49,090 - INFO - 127.0.0.1 - - [08/Aug/2025 14:51:49] "GET / HTTP/1.1" 200 -
+2025-08-08 15:04:51,353 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\main.py', reloading
+2025-08-08 15:04:51,549 - INFO -  * Restarting with stat
+2025-08-08 15:04:53,661 - WARNING -  * Debugger is active!
+2025-08-08 15:04:53,665 - INFO -  * Debugger PIN: 928-245-357
+2025-08-08 15:35:43,464 - INFO - 127.0.0.1 - - [08/Aug/2025 15:35:43] "GET / HTTP/1.1" 200 -
+2025-08-08 15:35:45,754 - INFO - 127.0.0.1 - - [08/Aug/2025 15:35:45] "GET / HTTP/1.1" 200 -
+2025-08-08 15:35:52,549 - INFO - 127.0.0.1 - - [08/Aug/2025 15:35:52] "GET / HTTP/1.1" 200 -
+2025-08-08 15:36:03,560 - INFO - 127.0.0.1 - - [08/Aug/2025 15:36:03] "[32mGET / HTTP/1.1[0m" 302 -
+2025-08-08 15:36:03,828 - INFO - 127.0.0.1 - - [08/Aug/2025 15:36:03] "GET /login?next=/ HTTP/1.1" 200 -
+2025-08-08 15:36:04,141 - INFO - 127.0.0.1 - - [08/Aug/2025 15:36:04] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-08 15:36:12,537 - INFO - 127.0.0.1 - - [08/Aug/2025 15:36:12] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-08-08 15:36:12,689 - INFO - 127.0.0.1 - - [08/Aug/2025 15:36:12] "GET / HTTP/1.1" 200 -
+2025-08-08 15:36:16,257 - INFO - 127.0.0.1 - - [08/Aug/2025 15:36:16] "GET /history HTTP/1.1" 200 -
+2025-08-08 15:36:17,750 - INFO - 127.0.0.1 - - [08/Aug/2025 15:36:17] "GET /batch_analysis HTTP/1.1" 200 -
+2025-08-08 15:36:18,566 - INFO - 127.0.0.1 - - [08/Aug/2025 15:36:18] "GET /history HTTP/1.1" 200 -
+2025-08-08 15:36:19,440 - INFO - 127.0.0.1 - - [08/Aug/2025 15:36:19] "GET / HTTP/1.1" 200 -
+2025-08-08 15:36:21,954 - INFO - 127.0.0.1 - - [08/Aug/2025 15:36:21] "GET / HTTP/1.1" 200 -
+2025-08-08 15:36:52,683 - INFO - 127.0.0.1 - - [08/Aug/2025 15:36:52] "GET /history HTTP/1.1" 200 -
+2025-08-08 15:36:53,462 - INFO - 127.0.0.1 - - [08/Aug/2025 15:36:53] "GET / HTTP/1.1" 200 -
+2025-08-08 15:48:56,683 - INFO - 127.0.0.1 - - [08/Aug/2025 15:48:56] "GET / HTTP/1.1" 200 -
+2025-08-08 15:49:00,137 - INFO - 127.0.0.1 - - [08/Aug/2025 15:49:00] "GET /history HTTP/1.1" 200 -
+2025-08-08 15:49:01,849 - INFO - 127.0.0.1 - - [08/Aug/2025 15:49:01] "GET / HTTP/1.1" 200 -
+2025-08-08 15:50:43,366 - INFO - 127.0.0.1 - - [08/Aug/2025 15:50:43] "GET / HTTP/1.1" 200 -
+2025-08-08 15:50:47,657 - INFO - 127.0.0.1 - - [08/Aug/2025 15:50:47] "GET /history HTTP/1.1" 200 -
+2025-08-08 15:54:46,921 - INFO - 127.0.0.1 - - [08/Aug/2025 15:54:46] "GET /batch_analysis HTTP/1.1" 200 -
+2025-08-08 15:56:19,915 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.16.50.35:8080
+2025-08-08 15:56:19,916 - INFO - [33mPress CTRL+C to quit[0m
+2025-08-08 15:56:19,918 - INFO -  * Restarting with stat
+2025-08-08 15:56:22,845 - WARNING -  * Debugger is active!
+2025-08-08 15:56:22,849 - INFO -  * Debugger PIN: 928-245-357

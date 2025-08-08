@@ -21,14 +21,14 @@ def index():
     return """
     <html>
     <head>
-        <title>SpeeDefender Phishing Detection Tool</title>
+        <title>SpeeSecure Phishing Detection Tool</title>
         <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
     </head>
     <body class="bg-dark text-light">
         <div class="container mt-5">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h1>SpeeDefender</h1>
+                    <h1>SpeeSecure</h1>
                     <h3>Phishing Detection Tool</h3>
                     <p class="lead">Running on port 5001</p>
                 </div>

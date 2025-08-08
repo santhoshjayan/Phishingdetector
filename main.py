@@ -409,14 +409,14 @@ def api_analyze():
         return jsonify({
             'success': False,
             'message': 'No URL provided. Please add ?url=https://example.com to your request.',
-            'product': 'SpeeDefender API'
+            'product': 'SpeeSecure API'
         }), 400
     
     if not is_valid_url(url):
         return jsonify({
             'success': False,
             'message': 'Invalid URL format',
-            'product': 'SpeeDefender API'
+            'product': 'SpeeSecure API'
         }), 400
     
     try:
@@ -426,7 +426,7 @@ def api_analyze():
         return jsonify({
             'success': True,
             'results': serializable_results,
-            'product': 'SpeeDefender API',
+            'product': 'SpeeSecure API',
             'version': '1.0'
         })
     except Exception as e:
@@ -434,7 +434,7 @@ def api_analyze():
         return jsonify({
             'success': False,
             'message': f'Error analyzing URL: {str(e)}',
-            'product': 'SpeeDefender API'
+            'product': 'SpeeSecure API'
         }), 500
 
 @app.route('/api/analyze_email', methods=['POST'])
@@ -480,7 +480,7 @@ def api_analyze_email():
         return jsonify({
             'success': True,
             'results': serializable_results,
-            'product': 'SpeeDefender API',
+            'product': 'SpeeSecure API',
             'version': '1.0'
         })
     except Exception as e:
@@ -488,7 +488,7 @@ def api_analyze_email():
         return jsonify({
             'success': False,
             'message': f'Error analyzing email: {str(e)}',
-            'product': 'SpeeDefender API'
+            'product': 'SpeeSecure API'
         }), 500
 
 import re
@@ -554,7 +554,7 @@ def export_url_report(id):
                             os.path.join(os.getcwd(), 'static', 'reports'),
                             filename,
                             as_attachment=True,
-                            download_name=f"SpeeDefender_URL_Report_{id}.pdf"
+                            download_name=f"SpeeSecure_URL_Report_{id}.pdf"
                         )
                     else:
                         return jsonify({
@@ -595,7 +595,7 @@ def export_email_report(id):
                             os.path.join(os.getcwd(), 'static', 'reports'),
                             filename,
                             as_attachment=True,
-                            download_name=f"SpeeDefender_Email_Report_{id}.pdf"
+                            download_name=f"SpeeSecure_Email_Report_{id}.pdf"
                         )
                     else:
                         return jsonify({
