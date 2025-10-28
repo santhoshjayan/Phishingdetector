@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Security Vulnerability Scanner - SpeeSecure</title>
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .gradient-card {
+            background: linear-gradient(135deg, #18226B 0%, #2D3A8C 100%);
+            border: none;
+        }
+        .result-card {
+            transition: transform 0.3s ease;
+        }
+        .result-card:hover {
+            transform: translateY(-2px);
+        }
+        .vulnerability-card {
+            border-left: 4px solid;
+        }
+        .severity-critical {
+            border-left-color: #dc3545 !important;
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+        .severity-high {
+            border-left-color: #fd7e14 !important;
+            background-color: rgba(253, 126, 20, 0.1);
+        }
+        .severity-medium {
+            border-left-color: #ffc107 !important;
+            background-color: rgba(255, 193, 7, 0.1);
+        }
+        .severity-low {
+            border-left-color: #17a2b8 !important;
+            background-color: rgba(23, 162, 184, 0.1);
+        }
+        .status-good {
+            color: #28a745;
+        }
+        .status-warning {
+            color: #fd7e14;
+        }
+        .status-danger {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shield-alt"></i> SpeeSecure
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/history"><i class="fas fa-history"></i> History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/batch_analysis"><i class="fas fa-tasks"></i> Batch Analysis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/email_analysis"><i class="fas fa-envelope"></i> Email Scanner</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/email_automation"><i class="fas fa-robot"></i> Email Automation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/web_security_scanner"><i class="fas fa-bug"></i> Security Scanner</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/security_headers_checker"><i class="fas fa-lock"></i> Headers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/clickjacking_checker"><i class="fas fa-mouse-pointer"></i> Clickjacking</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about"><i class="fas fa-info-circle"></i> About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/api/docs"><i class="fas fa-code"></i> API</a>
+                    </li>
+                    {% if current_user.id == 'admin@example.com' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/approve_requests"><i class="fas fa-user-shield"></i> Admin</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card gradient-card text-white">
+                    <div class="card-body text-center">
+                        <i class="fas fa-bug fa-3x mb-3"></i>
+                        <h1 class="display-5 fw-bold">Web Security Vulnerability Scanner</h1>
+                        <p class="lead">Comprehensive scan for common web security vulnerabilities including SQL injection, XSS, and more</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-search me-2"></i>Scan Website for Security Vulnerabilities</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="/web_security_scanner">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label for="url" class="form-label">Website URL</label>
+                                    <input type="url" class="form-control" id="url" name="url"
+                                           placeholder="https://example.com" required
+                                           value="{{ request.form.url if request.form.url else '' }}">
+                                    <div class="form-text">Enter a complete URL including https:// or http://</div>
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-search me-2"></i>Start Security Scan
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if results %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-success text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-check-circle me-2"></i>Security Scan Results for {{ results.url }}</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card result-card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="fas fa-shield-alt me-2"></i>Overall Risk Assessment
+                                        </h5>
+                                        <div class="mb-3">
+                                            {% if results.risk_level == 'Safe' %}
+                                                <span class="badge bg-success fs-6">
+                                                    <i class="fas fa-shield-alt me-1"></i>Safe
+                                                </span>
+                                            {% elif results.risk_level == 'Low' %}
+                                                <span class="badge bg-info fs-6">
+                                                    <i class="fas fa-info-circle me-1"></i>Low Risk
+                                                </span>
+                                            {% elif results.risk_level == 'Medium' %}
+                                                <span class="badge bg-warning fs-6">
+                                                    <i class="fas fa-exclamation-triangle me-1"></i>Medium Risk
+                                                </span>
+                                            {% elif results.risk_level == 'High' %}
+                                                <span class="badge bg-danger fs-6">
+                                                    <i class="fas fa-exclamation-triangle me-1"></i>High Risk
+                                                </span>
+                                            {% elif results.risk_level == 'Critical' %}
+                                                <span class="badge bg-dark fs-6">
+                                                    <i class="fas fa-skull-crossbones me-1"></i>Critical Risk
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-secondary fs-6">{{ results.risk_level }}</span>
+                                            {% endif %}
+                                        </div>
+                                        <p class="card-text">
+                                            <strong>Suspicious Indicators:</strong> {{ results.suspicious_count }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card result-card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="fas fa-list-check me-2"></i>Scan Summary
+                                        </h5>
+                                        <ul class="list-unstyled">
+                                            {% for finding in results.findings %}
+                                            <li class="mb-2">
+                                                {% if 'vulnerable' in finding.lower() or 'detected' in finding.lower() or 'not' in finding.lower() %}
+                                                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                                                {% else %}
+                                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                                {% endif %}
+                                                {{ finding }}
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if results.vulnerabilities %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-danger text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Detailed Vulnerability Analysis</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            {% for vuln_type, vuln_data in results.vulnerabilities.items() %}
+                                {% if vuln_data and vuln_data is mapping %}
+                                <div class="col-md-6 mb-4">
+                                    <div class="card result-card vulnerability-card
+                                        {% if vuln_data.severity == 'Critical' %}severity-critical
+                                        {% elif vuln_data.severity == 'High' %}severity-high
+                                        {% elif vuln_data.severity == 'Medium' %}severity-medium
+                                        {% else %}severity-low{% endif %}">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="fas fa-bug me-2"></i>{{ vuln_type.replace('_', ' ').title() }}
+                                                <span class="badge
+                                                    {% if vuln_data.severity == 'Critical' %}bg-danger
+                                                    {% elif vuln_data.severity == 'High' %}bg-warning text-dark
+                                                    {% elif vuln_data.severity == 'Medium' %}bg-info
+                                                    {% else %}bg-secondary{% endif %} float-end">
+                                                    {{ vuln_data.severity }}
+                                                </span>
+                                            </h6>
+                                            <p class="card-text small">{{ vuln_data.description }}</p>
+
+                                            {% if 'patterns_found' in vuln_data %}
+                                            <div class="mb-2">
+                                                <strong>Patterns Found:</strong>
+                                                <ul class="small">
+                                                    {% for pattern in vuln_data.patterns_found[:3] %}
+                                                    <li><code>{{ pattern[:50] }}{% if pattern|length > 50 %}...{% endif %}</code></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                            {% endif %}
+
+                                            {% if 'files' in vuln_data %}
+                                            <div class="mb-2">
+                                                <strong>Exposed Files:</strong>
+                                                <ul class="small">
+                                                    {% for file in vuln_data.files %}
+                                                    <li><code>{{ file }}</code></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                            {% endif %}
+
+                                            {% if 'issues' in vuln_data %}
+                                            <div class="mb-2">
+                                                <strong>Issues Found:</strong>
+                                                <ul class="small">
+                                                    {% for issue in vuln_data.issues %}
+                                                    <li>{{ issue }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                            {% endif %}
+
+                                            {% if 'methods' in vuln_data %}
+                                            <div class="mb-2">
+                                                <strong>Dangerous Methods:</strong>
+                                                <div>
+                                                    {% for method in vuln_data.methods %}
+                                                    <span class="badge bg-danger me-1">{{ method }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                            {% endif %}
+
+                                            {% if 'resources' in vuln_data %}
+                                            <div class="mb-2">
+                                                <strong>Mixed Content Resources:</strong>
+                                                <ul class="small">
+                                                    {% for resource in vuln_data.resources[:3] %}
+                                                    <li><code>{{ resource[:50] }}{% if resource|length > 50 %}...{% endif %}</code></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                            {% endif %}
+
+                                            {% if 'paths' in vuln_data %}
+                                            <div class="mb-2">
+                                                <strong>Revealed Paths:</strong>
+                                                <ul class="small">
+                                                    {% for path in vuln_data.paths %}
+                                                    <li><code>{{ path }}</code></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-info text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-lightbulb me-2"></i>Security Recommendations</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Immediate Actions:</h5>
+                                <ul>
+                                    <li>Fix any critical or high-severity vulnerabilities immediately</li>
+                                    <li>Remove or secure exposed sensitive files</li>
+                                    <li>Implement proper input validation and sanitization</li>
+                                    <li>Configure security headers (CSP, X-Frame-Options, etc.)</li>
+                                    <li>Disable dangerous HTTP methods if not needed</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Best Practices:</h5>
+                                <ul>
+                                    <li>Use HTTPS everywhere</li>
+                                    <li>Regular security audits and penetration testing</li>
+                                    <li>Keep software and frameworks updated</li>
+                                    <li>Implement Web Application Firewall (WAF)</li>
+                                    <li>Use Content Security Policy (CSP)</li>
+                                    <li>Implement proper error handling</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Error:</strong> {{ error }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-shield-alt me-2" style="color: var(--primary-color); font-size: 1.5rem;"></i>
+                        <h5 class="mb-0">SpeeSecure</h5>
+                    </div>
+                    <p>A comprehensive tool for analyzing URLs and emails to detect potential phishing attempts, helping you stay safe online.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="mb-3">
+                        <a href="/about" class="btn btn-outline-light btn-sm me-2"><i class="fas fa-info-circle me-1"></i> About</a>
+                        <a href="/api/docs" class="btn btn-outline-light btn-sm"><i class="fas fa-code me-1"></i> API</a>
+                    </div>
+                    <p>&copy; 2025 SpeeSecure - Advanced Phishing Protection</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

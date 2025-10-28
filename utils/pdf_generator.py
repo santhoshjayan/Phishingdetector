@@ -545,13 +545,309 @@ def generate_email_report_html(results):
     
     return html
 
+def generate_web_security_report_html(results):
+    """
+    Generate HTML for Web Security Vulnerability Scanner report
+    
+    Args:
+        results (dict): Web security scan results
+        
+    Returns:
+        str: HTML content
+    """
+    timestamp = results.get('timestamp', datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    url = results.get('url', 'Unknown URL')
+    risk_level = results.get('risk_level', 'Unknown')
+    risk_color = get_risk_color(risk_level)
+    suspicious_count = results.get('suspicious_count', 0)
+    
+    # Create HTML content
+    html = f'''
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>SpeeSecure Web Security Vulnerability Report</title>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                color: #333;
+                line-height: 1.5;
+                margin: 0;
+                padding: 20px;
+            }}
+            .header {{
+                text-align: center;
+                margin-bottom: 30px;
+                padding-bottom: 20px;
+                border-bottom: 2px solid #ddd;
+            }}
+            .report-title {{
+                font-size: 24px;
+                font-weight: bold;
+                margin-bottom: 10px;
+                color: #2c3e50;
+            }}
+            .logo {{
+                font-size: 28px;
+                font-weight: bold;
+                color: #3498db;
+                margin-bottom: 15px;
+            }}
+            .timestamp {{
+                color: #7f8c8d;
+                font-size: 14px;
+                margin-bottom: 15px;
+            }}
+            .risk-badge {{
+                display: inline-block;
+                padding: 8px 16px;
+                font-weight: bold;
+                color: white;
+                background-color: {risk_color};
+                border-radius: 4px;
+                margin-bottom: 15px;
+            }}
+            .section {{
+                margin-bottom: 25px;
+                padding: 15px;
+                background-color: #f9f9f9;
+                border-radius: 5px;
+            }}
+            .section-title {{
+                font-size: 18px;
+                font-weight: bold;
+                margin-bottom: 15px;
+                color: #2c3e50;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 5px;
+            }}
+            .vulnerability-card {{
+                border-left: 4px solid;
+                margin-bottom: 15px;
+                padding: 10px;
+                background-color: white;
+            }}
+            .severity-critical {{
+                border-left-color: #dc3545 !important;
+                background-color: rgba(220, 53, 69, 0.1);
+            }}
+            .severity-high {{
+                border-left-color: #fd7e14 !important;
+                background-color: rgba(253, 126, 20, 0.1);
+            }}
+            .severity-medium {{
+                border-left-color: #ffc107 !important;
+                background-color: rgba(255, 193, 7, 0.1);
+            }}
+            .severity-low {{
+                border-left-color: #17a2b8 !important;
+                background-color: rgba(23, 162, 184, 0.1);
+            }}
+            ul {{
+                margin: 0;
+                padding-left: 20px;
+            }}
+            li {{
+                margin-bottom: 5px;
+            }}
+            .summary {{
+                font-weight: bold;
+                margin-bottom: 20px;
+                font-size: 16px;
+            }}
+            .footer {{
+                margin-top: 30px;
+                text-align: center;
+                font-size: 12px;
+                color: #7f8c8d;
+                border-top: 1px solid #ddd;
+                padding-top: 15px;
+            }}
+            table {{
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 15px;
+            }}
+            th, td {{
+                padding: 8px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }}
+            th {{
+                background-color: #f2f2f2;
+            }}
+            .badge {{
+                display: inline-block;
+                padding: 4px 8px;
+                font-size: 12px;
+                font-weight: bold;
+                color: white;
+                border-radius: 3px;
+            }}
+            .badge-critical {{
+                background-color: #dc3545;
+            }}
+            .badge-high {{
+                background-color: #fd7e14;
+            }}
+            .badge-medium {{
+                background-color: #ffc107;
+                color: #000;
+            }}
+            .badge-low {{
+                background-color: #17a2b8;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <div class="logo">🛡️ SpeeSecure</div>
+            <div class="report-title">Web Security Vulnerability Report</div>
+            <div class="timestamp">Generated on: {timestamp}</div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Scan Summary</div>
+            <p><strong>URL:</strong> {url}</p>
+            <p><strong>Risk Level:</strong> <span class="risk-badge">{risk_level}</span></p>
+            <p><strong>Suspicious Indicators:</strong> {suspicious_count}</p>
+        </div>
+    '''
+    
+    # Scan Findings
+    if 'findings' in results and results['findings']:
+        html += '''
+        <div class="section">
+            <div class="section-title">Scan Findings</div>
+            <ul>
+        '''
+        
+        for finding in results['findings']:
+            html += f'<li>{finding}</li>'
+        
+        html += '''
+            </ul>
+        </div>
+        '''
+    
+    # Detailed Vulnerability Analysis
+    if 'vulnerabilities' in results and results['vulnerabilities']:
+        html += '''
+        <div class="section">
+            <div class="section-title">Detailed Vulnerability Analysis</div>
+        '''
+        
+        for vuln_type, vuln_data in results['vulnerabilities'].items():
+            if vuln_data and isinstance(vuln_data, dict):
+                severity = vuln_data.get('severity', 'Unknown')
+                severity_class = f"severity-{severity.lower()}"
+                badge_class = f"badge-{severity.lower()}"
+                
+                html += f'''
+                <div class="vulnerability-card {severity_class}">
+                    <h5 style="margin-top: 0; margin-bottom: 10px;">
+                        {vuln_type.replace('_', ' ').title()}
+                        <span class="badge {badge_class}" style="float: right;">{severity}</span>
+                    </h5>
+                '''
+                
+                if 'description' in vuln_data:
+                    html += f'<p style="margin-bottom: 10px;"><strong>Description:</strong> {vuln_data["description"]}</p>'
+                
+                if 'patterns_found' in vuln_data and vuln_data['patterns_found']:
+                    html += '<p style="margin-bottom: 5px;"><strong>Patterns Found:</strong></p><ul>'
+                    for pattern in vuln_data['patterns_found'][:5]:  # Limit to 5
+                        html += f'<li><code>{pattern[:50]}{"..." if len(pattern) > 50 else ""}</code></li>'
+                    html += '</ul>'
+                
+                if 'files' in vuln_data and vuln_data['files']:
+                    html += '<p style="margin-bottom: 5px;"><strong>Exposed Files:</strong></p><ul>'
+                    for file in vuln_data['files']:
+                        html += f'<li><code>{file}</code></li>'
+                    html += '</ul>'
+                
+                if 'issues' in vuln_data and vuln_data['issues']:
+                    html += '<p style="margin-bottom: 5px;"><strong>Issues Found:</strong></p><ul>'
+                    for issue in vuln_data['issues']:
+                        html += f'<li>{issue}</li>'
+                    html += '</ul>'
+                
+                if 'methods' in vuln_data and vuln_data['methods']:
+                    html += '<p style="margin-bottom: 5px;"><strong>Dangerous Methods:</strong></p>'
+                    for method in vuln_data['methods']:
+                        html += f'<span class="badge badge-critical" style="margin-right: 5px;">{method}</span>'
+                    html += '</p>'
+                
+                if 'resources' in vuln_data and vuln_data['resources']:
+                    html += '<p style="margin-bottom: 5px;"><strong>Mixed Content Resources:</strong></p><ul>'
+                    for resource in vuln_data['resources'][:3]:  # Limit to 3
+                        html += f'<li><code>{resource[:50]}{"..." if len(resource) > 50 else ""}</code></li>'
+                    html += '</ul>'
+                
+                if 'paths' in vuln_data and vuln_data['paths']:
+                    html += '<p style="margin-bottom: 5px;"><strong>Revealed Paths:</strong></p><ul>'
+                    for path in vuln_data['paths']:
+                        html += f'<li><code>{path}</code></li>'
+                    html += '</ul>'
+                
+                html += '''
+                </div>
+                '''
+        
+        html += '''
+        </div>
+        '''
+    
+    # Security Recommendations
+    html += '''
+        <div class="section">
+            <div class="section-title">Security Recommendations</div>
+            <div style="display: flex; gap: 20px;">
+                <div style="flex: 1;">
+                    <h6 style="color: #2c3e50; margin-bottom: 10px;">Immediate Actions:</h6>
+                    <ul>
+                        <li>Fix any critical or high-severity vulnerabilities immediately</li>
+                        <li>Remove or secure exposed sensitive files</li>
+                        <li>Implement proper input validation and sanitization</li>
+                        <li>Configure security headers (CSP, X-Frame-Options, etc.)</li>
+                        <li>Disable dangerous HTTP methods if not needed</li>
+                    </ul>
+                </div>
+                <div style="flex: 1;">
+                    <h6 style="color: #2c3e50; margin-bottom: 10px;">Best Practices:</h6>
+                    <ul>
+                        <li>Use HTTPS everywhere</li>
+                        <li>Regular security audits and penetration testing</li>
+                        <li>Keep software and frameworks updated</li>
+                        <li>Implement Web Application Firewall (WAF)</li>
+                        <li>Use Content Security Policy (CSP)</li>
+                        <li>Implement proper error handling</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    '''
+    
+    # Add footer
+    html += '''
+        <div class="footer">
+            <p>This report was generated by SpeeSecure - Advanced Web Security Scanner</p>
+            <p>© 2025 SpeeSecure - All rights reserved</p>
+        </div>
+    </body>
+    </html>
+    '''
+    
+    return html
+
 def generate_report_pdf(results, report_type='url'):
     """
     Generate PDF report from analysis results
     
     Args:
         results (dict): Analysis results
-        report_type (str): Type of report ('url' or 'email')
+        report_type (str): Type of report ('url', 'email', or 'web_security')
         
     Returns:
         tuple: (success status, file path or error message)
@@ -564,6 +860,10 @@ def generate_report_pdf(results, report_type='url'):
             # Generate URL report
             html_content = generate_url_report_html(results)
             filename = f"url_report_{timestamp}.pdf"
+        elif report_type == 'web_security':
+            # Generate Web Security report
+            html_content = generate_web_security_report_html(results)
+            filename = f"web_security_report_{timestamp}.pdf"
         else:
             # Generate Email report
             html_content = generate_email_report_html(results)

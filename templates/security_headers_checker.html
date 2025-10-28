@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Headers Checker - SpeeSecure</title>
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .gradient-card {
+            background: linear-gradient(135deg, #18226B 0%, #2D3A8C 100%);
+            border: none;
+        }
+        .result-card {
+            transition: transform 0.3s ease;
+        }
+        .result-card:hover {
+            transform: translateY(-2px);
+        }
+        .status-good {
+            color: #28a745;
+        }
+        .status-warning {
+            color: #fd7e14;
+        }
+        .status-danger {
+            color: #dc3545;
+        }
+        .header-present {
+            background-color: rgba(40, 167, 69, 0.1);
+            border-left: 4px solid #28a745;
+        }
+        .header-missing {
+            background-color: rgba(220, 53, 69, 0.1);
+            border-left: 4px solid #dc3545;
+        }
+        .header-warning {
+            background-color: rgba(253, 126, 20, 0.1);
+            border-left: 4px solid #fd7e14;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shield-alt"></i> SpeeSecure
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/history"><i class="fas fa-history"></i> History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/batch_analysis"><i class="fas fa-tasks"></i> Batch Analysis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/email_analysis"><i class="fas fa-envelope"></i> Email Scanner</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/email_automation"><i class="fas fa-robot"></i> Email Automation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/security_headers_checker"><i class="fas fa-lock"></i> Security Headers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about"><i class="fas fa-info-circle"></i> About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/api/docs"><i class="fas fa-code"></i> API</a>
+                    </li>
+                    {% if current_user.id == 'admin@example.com' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/approve_requests"><i class="fas fa-user-shield"></i> Admin</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card gradient-card text-white">
+                    <div class="card-body text-center">
+                        <i class="fas fa-lock fa-3x mb-3"></i>
+                        <h1 class="display-5 fw-bold">Security Headers Checker</h1>
+                        <p class="lead">Analyze HTTP security headers and clickjacking protection for any website</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-search me-2"></i>Check Website Security Headers</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="/security_headers_checker">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label for="url" class="form-label">Website URL</label>
+                                    <input type="url" class="form-control" id="url" name="url"
+                                           placeholder="https://example.com" required
+                                           value="{{ request.form.url if request.form.url else '' }}">
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-search me-2"></i>Analyze Headers
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if results %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-success text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-check-circle me-2"></i>Analysis Results for {{ results.url }}</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card result-card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="fas fa-shield-alt me-2"></i>Risk Assessment
+                                        </h5>
+                                        <div class="mb-3">
+                                            {% if results.risk_level == 'Safe' %}
+                                                <span class="badge bg-success fs-6">Safe</span>
+                                            {% elif results.risk_level == 'Low' %}
+                                                <span class="badge bg-info fs-6">Low Risk</span>
+                                            {% elif results.risk_level == 'Medium' %}
+                                                <span class="badge bg-warning fs-6">Medium Risk</span>
+                                            {% elif results.risk_level == 'High' %}
+                                                <span class="badge bg-danger fs-6">High Risk</span>
+                                            {% else %}
+                                                <span class="badge bg-dark fs-6">{{ results.risk_level }}</span>
+                                            {% endif %}
+                                        </div>
+                                        <p class="card-text">
+                                            <strong>Suspicious Indicators:</strong> {{ results.suspicious_count }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card result-card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="fas fa-list-check me-2"></i>Summary
+                                        </h5>
+                                        <ul class="list-unstyled">
+                                            {% for finding in results.findings %}
+                                            <li class="mb-2">
+                                                {% if 'missing' in finding.lower() or 'misconfigured' in finding.lower() %}
+                                                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                                                {% else %}
+                                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                                {% endif %}
+                                                {{ finding }}
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-info text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-list me-2"></i>Detailed Header Analysis</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            {% for header_name, header_info in results.header_analysis.items() %}
+                            <div class="col-md-6 mb-3">
+                                <div class="card result-card h-100
+                                    {% if header_info.present %}
+                                        {% if header_name == 'X-Frame-Options' %}
+                                            header-present
+                                        {% elif header_info.importance == 'Critical' or header_info.importance == 'High' %}
+                                            header-present
+                                        {% else %}
+                                            header-present
+                                        {% endif %}
+                                    {% else %}
+                                        {% if header_info.importance == 'Critical' %}
+                                            header-missing
+                                        {% elif header_info.importance == 'High' %}
+                                            header-warning
+                                        {% else %}
+                                            header-missing
+                                        {% endif %}
+                                    {% endif %}">
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            {% if header_info.present %}
+                                                <i class="fas fa-check-circle text-success me-2"></i>
+                                            {% else %}
+                                                <i class="fas fa-times-circle text-danger me-2"></i>
+                                            {% endif %}
+                                            {{ header_name }}
+                                        </h6>
+                                        <p class="card-text small text-muted mb-2">{{ header_info.description }}</p>
+                                        {% if header_info.present %}
+                                            <div class="mb-2">
+                                                <strong>Value:</strong>
+                                                <code class="bg-light text-dark px-1 rounded">{{ header_info.value }}</code>
+                                            </div>
+                                        {% endif %}
+                                        <div class="mb-2">
+                                            <span class="badge
+                                                {% if header_info.importance == 'Critical' %}bg-danger
+                                                {% elif header_info.importance == 'High' %}bg-warning text-dark
+                                                {% elif header_info.importance == 'Medium' %}bg-info
+                                                {% else %}bg-secondary{% endif %}">
+                                                {{ header_info.importance }}
+                                            </span>
+                                        </div>
+                                        <p class="card-text small">{{ header_info.recommendation }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Error:</strong> {{ error }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-shield-alt me-2" style="color: var(--primary-color); font-size: 1.5rem;"></i>
+                        <h5 class="mb-0">SpeeSecure</h5>
+                    </div>
+                    <p>A comprehensive tool for analyzing URLs and emails to detect potential phishing attempts, helping you stay safe online.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="mb-3">
+                        <a href="/about" class="btn btn-outline-light btn-sm me-2"><i class="fas fa-info-circle me-1"></i> About</a>
+                        <a href="/api/docs" class="btn btn-outline-light btn-sm"><i class="fas fa-code me-1"></i> API</a>
+                    </div>
+                    <p>&copy; 2025 SpeeSecure - Advanced Phishing Protection</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

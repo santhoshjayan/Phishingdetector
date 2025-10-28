@@ -15,6 +15,8 @@ from urllib.parse import urlparse
 from utils.url_analyzer import analyze_url_patterns
 from utils.domain_checker import check_domain_info
 from utils.reputation_checker import check_domain_reputation
+from utils.security_headers_checker import check_security_headers
+from utils.web_security_scanner import scan_web_security_vulnerabilities
 
 # Configure logging
 logging.basicConfig(
@@ -68,18 +70,26 @@ def analyze_url(url, verbose=False):
     # Check reputation
     reputation_info = check_domain_reputation(url)
     
+    # Check security headers
+    security_headers = check_security_headers(url)
+    
+    # Scan for web security vulnerabilities
+    web_security = scan_web_security_vulnerabilities(url)
+    
     # Calculate overall risk level
     suspicious_indicators = sum([
         pattern_results['suspicious_count'],
         domain_info['suspicious_count'],
-        reputation_info['suspicious_count']
+        reputation_info['suspicious_count'],
+        security_headers['suspicious_count'],
+        web_security['suspicious_count']
     ])
     
-    if suspicious_indicators >= 5:
+    if suspicious_indicators >= 8:
         risk_level = "High"
-    elif suspicious_indicators >= 3:
+    elif suspicious_indicators >= 5:
         risk_level = "Medium"
-    elif suspicious_indicators >= 1:
+    elif suspicious_indicators >= 2:
         risk_level = "Low"
     else:
         risk_level = "Safe"
@@ -92,7 +102,9 @@ def analyze_url(url, verbose=False):
         "suspicious_indicators": suspicious_indicators,
         "pattern_analysis": pattern_results,
         "domain_info": domain_info,
-        "reputation": reputation_info
+        "reputation": reputation_info,
+        "security_headers": security_headers,
+        "web_security": web_security
     }
     
     # Log the outcome
@@ -116,6 +128,14 @@ def analyze_url(url, verbose=False):
             
         print("\nREPUTATION INFORMATION:")
         for finding in reputation_info['findings']:
+            print(f"- {finding}")
+        
+        print("\nSECURITY HEADERS ANALYSIS:")
+        for finding in security_headers['findings']:
+            print(f"- {finding}")
+        
+        print("\nWEB SECURITY SCAN:")
+        for finding in web_security['findings']:
             print(f"- {finding}")
         
         print("\nRECOMMENDATION:")
