@@ -11,47 +11,67 @@ from urllib.parse import urlparse
 
 logger = logging.getLogger(__name__)
 
-# Important security headers to check
+# Security Headers Checklist based on best practices
 SECURITY_HEADERS = {
-    'Strict-Transport-Security': {
-        'description': 'HTTP Strict Transport Security (HSTS)',
-        'importance': 'Critical',
-        'recommendation': 'Should be set to at least "max-age=31536000; includeSubDomains"'
+    'X-Frame-Options': {
+        'purpose': 'Prevents Clickjacking',
+        'what_to_check': 'Should be set to DENY or SAMEORIGIN',
+        'example': 'X-Frame-Options: SAMEORIGIN',
+        'importance': 'High'
     },
     'Content-Security-Policy': {
-        'description': 'Content Security Policy',
-        'importance': 'High',
-        'recommendation': 'Should define allowed sources for content'
+        'purpose': 'Prevents XSS, data injection',
+        'what_to_check': 'Should exist and be restrictive',
+        'example': "Content-Security-Policy: default-src 'self'",
+        'importance': 'High'
     },
-    'X-Frame-Options': {
-        'description': 'Clickjacking Protection',
-        'importance': 'High',
-        'recommendation': 'Should be set to "DENY" or "SAMEORIGIN"'
+    'Strict-Transport-Security': {
+        'purpose': 'Enforces HTTPS',
+        'what_to_check': 'Present with a long max-age and includeSubDomains',
+        'example': 'Strict-Transport-Security: max-age=31536000; includeSubDomains; preload',
+        'importance': 'Critical'
     },
     'X-Content-Type-Options': {
-        'description': 'MIME Type Sniffing Protection',
-        'importance': 'Medium',
-        'recommendation': 'Should be set to "nosniff"'
+        'purpose': 'Prevents MIME-type sniffing',
+        'what_to_check': 'Must be nosniff',
+        'example': 'X-Content-Type-Options: nosniff',
+        'importance': 'Medium'
     },
     'Referrer-Policy': {
-        'description': 'Referrer Information Control',
-        'importance': 'Medium',
-        'recommendation': 'Should be set to "strict-origin-when-cross-origin" or similar'
+        'purpose': 'Controls referrer info leakage',
+        'what_to_check': 'Must exist and be restrictive',
+        'example': 'Referrer-Policy: no-referrer',
+        'importance': 'Medium'
     },
     'Permissions-Policy': {
-        'description': 'Feature Policy',
-        'importance': 'Medium',
-        'recommendation': 'Should restrict access to sensitive browser features'
+        'purpose': 'Controls access to browser features',
+        'what_to_check': 'Should exist and limit features',
+        'example': 'Permissions-Policy: geolocation=(), camera=()',
+        'importance': 'Medium'
     },
     'X-XSS-Protection': {
-        'description': 'Cross-Site Scripting Protection',
-        'importance': 'Low',
-        'recommendation': 'Should be set to "1; mode=block"'
+        'purpose': 'Legacy header for XSS',
+        'what_to_check': 'Should be 1; mode=block (for old browsers)',
+        'example': 'X-XSS-Protection: 1; mode=block',
+        'importance': 'Low'
     },
-    'Server': {
-        'description': 'Server Information Disclosure',
-        'importance': 'Low',
-        'recommendation': 'Should not reveal server software version'
+    'Cross-Origin-Opener-Policy': {
+        'purpose': 'Isolates browsing contexts',
+        'what_to_check': 'Should exist',
+        'example': 'Cross-Origin-Opener-Policy: same-origin',
+        'importance': 'Medium'
+    },
+    'Cross-Origin-Resource-Policy': {
+        'purpose': 'Controls cross-origin data sharing',
+        'what_to_check': 'Should exist',
+        'example': 'Cross-Origin-Resource-Policy: same-origin',
+        'importance': 'Medium'
+    },
+    'Cross-Origin-Embedder-Policy': {
+        'purpose': 'Helps in preventing data leaks',
+        'what_to_check': 'Should exist',
+        'example': 'Cross-Origin-Embedder-Policy: require-corp',
+        'importance': 'Medium'
     }
 }
 
@@ -79,87 +99,152 @@ def check_security_headers(url, timeout=10):
         # Check each security header
         for header_name, header_info in SECURITY_HEADERS.items():
             header_value = headers.get(header_name, '').strip()
-            header_analysis[header_name] = {
-                'present': bool(header_value),
-                'value': header_value,
-                'description': header_info['description'],
-                'importance': header_info['importance'],
-                'recommendation': header_info['recommendation']
-            }
+            status = 'missing'  # Default
+            status_icon = '❌'
+            message = f"{header_info['purpose']}: Missing"
 
-            # Analyze header presence and configuration
-            if not header_value:
-                # Header is missing
-                if header_info['importance'] == 'Critical':
-                    findings.append(f"Critical security header missing: {header_info['description']}")
-                    suspicious_count += 3
-                elif header_info['importance'] == 'High':
-                    findings.append(f"Important security header missing: {header_info['description']}")
-                    suspicious_count += 2
-                elif header_info['importance'] == 'Medium':
-                    findings.append(f"Recommended security header missing: {header_info['description']}")
-                    suspicious_count += 1
-                else:
-                    findings.append(f"Optional security header missing: {header_info['description']}")
-            else:
-                # Header is present, check configuration
+            if header_value:
+                status = 'correct'
+                status_icon = '✅'
+                message = f"{header_info['purpose']}: {header_info['what_to_check']} "
+                suspicious_count += 0  # Good
+
+                # Specific configuration checks
                 if header_name == 'Strict-Transport-Security':
-                    if 'max-age=' not in header_value or 'max-age=0' in header_value:
-                        findings.append("HSTS header is misconfigured or disabled")
+                    if 'max-age=' not in header_value or int(header_value.split('max-age=')[1].split(';')[0]) < 31536000:
+                        status = 'weak'
+                        status_icon = '⚠️'
+                        message = f"{header_info['purpose']}: Weak max-age"
                         suspicious_count += 2
                     elif 'includeSubDomains' not in header_value:
-                        findings.append("HSTS header should include subdomains")
+                        status = 'weak'
+                        status_icon = '⚠️'
+                        message = f"{header_info['purpose']}: Missing includeSubDomains"
                         suspicious_count += 1
 
                 elif header_name == 'X-Frame-Options':
                     if header_value.upper() not in ['DENY', 'SAMEORIGIN']:
-                        findings.append("X-Frame-Options header has weak configuration")
+                        status = 'weak'
+                        status_icon = '⚠️'
+                        message = f"{header_info['purpose']}: Weak configuration ({header_value})"
                         suspicious_count += 2
 
                 elif header_name == 'Content-Security-Policy':
-                    if len(header_value) < 10:  # Very basic CSP
-                        findings.append("Content Security Policy appears to be too permissive")
+                    if "default-src 'none'" not in header_value and len(header_value.split()) < 5:  # Basic restrictiveness check
+                        status = 'weak'
+                        status_icon = '⚠️'
+                        message = f"{header_info['purpose']}: Appears too permissive"
                         suspicious_count += 1
 
                 elif header_name == 'X-Content-Type-Options':
                     if header_value.lower() != 'nosniff':
-                        findings.append("X-Content-Type-Options should be set to 'nosniff'")
+                        status = 'weak'
+                        status_icon = '⚠️'
+                        message = f"{header_info['purpose']}: Should be nosniff"
                         suspicious_count += 1
 
-                elif header_name == 'Server':
-                    # Check if server reveals version information
-                    if any(char.isdigit() for char in header_value) and ('/' in header_value or ' ' in header_value):
-                        findings.append("Server header reveals software version information")
+                elif header_name == 'Referrer-Policy':
+                    restrictive_policies = ['no-referrer', 'no-referrer-when-downgrade', 'strict-origin', 'strict-origin-when-cross-origin']
+                    if header_value not in restrictive_policies:
+                        status = 'weak'
+                        status_icon = '⚠️'
+                        message = f"{header_info['purpose']}: Not restrictive ({header_value})"
                         suspicious_count += 1
 
-        # Check for additional security issues
-        # Check if site redirects to HTTP (should use HTTPS)
-        if url.startswith('http://') and response.url.startswith('https://'):
-            findings.append("Site redirects from HTTP to HTTPS (good practice)")
-        elif url.startswith('https://') and response.url.startswith('http://'):
-            findings.append("HTTPS site redirects to HTTP (security risk)")
+                elif header_name == 'Permissions-Policy':
+                    if len(header_value.split(',')) < 3:  # Basic check for limited features
+                        status = 'weak'
+                        status_icon = '⚠️'
+                        message = f"{header_info['purpose']}: Should limit more features"
+                        suspicious_count += 1
+
+                elif header_name == 'X-XSS-Protection':
+                    if header_value != '1; mode=block':
+                        status = 'weak'
+                        status_icon = '⚠️'
+                        message = f"{header_info['purpose']}: Should be 1; mode=block"
+                        suspicious_count += 1
+
+                elif header_name == 'Cross-Origin-Opener-Policy':
+                    if header_value != 'same-origin':
+                        status = 'weak'
+                        status_icon = '⚠️'
+                        message = f"{header_info['purpose']}: Should be same-origin"
+                        suspicious_count += 1
+
+                elif header_name == 'Cross-Origin-Resource-Policy':
+                    if header_value != 'same-origin':
+                        status = 'weak'
+                        status_icon = '⚠️'
+                        message = f"{header_info['purpose']}: Should be same-origin"
+                        suspicious_count += 1
+
+                elif header_name == 'Cross-Origin-Embedder-Policy':
+                    if header_value != 'require-corp':
+                        status = 'weak'
+                        status_icon = '⚠️'
+                        message = f"{header_info['purpose']}: Should be require-corp"
+                        suspicious_count += 1
+            else:
+                # Header missing
+                if header_info['importance'] == 'Critical':
+                    message = f"{header_info['purpose']}: Missing (Critical)"
+                    suspicious_count += 3
+                elif header_info['importance'] == 'High':
+                    message = f"{header_info['purpose']}: Missing (High)"
+                    suspicious_count += 2
+                else:
+                    message = f"{header_info['purpose']}: Missing"
+                    suspicious_count += 1
+
+            findings.append(f"{status_icon} {message}")
+            header_analysis[header_name] = {
+                'status': status,
+                'status_icon': status_icon,
+                'value': header_value,
+                'purpose': header_info['purpose'],
+                'what_to_check': header_info['what_to_check'],
+                'example': header_info['example']
+            }
+
+        # Additional checks
+        if not url.startswith('https://'):
+            findings.append("❌ Site does not use HTTPS encryption")
             suspicious_count += 2
 
         # Check for insecure cookies
         set_cookie = headers.get('Set-Cookie', '')
         if set_cookie and 'secure' not in set_cookie.lower():
-            findings.append("Cookies are not marked as secure (should use HTTPS)")
+            findings.append("⚠️ Cookies are not marked as secure")
             suspicious_count += 1
 
-        # Check for missing HTTPS
-        if not url.startswith('https://'):
-            findings.append("Site does not use HTTPS encryption")
-            suspicious_count += 2
+    except requests.exceptions.HTTPError as e:
+        if hasattr(e, 'response') and e.response:
+            status_code = e.response.status_code
+            if status_code == 403:
+                findings.append("❌ Server returned 403 Forbidden - The website is blocking automated requests or requires authentication")
+            elif status_code == 401:
+                findings.append("❌ Server returned 401 Unauthorized - Authentication is required to access this page")
+            else:
+                findings.append(f"❌ Server returned HTTP {status_code} error")
+            suspicious_count += 1
+        else:
+            findings.append(f"❌ HTTP error: {str(e)[:100]}...")
+            suspicious_count += 1
+        header_analysis = {"error": "Failed to retrieve headers due to HTTP error"}
 
     except requests.exceptions.RequestException as e:
-        findings.append(f"Could not analyze security headers: {str(e)}")
+        error_msg = str(e)
+        if len(error_msg) > 100:
+            error_msg = error_msg[:100] + "..."
+        findings.append(f"❌ Network error: {error_msg}")
         suspicious_count += 1
-        header_analysis = {"error": "Failed to retrieve headers"}
+        header_analysis = {"error": "Failed to retrieve headers due to network issue"}
 
     # Calculate risk level based on findings
-    if suspicious_count >= 5:
+    if suspicious_count >= 6:
         risk_level = "Critical"
-    elif suspicious_count >= 3:
+    elif suspicious_count >= 4:
         risk_level = "High"
     elif suspicious_count >= 2:
         risk_level = "Medium"
@@ -169,8 +254,8 @@ def check_security_headers(url, timeout=10):
         risk_level = "Safe"
 
     # If no issues found
-    if not findings:
-        findings.append("No security header vulnerabilities detected")
+    if all('✅' in f for f in findings):
+        findings = ["✅ All security headers are properly configured"]
 
     return {
         "url": url,
