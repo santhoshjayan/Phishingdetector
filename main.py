@@ -275,6 +275,8 @@ def dashboard():
         'tld_distribution': collections.Counter(),
         'daily_scans': collections.Counter(),
         'email_indicators': collections.Counter(),
+        'security_header_issues': collections.Counter(),
+        'web_vulnerabilities': collections.Counter(),
         'recent_high_risk': [],
         'recent_high_risk_emails': []
     }
@@ -333,9 +335,24 @@ def dashboard():
                         tld = url.split('.')[-1].split('/')[0]  # Get the TLD
                         analytics['tld_distribution'][tld] += 1
                     
-                    # Count suspicious patterns
+                # Count suspicious patterns
                     for pattern in data.get('url_patterns', {}).get('suspicious_patterns', []):
                         analytics['suspicious_patterns'][pattern] += 1
+
+                    # Count security header issues
+                    if 'security_headers' in data:
+                        security_findings = data['security_headers'].get('findings', [])
+                        for finding in security_findings:
+                            if 'missing' in finding.lower() or 'misconfigured' in finding.lower():
+                                analytics['security_header_issues'][finding] += 1
+
+                    # Count web security vulnerabilities
+                    if 'web_security' in data:
+                        vulnerabilities = data['web_security'].get('vulnerabilities', {})
+                        for vuln_type, vuln_data in vulnerabilities.items():
+                            if isinstance(vuln_data, dict) and 'severity' in vuln_data:
+                                severity = vuln_data['severity']
+                                analytics['web_vulnerabilities'][f"{vuln_type} ({severity})"] += 1
                     
                     # Collect recent high risk URLs (up to 5)
                     if risk_level in ['Critical', 'High'] and len(analytics['recent_high_risk']) < 5:
@@ -344,6 +361,17 @@ def dashboard():
                             'timestamp': timestamp,
                             'indicators': data.get('suspicious_indicators', 0)
                         })
+
+                    # Collect recent high risk web security scans (up to 5)
+                    if 'web_security' in data and len(analytics.get('recent_high_risk_web_security', [])) < 5:
+                        web_security = data['web_security']
+                        if web_security.get('suspicious_count', 0) > 0:
+                            analytics.setdefault('recent_high_risk_web_security', []).append({
+                                'url': data.get('url', ''),
+                                'timestamp': timestamp,
+                                'vulnerabilities_count': web_security.get('suspicious_count', 0),
+                                'severity': web_security.get('risk_level', 'Unknown')
+                            })
                 
             except Exception as e:
                 logger.error(f"Error processing history file {file}: {str(e)}")
@@ -387,14 +415,14 @@ def dashboard():
     # Get top email indicators (top 5)
     top_email_indicators = dict(analytics['email_indicators'].most_common(5))
     
-    return render_template('dashboard.html', 
-                          analytics=analytics, 
-                          daily_scan_labels=json.dumps(last_7_days),
-                          daily_url_data=json.dumps(daily_url_data),
-                          daily_email_data=json.dumps(daily_email_data),
-                          top_patterns=json.dumps(top_patterns),
-                          top_tlds=json.dumps(top_tlds),
-                          top_email_indicators=json.dumps(top_email_indicators))
+    return render_template('dashboard.html',
+                          analytics=analytics,
+                          daily_scan_labels=last_7_days,
+                          daily_url_data=daily_url_data,
+                          daily_email_data=daily_email_data,
+                          top_patterns=top_patterns,
+                          top_tlds=top_tlds,
+                          top_email_indicators=top_email_indicators)
 
 @app.route('/api/docs')
 @login_required
@@ -521,15 +549,53 @@ def save_email_to_history(email_data, results):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     sender = email_data.get('from', '').replace("@", "_at_").replace(".", "_")
     filename = f"{timestamp}_email_{sender}.json"
-    
+
     # Add timestamp to results
     results['timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
+
     try:
         with open(os.path.join(HISTORY_DIR, filename), 'w') as f:
             json.dump(results, f)
     except Exception as e:
         logger.error(f"Failed to save email analysis to history file {filename}: {str(e)}")
+        raise
+
+def save_security_headers_to_history(url, results):
+    """Save the security headers analysis results to a JSON file in the history directory"""
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    domain = url.replace("://", "_").replace("/", "_").replace(".", "_")
+    domain = sanitize_filename(domain)
+    filename = f"{timestamp}_security_headers_{domain}.json"
+
+    # Add timestamp to results
+    results['timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    logger.info(f"Saving security headers analysis to file: {filename}")
+
+    try:
+        with open(os.path.join(HISTORY_DIR, filename), 'w') as f:
+            json.dump(results, f)
+    except Exception as e:
+        logger.error(f"Failed to save security headers analysis to history file {filename}: {str(e)}")
+        raise
+
+def save_web_security_to_history(url, results):
+    """Save the web security vulnerability scan results to a JSON file in the history directory"""
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    domain = url.replace("://", "_").replace("/", "_").replace(".", "_")
+    domain = sanitize_filename(domain)
+    filename = f"{timestamp}_web_security_{domain}.json"
+
+    # Add timestamp to results
+    results['timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    logger.info(f"Saving web security analysis to file: {filename}")
+
+    try:
+        with open(os.path.join(HISTORY_DIR, filename), 'w') as f:
+            json.dump(results, f)
+    except Exception as e:
+        logger.error(f"Failed to save web security analysis to history file {filename}: {str(e)}")
         raise
 
 # Routes for PDF reports
@@ -615,6 +681,125 @@ def export_email_report(id):
             'message': f'Error exporting PDF report: {str(e)}'
         }), 500
 
+@app.route('/export/security_headers_report/<path:id>', methods=['GET'])
+def export_security_headers_report(id):
+    """Generate and download a PDF report for security headers analysis"""
+    try:
+        # Find the security headers analysis result by ID (timestamp)
+        for file in os.listdir(HISTORY_DIR):
+            if file.startswith(id) and file.endswith('.json') and '_security_headers_' in file:
+                with open(os.path.join(HISTORY_DIR, file), 'r') as f:
+                    results = json.load(f)
+
+                    # Generate PDF report
+                    success, pdf_path = generate_report_pdf(results, 'security_headers')
+
+                    if success:
+                        # Extract filename from path
+                        filename = os.path.basename(pdf_path)
+                        # Return the PDF file
+                        return send_from_directory(
+                            os.path.join(os.getcwd(), 'static', 'reports'),
+                            filename,
+                            as_attachment=True,
+                            download_name=f"SpeeSecure_Security_Headers_Report_{id}.pdf"
+                        )
+                    else:
+                        return jsonify({
+                            'success': False,
+                            'message': f'Error generating PDF report: {pdf_path}'
+                        }), 500
+
+        # If no matching file found
+        return jsonify({
+            'success': False,
+            'message': 'Analysis not found'
+        }), 404
+    except Exception as e:
+        logger.error(f"Error exporting security headers report: {str(e)}")
+        return jsonify({
+            'success': False,
+            'message': f'Error exporting PDF report: {str(e)}'
+        }), 500
+
+@app.route('/export/web_security_report/<path:id>', methods=['GET'])
+def export_web_security_report(id):
+    """Generate and download a PDF report for web security vulnerability scan"""
+    try:
+        # First try to find standalone web security scan result
+        for file in os.listdir(HISTORY_DIR):
+            if file.startswith(id) and file.endswith('.json') and '_web_security_' in file:
+                with open(os.path.join(HISTORY_DIR, file), 'r') as f:
+                    results = json.load(f)
+
+                    # Generate PDF report
+                    success, pdf_path = generate_report_pdf(results, 'web_security')
+
+                    if success:
+                        # Extract filename from path
+                        filename = os.path.basename(pdf_path)
+                        # Return the PDF file
+                        return send_from_directory(
+                            os.path.join(os.getcwd(), 'static', 'reports'),
+                            filename,
+                            as_attachment=True,
+                            download_name=f"SpeeSecure_Web_Security_Report_{id}.pdf"
+                        )
+                    else:
+                        return jsonify({
+                            'success': False,
+                            'message': f'Error generating PDF report: {pdf_path}'
+                        }), 500
+
+        # If not found as standalone, try to find in main URL analysis
+        for file in os.listdir(HISTORY_DIR):
+            if file.startswith(id) and file.endswith('.json') and '_email_' not in file and '_security_headers_' not in file and '_web_security_' not in file:
+                with open(os.path.join(HISTORY_DIR, file), 'r') as f:
+                    data = json.load(f)
+
+                    # Extract web security results
+                    if 'web_security' in data:
+                        results = data['web_security']
+                        # Add timestamp and URL from parent data
+                        results['timestamp'] = data.get('timestamp', datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                        results['url'] = data.get('url', 'Unknown URL')
+
+                        # Generate PDF report
+                        success, pdf_path = generate_report_pdf(results, 'web_security')
+
+                        if success:
+                            # Extract filename from path
+                            filename = os.path.basename(pdf_path)
+                            # Return the PDF file
+                            return send_from_directory(
+                                os.path.join(os.getcwd(), 'static', 'reports'),
+                                filename,
+                                as_attachment=True,
+                                download_name=f"SpeeSecure_Web_Security_Report_{id}.pdf"
+                            )
+                        else:
+                            return jsonify({
+                                'success': False,
+                                'message': f'Error generating PDF report: {pdf_path}'
+                            }), 500
+                    else:
+                        return jsonify({
+                            'success': False,
+                            'message': 'Web security data not found in analysis'
+                        }), 404
+
+        # If no matching file found
+        return jsonify({
+            'success': False,
+            'message': 'Analysis not found'
+        }), 404
+    except Exception as e:
+        logger.error(f"Error exporting web security report: {str(e)}")
+        return jsonify({
+            'success': False,
+            'message': f'Error exporting PDF report: {str(e)}'
+        }), 500
+
 # Email Automation route
 @app.route('/admin/approve_requests')
 @login_required
@@ -647,6 +832,104 @@ def approve_requests():
 def email_automation():
     """Email Automation Dashboard"""
     return render_template('email_automation.html')
+
+@app.route('/security_headers_checker', methods=['GET', 'POST'])
+@login_required
+def security_headers_checker():
+    """Security Headers Checker"""
+    if request.method == 'POST':
+        url = request.form.get('url', '').strip()
+
+        if not url:
+            return render_template('security_headers_checker.html', error="Please provide a URL")
+
+        if not is_valid_url(url):
+            return render_template('security_headers_checker.html', error="Invalid URL format")
+
+        try:
+            from utils.security_headers_checker import check_security_headers
+            results = check_security_headers(url)
+            # Save the analysis to history
+            save_security_headers_to_history(url, results)
+            return render_template('security_headers_checker.html', results=results)
+        except Exception as e:
+            logger.error(f"Error checking security headers: {str(e)}")
+            return render_template('security_headers_checker.html', error=f"Error analyzing security headers: {str(e)}")
+
+    return render_template('security_headers_checker.html')
+
+@app.route('/clickjacking_checker', methods=['GET', 'POST'])
+@login_required
+def clickjacking_checker():
+    """Clickjacking Protection Checker"""
+    if request.method == 'POST':
+        url = request.form.get('url', '').strip()
+
+        if not url:
+            return render_template('clickjacking_checker.html', error="Please provide a URL")
+
+        if not is_valid_url(url):
+            return render_template('clickjacking_checker.html', error="Invalid URL format")
+
+        try:
+            # Check X-Frame-Options header specifically for clickjacking
+            import requests
+            response = requests.get(url, timeout=10, verify=False, allow_redirects=True)
+            headers = response.headers
+
+            x_frame_options = headers.get('X-Frame-Options', '').strip()
+            clickjacking_vulnerable = not x_frame_options or x_frame_options.upper() not in ['DENY', 'SAMEORIGIN']
+
+            findings = []
+            if clickjacking_vulnerable:
+                findings.append("Website is vulnerable to clickjacking attacks")
+                findings.append("X-Frame-Options header is not properly configured")
+                if not x_frame_options:
+                    findings.append("X-Frame-Options header is missing")
+                else:
+                    findings.append(f"X-Frame-Options header has weak configuration: {x_frame_options}")
+            else:
+                findings.append("Website is protected against clickjacking")
+                findings.append(f"X-Frame-Options properly configured: {x_frame_options}")
+
+            results = {
+                'url': url,
+                'x_frame_options': x_frame_options,
+                'clickjacking_vulnerable': clickjacking_vulnerable,
+                'findings': findings
+            }
+
+            return render_template('clickjacking_checker.html', results=results)
+        except Exception as e:
+            logger.error(f"Error checking clickjacking protection: {str(e)}")
+            return render_template('clickjacking_checker.html', error=f"Error testing clickjacking protection: {str(e)}")
+
+    return render_template('clickjacking_checker.html')
+
+@app.route('/web_security_scanner', methods=['GET', 'POST'])
+@login_required
+def web_security_scanner():
+    """Web Security Vulnerability Scanner"""
+    if request.method == 'POST':
+        url = request.form.get('url', '').strip()
+
+        if not url:
+            return render_template('web_security_scanner.html', error="Please provide a URL")
+
+        if not is_valid_url(url):
+            return render_template('web_security_scanner.html', error="Invalid URL format")
+
+        try:
+            from utils.web_security_scanner import scan_web_security_vulnerabilities
+            results = scan_web_security_vulnerabilities(url)
+            # Save the analysis to history
+            save_web_security_to_history(url, results)
+            return render_template('web_security_scanner.html', results=results)
+        except Exception as e:
+            logger.error(f"Error scanning web security vulnerabilities: {str(e)}")
+            return render_template('web_security_scanner.html', error=f"Error scanning web security vulnerabilities: {str(e)}")
+
+    return render_template('web_security_scanner.html')
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
