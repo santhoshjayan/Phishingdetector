@@ -225,7 +225,7 @@
                     <div class="card-body">
                         <div class="row">
                             {% for vuln_type, vuln_data in results.vulnerabilities.items() %}
-                                {% if vuln_data and isinstance(vuln_data, dict) %}
+                                {% if vuln_data and vuln_data is mapping %}
                                 <div class="col-md-6 mb-4">
                                     <div class="card result-card vulnerability-card
                                         {% if vuln_data.severity == 'Critical' %}severity-critical

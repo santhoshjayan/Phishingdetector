@@ -85,11 +85,11 @@ def analyze_url(url, verbose=False):
         web_security['suspicious_count']
     ])
     
-    if suspicious_indicators >= 5:
+    if suspicious_indicators >= 8:
         risk_level = "High"
-    elif suspicious_indicators >= 3:
+    elif suspicious_indicators >= 5:
         risk_level = "Medium"
-    elif suspicious_indicators >= 1:
+    elif suspicious_indicators >= 2:
         risk_level = "Low"
     else:
         risk_level = "Safe"

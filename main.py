@@ -7,6 +7,8 @@ import json
 import collections
 from datetime import datetime, timedelta
 from phishing_detector import analyze_url, is_valid_url
+from utils.security_headers_checker import check_security_headers
+from utils.web_security_scanner import scan_web_security_vulnerabilities
 from utils.email_analyzer import analyze_email
 from utils.pdf_generator import generate_report_pdf
 from api_routes import api_bp
