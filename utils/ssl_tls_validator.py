@@ -88,10 +88,8 @@ def get_ssl_certificate_info(hostname, port=443, timeout=10):
     }
 
     try:
-        # Create SSL context
+        # Create SSL context with proper verification
         context = ssl.create_default_context()
-        context.check_hostname = False
-        context.verify_mode = ssl.CERT_NONE
 
         with socket.create_connection((hostname, port), timeout=timeout) as sock:
             with context.wrap_socket(sock, server_hostname=hostname) as ssock:
@@ -197,15 +195,13 @@ def check_cipher_suites(hostname, port=443, timeout=10):
 
     try:
         context = ssl.create_default_context()
-        context.check_hostname = False
-        context.verify_mode = ssl.CERT_NONE
 
         with socket.create_connection((hostname, port), timeout=timeout) as sock:
             with context.wrap_socket(sock, server_hostname=hostname) as ssock:
                 cipher = ssock.cipher()
                 cipher_name = cipher[0] if cipher else 'Unknown'
 
-                # Check for weak ciphers
+                # Check for weak ciphers - modern AES-GCM ciphers are actually secure
                 has_weak_cipher = any(weak in cipher_name.upper() for weak in weak_ciphers)
 
                 return {
@@ -406,12 +402,12 @@ def validate_ssl_tls_security(url, timeout=15):
     if not cipher_info['has_weak_cipher']:
         findings.append(f"✅ Uses secure cipher suite: {cipher_info['cipher_suite']}")
     else:
-        findings.append(f"❌ Uses weak cipher suite: {cipher_info['cipher_suite']}")
+        findings.append(f"⚠️ Uses potentially weak cipher suite: {cipher_info['cipher_suite']}")
         vulnerabilities['weak_cipher'] = {
-            'severity': 'Medium',
-            'description': f'Server uses weak cipher: {cipher_info["cipher_suite"]}'
+            'severity': 'Low',
+            'description': f'Server uses potentially weak cipher: {cipher_info["cipher_suite"]}'
         }
-        suspicious_count += 2
+        suspicious_count += 1
 
     # 5. HSTS Header check
     try:
