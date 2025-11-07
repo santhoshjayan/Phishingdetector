@@ -1701,3 +1701,52 @@ Registrars.
 2025-11-04 13:09:25,600 - INFO - 127.0.0.1 - - [04/Nov/2025 13:09:25] "POST /cookie_security_checker HTTP/1.1" 200 -
 2025-11-04 13:13:15,886 - INFO - Saving cookie security analysis to file: 20251104_131315_cookie_security_https_gn-qa_azurewebsites_net.json
 2025-11-04 13:13:15,919 - INFO - 127.0.0.1 - - [04/Nov/2025 13:13:15] "POST /cookie_security_checker HTTP/1.1" 200 -
+2025-11-07 16:58:03,129 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.16.50.35:8080
+2025-11-07 16:58:03,130 - INFO - [33mPress CTRL+C to quit[0m
+2025-11-07 16:58:03,132 - INFO -  * Restarting with stat
+2025-11-07 16:58:04,829 - WARNING -  * Debugger is active!
+2025-11-07 16:58:04,836 - INFO -  * Debugger PIN: 640-327-974
+2025-11-07 16:58:16,861 - INFO - 127.0.0.1 - - [07/Nov/2025 16:58:16] "[32mHEAD /ssl_tls_checker HTTP/1.1[0m" 302 -
+2025-11-07 16:58:24,551 - INFO - 127.0.0.1 - - [07/Nov/2025 16:58:24] "[32mGET /ssl_tls_checker HTTP/1.1[0m" 302 -
+2025-11-07 16:58:24,584 - INFO - 127.0.0.1 - - [07/Nov/2025 16:58:24] "GET /login?next=/ssl_tls_checker HTTP/1.1" 200 -
+2025-11-07 16:58:33,437 - INFO - 127.0.0.1 - - [07/Nov/2025 16:58:33] "[32mGET /ssl_tls_checker HTTP/1.1[0m" 302 -
+2025-11-07 16:58:33,443 - INFO - 127.0.0.1 - - [07/Nov/2025 16:58:33] "GET /login?next=/ssl_tls_checker HTTP/1.1" 200 -
+2025-11-07 16:58:47,906 - INFO - 127.0.0.1 - - [07/Nov/2025 16:58:47] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-11-07 16:58:55,201 - INFO - 127.0.0.1 - - [07/Nov/2025 16:58:55] "GET /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-07 17:09:18,393 - INFO - Saving SSL/TLS analysis to file: 20251107_170918_ssl_tls_https_google_com.json
+2025-11-07 17:09:18,396 - INFO - 127.0.0.1 - - [07/Nov/2025 17:09:18] "POST /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-07 17:10:10,968 - INFO - Saving SSL/TLS analysis to file: 20251107_171010_ssl_tls_https_github_com.json
+2025-11-07 17:10:10,970 - INFO - 127.0.0.1 - - [07/Nov/2025 17:10:10] "POST /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-07 17:11:00,812 - INFO - 127.0.0.1 - - [07/Nov/2025 17:11:00] "POST /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-07 17:17:55,314 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\utils\\ssl_tls_validator.py', reloading
+2025-11-07 17:17:55,563 - INFO -  * Restarting with stat
+2025-11-07 17:17:57,610 - WARNING -  * Debugger is active!
+2025-11-07 17:17:57,612 - INFO -  * Debugger PIN: 640-327-974
+2025-11-07 17:38:05,588 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\test_ssl_validation.py', reloading
+2025-11-07 17:38:05,739 - INFO -  * Restarting with stat
+2025-11-07 17:38:07,526 - WARNING -  * Debugger is active!
+2025-11-07 17:38:07,529 - INFO -  * Debugger PIN: 640-327-974
+2025-11-07 17:43:39,681 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.16.50.35:8080
+2025-11-07 17:43:39,681 - INFO - [33mPress CTRL+C to quit[0m
+2025-11-07 17:43:39,682 - INFO -  * Restarting with stat
+2025-11-07 17:43:41,458 - WARNING -  * Debugger is active!
+2025-11-07 17:43:41,460 - INFO -  * Debugger PIN: 640-327-974
+2025-11-07 17:43:41,475 - INFO - 127.0.0.1 - - [07/Nov/2025 17:43:41] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-07 17:43:41,506 - INFO - 127.0.0.1 - - [07/Nov/2025 17:43:41] "GET /login?next=/ HTTP/1.1" 200 -
+2025-11-07 17:43:42,570 - INFO - 127.0.0.1 - - [07/Nov/2025 17:43:42] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-11-07 17:43:56,899 - INFO - 127.0.0.1 - - [07/Nov/2025 17:43:56] "POST /login HTTP/1.1" 200 -
+2025-11-07 17:44:05,035 - INFO - 127.0.0.1 - - [07/Nov/2025 17:44:05] "[33mGET /ssl-tls-checker HTTP/1.1[0m" 404 -
+2025-11-07 17:44:05,278 - INFO - 127.0.0.1 - - [07/Nov/2025 17:44:05] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-11-07 17:44:05,476 - INFO - 127.0.0.1 - - [07/Nov/2025 17:44:05] "GET / HTTP/1.1" 200 -
+2025-11-07 17:44:08,747 - INFO - 127.0.0.1 - - [07/Nov/2025 17:44:08] "GET /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-07 17:44:21,447 - INFO - 127.0.0.1 - - [07/Nov/2025 17:44:21] "[32mGET /ssl_tls_checker HTTP/1.1[0m" 302 -
+2025-11-07 17:44:29,302 - INFO - 127.0.0.1 - - [07/Nov/2025 17:44:29] "[32mPOST /ssl_tls_checker HTTP/1.1[0m" 302 -
+2025-11-07 17:44:38,167 - INFO - 127.0.0.1 - - [07/Nov/2025 17:44:38] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-11-07 17:44:47,728 - INFO - Saving SSL/TLS analysis to file: 20251107_174447_ssl_tls_https_www_google_com.json
+2025-11-07 17:44:47,730 - INFO - 127.0.0.1 - - [07/Nov/2025 17:44:47] "POST /ssl_tls_checker HTTP/1.1" 200 -
