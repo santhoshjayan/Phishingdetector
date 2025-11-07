@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSL/TLS & HTTPS Validator - SpeeSecure</title>
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .gradient-card {
+            background: linear-gradient(135deg, #18226B 0%, #2D3A8C 100%);
+            border: none;
+        }
+        .result-card {
+            transition: transform 0.3s ease;
+        }
+        .result-card:hover {
+            transform: translateY(-2px);
+        }
+        .vulnerability-card {
+            border-left: 4px solid;
+        }
+        .severity-critical {
+            border-left-color: #dc3545 !important;
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+        .severity-high {
+            border-left-color: #fd7e14 !important;
+            background-color: rgba(253, 126, 20, 0.1);
+        }
+        .severity-medium {
+            border-left-color: #ffc107 !important;
+            background-color: rgba(255, 193, 7, 0.1);
+        }
+        .severity-low {
+            border-left-color: #17a2b8 !important;
+            background-color: rgba(23, 162, 184, 0.1);
+        }
+        .status-good {
+            color: #28a745;
+        }
+        .status-warning {
+            color: #fd7e14;
+        }
+        .status-danger {
+            color: #dc3545;
+        }
+        .certificate-valid {
+            background-color: rgba(40, 167, 69, 0.1);
+            border-left: 4px solid #28a745;
+        }
+        .certificate-invalid {
+            background-color: rgba(220, 53, 69, 0.1);
+            border-left: 4px solid #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shield-alt"></i> SpeeSecure
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/history"><i class="fas fa-history"></i> History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/batch_analysis"><i class="fas fa-tasks"></i> Batch Analysis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/email_analysis"><i class="fas fa-envelope"></i> Email Scanner</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/email_automation"><i class="fas fa-robot"></i> Email Automation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/security_headers_checker"><i class="fas fa-lock"></i> Headers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/ssl_tls_checker"><i class="fas fa-certificate"></i> SSL/TLS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/web_security_scanner"><i class="fas fa-bug"></i> Security Scanner</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/clickjacking_checker"><i class="fas fa-mouse-pointer"></i> Clickjacking</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about"><i class="fas fa-info-circle"></i> About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/api/docs"><i class="fas fa-code"></i> API</a>
+                    </li>
+                    {% if current_user.id == 'admin@example.com' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/approve_requests"><i class="fas fa-user-shield"></i> Admin</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card gradient-card text-white">
+                    <div class="card-body text-center">
+                        <i class="fas fa-certificate fa-3x mb-3"></i>
+                        <h1 class="display-5 fw-bold">SSL/TLS & HTTPS Validator</h1>
+                        <p class="lead">Comprehensive SSL/TLS certificate and HTTPS security validation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-search me-2"></i>Validate SSL/TLS Security</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="/ssl_tls_checker">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label for="url" class="form-label">Website URL</label>
+                                    <input type="url" class="form-control" id="url" name="url"
+                                           placeholder="https://example.com" required
+                                           value="{{ request.form.url if request.form.url else '' }}">
+                                    <div class="form-text">Enter a complete URL including https:// or http://</div>
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-search me-2"></i>Validate SSL/TLS
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if results %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-success text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-check-circle me-2"></i>SSL/TLS Validation Results for {{ results.url }}</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card result-card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="fas fa-shield-alt me-2"></i>Overall Risk Assessment
+                                        </h5>
+                                        <div class="mb-3">
+                                            {% if results.risk_level == 'Safe' %}
+                                                <span class="badge bg-success fs-6">
+                                                    <i class="fas fa-shield-alt me-1"></i>Safe
+                                                </span>
+                                            {% elif results.risk_level == 'Low' %}
+                                                <span class="badge bg-info fs-6">
+                                                    <i class="fas fa-info-circle me-1"></i>Low Risk
+                                                </span>
+                                            {% elif results.risk_level == 'Medium' %}
+                                                <span class="badge bg-warning fs-6">
+                                                    <i class="fas fa-exclamation-triangle me-1"></i>Medium Risk
+                                                </span>
+                                            {% elif results.risk_level == 'High' %}
+                                                <span class="badge bg-danger fs-6">
+                                                    <i class="fas fa-exclamation-triangle me-1"></i>High Risk
+                                                </span>
+                                            {% elif results.risk_level == 'Critical' %}
+                                                <span class="badge bg-dark fs-6">
+                                                    <i class="fas fa-skull-crossbones me-1"></i>Critical Risk
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-secondary fs-6">{{ results.risk_level }}</span>
+                                            {% endif %}
+                                        </div>
+                                        <p class="card-text">
+                                            <strong>Suspicious Indicators:</strong> {{ results.suspicious_count }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card result-card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="fas fa-list-check me-2"></i>Validation Summary
+                                        </h5>
+                                        <ul class="list-unstyled">
+                                            {% for finding in results.findings %}
+                                            <li class="mb-2">
+                                                {% if '❌' in finding or '⚠️' in finding %}
+                                                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                                                {% else %}
+                                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                                {% endif %}
+                                                {{ finding }}
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if results.vulnerabilities %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-danger text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Detailed Security Issues</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            {% for vuln_type, vuln_data in results.vulnerabilities.items() %}
+                                {% if vuln_data and vuln_data is mapping %}
+                                <div class="col-md-6 mb-4">
+                                    <div class="card result-card vulnerability-card
+                                        {% if vuln_data.severity == 'Critical' %}severity-critical
+                                        {% elif vuln_data.severity == 'High' %}severity-high
+                                        {% elif vuln_data.severity == 'Medium' %}severity-medium
+                                        {% else %}severity-low{% endif %}">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <i class="fas fa-bug me-2"></i>{{ vuln_type.replace('_', ' ').title() }}
+                                                <span class="badge
+                                                    {% if vuln_data.severity == 'Critical' %}bg-danger
+                                                    {% elif vuln_data.severity == 'High' %}bg-warning text-dark
+                                                    {% elif vuln_data.severity == 'Medium' %}bg-info
+                                                    {% else %}bg-secondary{% endif %} float-end">
+                                                    {{ vuln_data.severity }}
+                                                </span>
+                                            </h6>
+                                            <p class="card-text small">{{ vuln_data.description }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if results.certificate_info %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-info text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-certificate me-2"></i>SSL Certificate Details</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card result-card h-100
+                                    {% if results.certificate_info.valid %}certificate-valid{% else %}certificate-invalid{% endif %}">
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            {% if results.certificate_info.valid %}
+                                                <i class="fas fa-check-circle text-success me-2"></i>
+                                            {% else %}
+                                                <i class="fas fa-times-circle text-danger me-2"></i>
+                                            {% endif %}
+                                            Certificate Status
+                                        </h6>
+                                        <div class="mb-2">
+                                            <strong>Valid:</strong>
+                                            <span class="{% if results.certificate_info.valid %}text-success{% else %}text-danger{% endif %}">
+                                                {{ results.certificate_info.valid|title }}
+                                            </span>
+                                        </div>
+                                        {% if results.certificate_info.issuer %}
+                                        <div class="mb-2">
+                                            <strong>Issuer:</strong> {{ results.certificate_info.issuer }}
+                                        </div>
+                                        {% endif %}
+                                        {% if results.certificate_info.subject %}
+                                        <div class="mb-2">
+                                            <strong>Subject:</strong> {{ results.certificate_info.subject }}
+                                        </div>
+                                        {% endif %}
+                                        {% if results.certificate_info.self_signed %}
+                                        <div class="mb-2">
+                                            <strong>Self-Signed:</strong>
+                                            <span class="text-warning">Yes</span>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card result-card h-100">
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            <i class="fas fa-calendar me-2"></i>Certificate Validity
+                                        </h6>
+                                        {% if results.certificate_info.not_before %}
+                                        <div class="mb-2">
+                                            <strong>Issued:</strong> {{ results.certificate_info.not_before.split('T')[0] }}
+                                        </div>
+                                        {% endif %}
+                                        {% if results.certificate_info.not_after %}
+                                        <div class="mb-2">
+                                            <strong>Expires:</strong> {{ results.certificate_info.not_after.split('T')[0] }}
+                                        </div>
+                                        {% endif %}
+                                        {% if results.certificate_info.days_until_expiry is not none %}
+                                        <div class="mb-2">
+                                            <strong>Days Until Expiry:</strong>
+                                            <span class="{% if results.certificate_info.days_until_expiry < 30 %}text-danger{% elif results.certificate_info.days_until_expiry < 90 %}text-warning{% else %}text-success{% endif %}">
+                                                {{ results.certificate_info.days_until_expiry }}
+                                            </span>
+                                        </div>
+                                        {% endif %}
+                                        {% if results.certificate_info.expired %}
+                                        <div class="mb-2">
+                                            <strong>Status:</strong>
+                                            <span class="text-danger">Expired</span>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if results.tls_info %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-warning text-dark">
+                        <h2 class="h4 mb-0"><i class="fas fa-key me-2"></i>TLS Version & Cipher Suite Analysis</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card result-card h-100">
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            <i class="fas fa-shield-alt me-2"></i>TLS Versions
+                                        </h6>
+                                        <div class="mb-2">
+                                            <strong>Supported Versions:</strong>
+                                            {% if results.tls_info.supported_versions %}
+                                                {% for version in results.tls_info.supported_versions %}
+                                                    <span class="badge bg-success me-1">{{ version }}</span>
+                                                {% endfor %}
+                                            {% else %}
+                                                <span class="text-muted">None detected</span>
+                                            {% endif %}
+                                        </div>
+                                        {% if results.tls_info.weak_versions %}
+                                        <div class="mb-2">
+                                            <strong>Weak Versions:</strong>
+                                            {% for version in results.tls_info.weak_versions %}
+                                                <span class="badge bg-warning text-dark me-1">{{ version }}</span>
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                        <div class="mb-2">
+                                            <strong>TLS 1.2+ Support:</strong>
+                                            <span class="{% if results.tls_info.tls_1_2_or_higher %}text-success{% else %}text-danger{% endif %}">
+                                                {{ results.tls_info.tls_1_2_or_higher|title }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card result-card h-100">
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            <i class="fas fa-lock me-2"></i>Cipher Suite
+                                        </h6>
+                                        {% if results.cipher_info %}
+                                        <div class="mb-2">
+                                            <strong>Cipher:</strong> <code>{{ results.cipher_info.cipher_suite }}</code>
+                                        </div>
+                                        <div class="mb-2">
+                                            <strong>Protocol:</strong> {{ results.cipher_info.protocol }}
+                                        </div>
+                                        <div class="mb-2">
+                                            <strong>Key Size:</strong> {{ results.cipher_info.key_size }} bits
+                                        </div>
+                                        <div class="mb-2">
+                                            <strong>Weak Cipher:</strong>
+                                            <span class="{% if results.cipher_info.has_weak_cipher %}text-danger{% else %}text-success{% endif %}">
+                                                {{ results.cipher_info.has_weak_cipher|title }}
+                                            </span>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-info text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-lightbulb me-2"></i>SSL/TLS Security Recommendations</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Immediate Actions:</h5>
+                                <ul>
+                                    <li>Ensure SSL certificate is valid and not expired</li>
+                                    <li>Redirect all HTTP traffic to HTTPS</li>
+                                    <li>Disable weak TLS versions (1.0, 1.1)</li>
+                                    <li>Use strong cipher suites</li>
+                                    <li>Implement HSTS header</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Best Practices:</h5>
+                                <ul>
+                                    <li>Use certificates from trusted Certificate Authorities</li>
+                                    <li>Enable OCSP stapling</li>
+                                    <li>Implement certificate pinning if appropriate</li>
+                                    <li>Regular certificate renewal monitoring</li>
+                                    <li>Use TLS 1.3 when possible</li>
+                                    <li>Regular security audits and vulnerability scanning</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Error:</strong> {{ error }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-shield-alt me-2" style="color: var(--primary-color); font-size: 1.5rem;"></i>
+                        <h5 class="mb-0">SpeeSecure</h5>
+                    </div>
+                    <p>A comprehensive tool for analyzing URLs and emails to detect potential phishing attempts, helping you stay safe online.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="mb-3">
+                        <a href="/about" class="btn btn-outline-light btn-sm me-2"><i class="fas fa-info-circle me-1"></i> About</a>
+                        <a href="/api/docs" class="btn btn-outline-light btn-sm"><i class="fas fa-code me-1"></i> API</a>
+                    </div>
+                    <p>&copy; 2025 SpeeSecure - Advanced Phishing Protection</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

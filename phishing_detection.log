@@ -1450,3 +1450,254 @@ Registrars.
 2025-10-28 11:59:46,745 - INFO - 127.0.0.1 - - [28/Oct/2025 11:59:46] "POST /web_security_scanner HTTP/1.1" 200 -
 2025-10-28 12:03:36,318 - INFO - 127.0.0.1 - - [28/Oct/2025 12:03:36] "GET /clickjacking_checker HTTP/1.1" 200 -
 2025-10-28 12:03:52,102 - INFO - 127.0.0.1 - - [28/Oct/2025 12:03:52] "POST /clickjacking_checker HTTP/1.1" 200 -
+2025-10-28 12:46:49,061 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.16.50.35:8080
+2025-10-28 12:46:49,061 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-28 12:46:49,062 - INFO -  * Restarting with stat
+2025-10-28 12:46:50,950 - WARNING -  * Debugger is active!
+2025-10-28 12:46:50,952 - INFO -  * Debugger PIN: 640-327-974
+2025-10-28 12:47:04,974 - INFO - 127.0.0.1 - - [28/Oct/2025 12:47:04] "POST /clickjacking_checker HTTP/1.1" 200 -
+2025-10-28 12:48:17,177 - INFO - 127.0.0.1 - - [28/Oct/2025 12:48:17] "[32mHEAD / HTTP/1.1[0m" 302 -
+2025-10-28 12:48:25,703 - INFO - 127.0.0.1 - - [28/Oct/2025 12:48:25] "GET /login HTTP/1.1" 200 -
+2025-10-28 12:48:48,518 - INFO - 127.0.0.1 - - [28/Oct/2025 12:48:48] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-10-28 12:48:55,490 - INFO - 127.0.0.1 - - [28/Oct/2025 12:48:55] "GET / HTTP/1.1" 200 -
+2025-10-28 12:49:36,264 - INFO - 127.0.0.1 - - [28/Oct/2025 12:49:36] "GET / HTTP/1.1" 200 -
+2025-10-28 12:49:58,681 - INFO - 127.0.0.1 - - [28/Oct/2025 12:49:58] "GET /email_analysis HTTP/1.1" 200 -
+2025-10-28 12:50:01,568 - INFO - 127.0.0.1 - - [28/Oct/2025 12:50:01] "GET / HTTP/1.1" 200 -
+2025-10-28 12:50:02,614 - INFO - 127.0.0.1 - - [28/Oct/2025 12:50:02] "GET /web_security_scanner HTTP/1.1" 200 -
+2025-10-28 12:50:36,738 - INFO - Analyzing URL: https://google.com
+2025-10-28 12:50:54,271 - INFO - Analysis complete for https://google.com - Risk level: High
+2025-10-28 12:50:54,272 - INFO - Saving URL analysis to file: 20251028_125054_https_google_com.json
+2025-10-28 12:50:54,274 - INFO - 127.0.0.1 - - [28/Oct/2025 12:50:54] "POST /analyze HTTP/1.1" 200 -
+2025-10-28 14:29:20,723 - INFO - 127.0.0.1 - - [28/Oct/2025 14:29:20] "GET /web_security_scanner HTTP/1.1" 200 -
+2025-10-28 14:41:10,162 - INFO - 127.0.0.1 - - [28/Oct/2025 14:41:10] "GET / HTTP/1.1" 200 -
+2025-10-28 14:41:57,524 - INFO - 127.0.0.1 - - [28/Oct/2025 14:41:57] "GET / HTTP/1.1" 200 -
+2025-10-28 15:36:45,605 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.16.50.35:8080
+2025-10-28 15:36:45,606 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-28 15:36:45,607 - INFO -  * Restarting with stat
+2025-10-28 15:36:47,146 - WARNING -  * Debugger is active!
+2025-10-28 15:36:47,149 - INFO -  * Debugger PIN: 435-460-427
+2025-10-31 10:47:17,007 - INFO - Analyzing URL: https://google.com
+2025-10-31 10:47:38,984 - INFO - Analysis complete for https://google.com - Risk level: High
+2025-10-31 10:49:07,231 - INFO - Analyzing URL: https://example.com
+2025-10-31 10:49:40,029 - INFO - Analysis complete for https://example.com - Risk level: High
+2025-10-31 10:50:35,236 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.16.50.35:8080
+2025-10-31 10:50:35,237 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-31 10:50:35,239 - INFO -  * Restarting with stat
+2025-10-31 10:50:36,622 - WARNING -  * Debugger is active!
+2025-10-31 10:50:36,625 - INFO -  * Debugger PIN: 640-327-974
+2025-10-31 10:50:49,159 - INFO - 127.0.0.1 - - [31/Oct/2025 10:50:49] "[32mGET / HTTP/1.1[0m" 302 -
+2025-10-31 10:50:49,436 - INFO - 127.0.0.1 - - [31/Oct/2025 10:50:49] "GET /login?next=/ HTTP/1.1" 200 -
+2025-10-31 10:50:49,781 - INFO - 127.0.0.1 - - [31/Oct/2025 10:50:49] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-10-31 10:50:56,954 - INFO - 127.0.0.1 - - [31/Oct/2025 10:50:56] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-10-31 10:50:57,131 - INFO - 127.0.0.1 - - [31/Oct/2025 10:50:57] "GET / HTTP/1.1" 200 -
+2025-10-31 10:51:01,020 - INFO - 127.0.0.1 - - [31/Oct/2025 10:51:01] "GET /web_security_scanner HTTP/1.1" 200 -
+2025-10-31 10:51:24,415 - INFO - Saving web security analysis to file: 20251031_105124_web_security_https_gn-qa_azurewebsites_net.json
+2025-10-31 10:51:24,417 - INFO - 127.0.0.1 - - [31/Oct/2025 10:51:24] "POST /web_security_scanner HTTP/1.1" 200 -
+2025-10-31 10:51:34,016 - ERROR - Error processing history file 20250326_122354_https_www_google_co_in_.json: Expecting value: line 1 column 430 (char 429)
+2025-10-31 10:51:34,030 - ERROR - Error processing history file 20250326_122401_https_www_google_co_in.json: Expecting value: line 1 column 429 (char 428)
+2025-10-31 10:51:34,042 - ERROR - Error processing history file 20250326_122500_https_speehive_com.json: Expecting value: line 1 column 422 (char 421)
+2025-10-31 10:51:34,053 - ERROR - Error processing history file 20250326_122529_https_google_com.json: Expecting value: line 1 column 401 (char 400)
+2025-10-31 10:51:35,833 - INFO - 127.0.0.1 - - [31/Oct/2025 10:51:35] "GET /dashboard HTTP/1.1" 200 -
+2025-10-31 11:03:29,926 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.16.50.35:8080
+2025-10-31 11:03:29,927 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-31 11:03:29,928 - INFO -  * Restarting with stat
+2025-10-31 11:03:31,479 - WARNING -  * Debugger is active!
+2025-10-31 11:03:31,481 - INFO -  * Debugger PIN: 640-327-974
+2025-10-31 11:03:34,155 - INFO - 127.0.0.1 - - [31/Oct/2025 11:03:34] "GET /web_security_scanner HTTP/1.1" 200 -
+2025-10-31 11:03:38,257 - INFO - 127.0.0.1 - - [31/Oct/2025 11:03:38] "GET /security_headers_checker HTTP/1.1" 200 -
+2025-10-31 11:03:44,396 - INFO - Saving security headers analysis to file: 20251031_110344_security_headers_https_gn-qa_azurewebsites_net.json
+2025-10-31 11:03:44,402 - INFO - 127.0.0.1 - - [31/Oct/2025 11:03:44] "POST /security_headers_checker HTTP/1.1" 200 -
+2025-10-31 11:06:44,883 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\main.py', reloading
+2025-10-31 11:06:45,073 - INFO -  * Restarting with stat
+2025-10-31 11:06:47,043 - WARNING -  * Debugger is active!
+2025-10-31 11:06:47,045 - INFO -  * Debugger PIN: 640-327-974
+2025-10-31 11:06:55,122 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\main.py', reloading
+2025-10-31 11:06:55,290 - INFO -  * Restarting with stat
+2025-10-31 11:06:57,362 - WARNING -  * Debugger is active!
+2025-10-31 11:06:57,364 - INFO -  * Debugger PIN: 640-327-974
+2025-10-31 11:07:30,488 - INFO - Saving security headers analysis to file: 20251031_110730_security_headers_https_gn-qa_azurewebsites_net.json
+2025-10-31 11:07:30,499 - INFO - 127.0.0.1 - - [31/Oct/2025 11:07:30] "POST /security_headers_checker HTTP/1.1" 200 -
+2025-10-31 11:07:36,308 - INFO - Saving security headers analysis to file: 20251031_110736_security_headers_https_gn-qa_azurewebsites_net.json
+2025-10-31 11:07:36,310 - INFO - 127.0.0.1 - - [31/Oct/2025 11:07:36] "POST /security_headers_checker HTTP/1.1" 200 -
+2025-10-31 11:07:40,702 - INFO - 127.0.0.1 - - [31/Oct/2025 11:07:40] "GET / HTTP/1.1" 200 -
+2025-10-31 11:07:42,200 - INFO - 127.0.0.1 - - [31/Oct/2025 11:07:42] "GET /web_security_scanner HTTP/1.1" 200 -
+2025-10-31 11:08:02,847 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\test_ssl_save.py', reloading
+2025-10-31 11:08:03,034 - INFO -  * Restarting with stat
+2025-10-31 11:08:04,779 - WARNING -  * Debugger is active!
+2025-10-31 11:08:04,781 - INFO -  * Debugger PIN: 640-327-974
+2025-10-31 11:08:31,137 - INFO - 127.0.0.1 - - [31/Oct/2025 11:08:31] "GET / HTTP/1.1" 200 -
+2025-10-31 11:08:37,511 - INFO - 127.0.0.1 - - [31/Oct/2025 11:08:37] "GET /web_security_scanner HTTP/1.1" 200 -
+2025-10-31 11:09:11,215 - INFO - 127.0.0.1 - - [31/Oct/2025 11:09:11] "[32mGET / HTTP/1.1[0m" 302 -
+2025-10-31 11:09:11,486 - INFO - 127.0.0.1 - - [31/Oct/2025 11:09:11] "GET /login?next=/ HTTP/1.1" 200 -
+2025-10-31 11:09:46,036 - INFO - 127.0.0.1 - - [31/Oct/2025 11:09:46] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-10-31 11:09:46,341 - INFO - 127.0.0.1 - - [31/Oct/2025 11:09:46] "GET / HTTP/1.1" 200 -
+2025-10-31 11:09:50,653 - INFO - 127.0.0.1 - - [31/Oct/2025 11:09:50] "GET /web_security_scanner HTTP/1.1" 200 -
+2025-10-31 11:10:07,859 - INFO - Saving web security analysis to file: 20251031_111007_web_security_https_perform_geoserves-uat_com.json
+2025-10-31 11:10:07,860 - INFO - 127.0.0.1 - - [31/Oct/2025 11:10:07] "POST /web_security_scanner HTTP/1.1" 200 -
+2025-10-31 11:10:12,148 - INFO - Saving web security analysis to file: 20251031_111012_web_security_https_perform_geoserves-uat_com.json
+2025-10-31 11:10:12,150 - INFO - 127.0.0.1 - - [31/Oct/2025 11:10:12] "POST /web_security_scanner HTTP/1.1" 200 -
+2025-10-31 11:10:16,181 - INFO - Saving web security analysis to file: 20251031_111016_web_security_https_perform_geoserves-uat_com.json
+2025-10-31 11:10:16,183 - INFO - 127.0.0.1 - - [31/Oct/2025 11:10:16] "POST /web_security_scanner HTTP/1.1" 200 -
+2025-10-31 11:12:42,733 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.16.50.35:8080
+2025-10-31 11:12:42,733 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-31 11:12:42,734 - INFO -  * Restarting with stat
+2025-10-31 11:12:44,103 - WARNING -  * Debugger is active!
+2025-10-31 11:12:44,105 - INFO -  * Debugger PIN: 640-327-974
+2025-10-31 11:12:46,900 - INFO - 127.0.0.1 - - [31/Oct/2025 11:12:46] "[32mGET / HTTP/1.1[0m" 302 -
+2025-10-31 11:12:46,931 - INFO - 127.0.0.1 - - [31/Oct/2025 11:12:46] "GET /login?next=/ HTTP/1.1" 200 -
+2025-10-31 11:12:47,279 - INFO - 127.0.0.1 - - [31/Oct/2025 11:12:47] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-10-31 11:13:02,356 - INFO - 127.0.0.1 - - [31/Oct/2025 11:13:02] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-10-31 11:13:02,362 - INFO - 127.0.0.1 - - [31/Oct/2025 11:13:02] "GET / HTTP/1.1" 200 -
+2025-10-31 11:13:04,988 - INFO - 127.0.0.1 - - [31/Oct/2025 11:13:04] "GET /web_security_scanner HTTP/1.1" 200 -
+2025-10-31 11:13:08,720 - INFO - 127.0.0.1 - - [31/Oct/2025 11:13:08] "GET /web_security_scanner HTTP/1.1" 200 -
+2025-10-31 11:13:10,016 - INFO - 127.0.0.1 - - [31/Oct/2025 11:13:10] "GET /security_headers_checker HTTP/1.1" 200 -
+2025-10-31 11:13:15,917 - INFO - Saving security headers analysis to file: 20251031_111315_security_headers_https_gn-qa_azurewebsites_net.json
+2025-10-31 11:13:15,920 - INFO - 127.0.0.1 - - [31/Oct/2025 11:13:15] "POST /security_headers_checker HTTP/1.1" 200 -
+2025-10-31 11:13:24,138 - INFO - 127.0.0.1 - - [31/Oct/2025 11:13:24] "GET /security_headers_checker HTTP/1.1" 200 -
+2025-10-31 11:13:27,211 - INFO - 127.0.0.1 - - [31/Oct/2025 11:13:27] "GET /email_automation HTTP/1.1" 200 -
+2025-10-31 11:13:29,409 - ERROR - Error processing history file 20250326_122354_https_www_google_co_in_.json: Expecting value: line 1 column 430 (char 429)
+2025-10-31 11:13:29,419 - ERROR - Error processing history file 20250326_122401_https_www_google_co_in.json: Expecting value: line 1 column 429 (char 428)
+2025-10-31 11:13:29,429 - ERROR - Error processing history file 20250326_122500_https_speehive_com.json: Expecting value: line 1 column 422 (char 421)
+2025-10-31 11:13:29,441 - ERROR - Error processing history file 20250326_122529_https_google_com.json: Expecting value: line 1 column 401 (char 400)
+2025-10-31 11:13:31,210 - INFO - 127.0.0.1 - - [31/Oct/2025 11:13:31] "GET /dashboard HTTP/1.1" 200 -
+2025-10-31 11:13:32,625 - INFO - 127.0.0.1 - - [31/Oct/2025 11:13:32] "GET /web_security_scanner HTTP/1.1" 200 -
+2025-10-31 11:13:45,297 - INFO - Saving web security analysis to file: 20251031_111345_web_security_https_gn-qa_azurewebsites_net.json
+2025-10-31 11:13:45,299 - INFO - 127.0.0.1 - - [31/Oct/2025 11:13:45] "POST /web_security_scanner HTTP/1.1" 200 -
+2025-10-31 11:53:37,173 - INFO - Saving web security analysis to file: 20251031_115337_web_security_https_gn-qa_azurewebsites_net.json
+2025-10-31 11:53:37,175 - INFO - 127.0.0.1 - - [31/Oct/2025 11:53:37] "POST /web_security_scanner HTTP/1.1" 200 -
+2025-10-31 11:53:41,792 - INFO - 127.0.0.1 - - [31/Oct/2025 11:53:41] "[32mGET / HTTP/1.1[0m" 302 -
+2025-10-31 11:53:42,044 - INFO - 127.0.0.1 - - [31/Oct/2025 11:53:42] "GET /login?next=/ HTTP/1.1" 200 -
+2025-10-31 11:53:50,460 - INFO - 127.0.0.1 - - [31/Oct/2025 11:53:50] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-10-31 11:53:50,809 - INFO - 127.0.0.1 - - [31/Oct/2025 11:53:50] "GET / HTTP/1.1" 200 -
+2025-10-31 11:53:54,874 - INFO - 127.0.0.1 - - [31/Oct/2025 11:53:54] "GET /ssl_tls_checker HTTP/1.1" 200 -
+2025-10-31 11:54:02,322 - INFO - Saving SSL/TLS analysis to file: 20251031_115402_ssl_tls_https_gn-qa_azurewebsites_net.json
+2025-10-31 11:54:02,324 - INFO - 127.0.0.1 - - [31/Oct/2025 11:54:02] "POST /ssl_tls_checker HTTP/1.1" 200 -
+2025-10-31 11:59:05,286 - INFO - 127.0.0.1 - - [31/Oct/2025 11:59:05] "GET / HTTP/1.1" 200 -
+2025-10-31 11:59:08,506 - INFO - 127.0.0.1 - - [31/Oct/2025 11:59:08] "GET /email_analysis HTTP/1.1" 200 -
+2025-10-31 11:59:10,437 - INFO - 127.0.0.1 - - [31/Oct/2025 11:59:10] "GET / HTTP/1.1" 200 -
+2025-10-31 11:59:12,131 - INFO - 127.0.0.1 - - [31/Oct/2025 11:59:12] "GET /ssl_tls_checker HTTP/1.1" 200 -
+2025-10-31 12:10:41,188 - INFO - 127.0.0.1 - - [31/Oct/2025 12:10:41] "GET / HTTP/1.1" 200 -
+2025-10-31 12:10:50,441 - INFO - 127.0.0.1 - - [31/Oct/2025 12:10:50] "GET /security_headers_checker HTTP/1.1" 200 -
+2025-10-31 12:10:55,258 - INFO - Saving security headers analysis to file: 20251031_121055_security_headers_https_gn-qa_azurewebsites_net.json
+2025-10-31 12:10:55,260 - INFO - 127.0.0.1 - - [31/Oct/2025 12:10:55] "POST /security_headers_checker HTTP/1.1" 200 -
+2025-10-31 12:11:03,519 - INFO - 127.0.0.1 - - [31/Oct/2025 12:11:03] "GET / HTTP/1.1" 200 -
+2025-10-31 12:11:08,627 - INFO - 127.0.0.1 - - [31/Oct/2025 12:11:08] "GET /clickjacking_checker HTTP/1.1" 200 -
+2025-10-31 12:18:11,938 - INFO - 127.0.0.1 - - [31/Oct/2025 12:18:11] "POST /clickjacking_checker HTTP/1.1" 200 -
+2025-10-31 12:18:17,611 - INFO - 127.0.0.1 - - [31/Oct/2025 12:18:17] "GET /security_headers_checker HTTP/1.1" 200 -
+2025-10-31 12:18:20,244 - INFO - 127.0.0.1 - - [31/Oct/2025 12:18:20] "GET / HTTP/1.1" 200 -
+2025-10-31 12:18:21,824 - INFO - 127.0.0.1 - - [31/Oct/2025 12:18:21] "GET /ssl_tls_checker HTTP/1.1" 200 -
+2025-10-31 12:18:27,695 - INFO - Saving SSL/TLS analysis to file: 20251031_121827_ssl_tls_https_gn-qa_azurewebsites_net.json
+2025-10-31 12:18:27,697 - INFO - 127.0.0.1 - - [31/Oct/2025 12:18:27] "POST /ssl_tls_checker HTTP/1.1" 200 -
+2025-10-31 12:19:24,208 - INFO - 127.0.0.1 - - [31/Oct/2025 12:19:24] "GET /security_headers_checker HTTP/1.1" 200 -
+2025-10-31 12:19:26,870 - INFO - 127.0.0.1 - - [31/Oct/2025 12:19:26] "GET / HTTP/1.1" 200 -
+2025-10-31 12:19:27,823 - INFO - 127.0.0.1 - - [31/Oct/2025 12:19:27] "GET /ssl_tls_checker HTTP/1.1" 200 -
+2025-10-31 12:19:31,151 - INFO - 127.0.0.1 - - [31/Oct/2025 12:19:31] "GET / HTTP/1.1" 200 -
+2025-10-31 12:19:33,068 - INFO - 127.0.0.1 - - [31/Oct/2025 12:19:33] "GET /web_security_scanner HTTP/1.1" 200 -
+2025-10-31 12:19:43,166 - INFO - Saving web security analysis to file: 20251031_121943_web_security_https_gn-qa_azurewebsites_net.json
+2025-10-31 12:19:43,168 - INFO - 127.0.0.1 - - [31/Oct/2025 12:19:43] "POST /web_security_scanner HTTP/1.1" 200 -
+2025-10-31 12:19:46,839 - INFO - Saving web security analysis to file: 20251031_121946_web_security_https_gn-qa_azurewebsites_net.json
+2025-10-31 12:19:46,840 - INFO - 127.0.0.1 - - [31/Oct/2025 12:19:46] "POST /web_security_scanner HTTP/1.1" 200 -
+2025-10-31 12:47:36,145 - INFO - 127.0.0.1 - - [31/Oct/2025 12:47:36] "GET /web_security_scanner HTTP/1.1" 200 -
+2025-11-04 12:29:30,867 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.16.50.35:8080
+2025-11-04 12:29:30,868 - INFO - [33mPress CTRL+C to quit[0m
+2025-11-04 12:29:30,870 - INFO -  * Restarting with stat
+2025-11-04 12:29:32,555 - WARNING -  * Debugger is active!
+2025-11-04 12:29:32,562 - INFO -  * Debugger PIN: 640-327-974
+2025-11-04 12:29:37,866 - INFO - 127.0.0.1 - - [04/Nov/2025 12:29:37] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-04 12:29:37,896 - INFO - 127.0.0.1 - - [04/Nov/2025 12:29:37] "GET /login?next=/ HTTP/1.1" 200 -
+2025-11-04 12:29:38,215 - INFO - 127.0.0.1 - - [04/Nov/2025 12:29:38] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-11-04 12:29:46,576 - INFO - 127.0.0.1 - - [04/Nov/2025 12:29:46] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-11-04 12:29:46,619 - INFO - 127.0.0.1 - - [04/Nov/2025 12:29:46] "GET / HTTP/1.1" 200 -
+2025-11-04 12:29:52,182 - INFO - 127.0.0.1 - - [04/Nov/2025 12:29:52] "GET /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-04 12:30:00,432 - INFO - Saving SSL/TLS analysis to file: 20251104_123000_ssl_tls_https_gn-qa_azurewebsites_net.json
+2025-11-04 12:30:00,435 - INFO - 127.0.0.1 - - [04/Nov/2025 12:30:00] "POST /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-04 12:32:10,776 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\main.py', reloading
+2025-11-04 12:32:11,011 - INFO -  * Restarting with stat
+2025-11-04 12:32:12,891 - WARNING -  * Debugger is active!
+2025-11-04 12:32:12,894 - INFO -  * Debugger PIN: 640-327-974
+2025-11-04 12:32:21,983 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\main.py', reloading
+2025-11-04 12:32:22,178 - INFO -  * Restarting with stat
+2025-11-04 12:32:23,950 - WARNING -  * Debugger is active!
+2025-11-04 12:32:23,953 - INFO -  * Debugger PIN: 640-327-974
+2025-11-04 12:45:50,617 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.16.50.35:8080
+2025-11-04 12:45:50,618 - INFO - [33mPress CTRL+C to quit[0m
+2025-11-04 12:45:50,619 - INFO -  * Restarting with stat
+2025-11-04 12:45:52,057 - WARNING -  * Debugger is active!
+2025-11-04 12:45:52,059 - INFO -  * Debugger PIN: 640-327-974
+2025-11-04 12:45:52,541 - INFO - 127.0.0.1 - - [04/Nov/2025 12:45:52] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-04 12:45:52,826 - INFO - 127.0.0.1 - - [04/Nov/2025 12:45:52] "GET /login?next=/ HTTP/1.1" 200 -
+2025-11-04 12:46:10,658 - INFO - 127.0.0.1 - - [04/Nov/2025 12:46:10] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-11-04 12:46:11,011 - INFO - 127.0.0.1 - - [04/Nov/2025 12:46:11] "GET / HTTP/1.1" 200 -
+2025-11-04 12:46:14,924 - INFO - 127.0.0.1 - - [04/Nov/2025 12:46:14] "GET /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-04 12:46:20,220 - INFO - 127.0.0.1 - - [04/Nov/2025 12:46:20] "GET /web_security_scanner HTTP/1.1" 200 -
+2025-11-04 12:46:30,875 - INFO - Saving web security analysis to file: 20251104_124630_web_security_https_gn-qa_azurewebsites_net.json
+2025-11-04 12:46:30,877 - INFO - 127.0.0.1 - - [04/Nov/2025 12:46:30] "POST /web_security_scanner HTTP/1.1" 200 -
+2025-11-04 12:46:35,018 - INFO - Saving web security analysis to file: 20251104_124635_web_security_https_gn-qa_azurewebsites_net.json
+2025-11-04 12:46:35,020 - INFO - 127.0.0.1 - - [04/Nov/2025 12:46:35] "POST /web_security_scanner HTTP/1.1" 200 -
+2025-11-04 12:48:36,996 - INFO - Saving web security analysis to file: 20251104_124836_web_security_https_gn-qa_azurewebsites_net.json
+2025-11-04 12:48:36,998 - INFO - 127.0.0.1 - - [04/Nov/2025 12:48:36] "POST /web_security_scanner HTTP/1.1" 200 -
+2025-11-04 12:48:48,573 - INFO - Saving web security analysis to file: 20251104_124848_web_security_https_gn-qa_azurewebsites_net.json
+2025-11-04 12:48:48,575 - INFO - 127.0.0.1 - - [04/Nov/2025 12:48:48] "POST /web_security_scanner HTTP/1.1" 200 -
+2025-11-04 12:48:52,946 - INFO - 127.0.0.1 - - [04/Nov/2025 12:48:52] "GET /security_headers_checker HTTP/1.1" 200 -
+2025-11-04 12:48:56,462 - INFO - Saving security headers analysis to file: 20251104_124856_security_headers_https_gn-qa_azurewebsites_net.json
+2025-11-04 12:48:56,465 - INFO - 127.0.0.1 - - [04/Nov/2025 12:48:56] "POST /security_headers_checker HTTP/1.1" 200 -
+2025-11-04 12:49:04,001 - INFO - 127.0.0.1 - - [04/Nov/2025 12:49:04] "GET / HTTP/1.1" 200 -
+2025-11-04 12:49:06,201 - INFO - 127.0.0.1 - - [04/Nov/2025 12:49:06] "GET /web_security_scanner HTTP/1.1" 200 -
+2025-11-04 12:49:20,237 - INFO - Saving web security analysis to file: 20251104_124920_web_security_https_gn-qa_azurewebsites_net.json
+2025-11-04 12:49:20,239 - INFO - 127.0.0.1 - - [04/Nov/2025 12:49:20] "POST /web_security_scanner HTTP/1.1" 200 -
+2025-11-04 12:53:57,341 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.16.50.35:8080
+2025-11-04 12:53:57,341 - INFO - [33mPress CTRL+C to quit[0m
+2025-11-04 12:53:57,342 - INFO -  * Restarting with stat
+2025-11-04 12:53:58,940 - WARNING -  * Debugger is active!
+2025-11-04 12:53:58,942 - INFO -  * Debugger PIN: 640-327-974
+2025-11-04 12:54:19,543 - INFO - 127.0.0.1 - - [04/Nov/2025 12:54:19] "[32mPOST /cookie_security_checker HTTP/1.1[0m" 302 -
+2025-11-04 12:54:26,636 - INFO - 127.0.0.1 - - [04/Nov/2025 12:54:26] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-11-04 12:54:35,769 - ERROR - Error analyzing cookie security: cannot import name 'analyze_cookie_security_full' from 'utils.web_security_scanner' (C:\Users\SanthoshKumarJP\Phishingdetector\Phishingdetector\utils\web_security_scanner.py)
+2025-11-04 12:54:35,805 - INFO - 127.0.0.1 - - [04/Nov/2025 12:54:35] "POST /cookie_security_checker HTTP/1.1" 200 -
+2025-11-04 12:55:21,611 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\utils\\web_security_scanner.py', reloading
+2025-11-04 12:55:21,802 - INFO -  * Restarting with stat
+2025-11-04 12:55:23,427 - WARNING -  * Debugger is active!
+2025-11-04 12:55:23,430 - INFO -  * Debugger PIN: 640-327-974
+2025-11-04 12:55:30,996 - INFO - Saving cookie security analysis to file: 20251104_125530_cookie_security_https_google_com.json
+2025-11-04 12:55:31,005 - INFO - 127.0.0.1 - - [04/Nov/2025 12:55:31] "POST /cookie_security_checker HTTP/1.1" 200 -
+2025-11-04 12:56:09,658 - INFO - Saving cookie security analysis to file: 20251104_125609_cookie_security_https_example_com.json
+2025-11-04 12:56:09,660 - INFO - 127.0.0.1 - - [04/Nov/2025 12:56:09] "POST /cookie_security_checker HTTP/1.1" 200 -
+2025-11-04 12:56:39,555 - INFO - 127.0.0.1 - - [04/Nov/2025 12:56:39] "POST /cookie_security_checker HTTP/1.1" 200 -
+2025-11-04 13:00:08,867 - INFO - Saving web security analysis to file: 20251104_130008_web_security_https_gn-qa_azurewebsites_net.json
+2025-11-04 13:00:08,904 - INFO - 127.0.0.1 - - [04/Nov/2025 13:00:08] "POST /web_security_scanner HTTP/1.1" 200 -
+2025-11-04 13:01:49,844 - INFO - 127.0.0.1 - - [04/Nov/2025 13:01:49] "GET / HTTP/1.1" 200 -
+2025-11-04 13:01:56,312 - INFO - 127.0.0.1 - - [04/Nov/2025 13:01:56] "GET /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-04 13:04:53,060 - INFO - 127.0.0.1 - - [04/Nov/2025 13:04:53] "[32mGET /cookie_security_checker HTTP/1.1[0m" 302 -
+2025-11-04 13:05:00,897 - INFO - 127.0.0.1 - - [04/Nov/2025 13:05:00] "GET /login HTTP/1.1" 200 -
+2025-11-04 13:05:12,694 - INFO - 127.0.0.1 - - [04/Nov/2025 13:05:12] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-11-04 13:05:19,938 - INFO - 127.0.0.1 - - [04/Nov/2025 13:05:19] "GET /cookie_security_checker HTTP/1.1" 200 -
+2025-11-04 13:08:45,671 - INFO - 127.0.0.1 - - [04/Nov/2025 13:08:45] "GET / HTTP/1.1" 200 -
+2025-11-04 13:09:17,817 - INFO - 127.0.0.1 - - [04/Nov/2025 13:09:17] "GET /cookie_security_checker HTTP/1.1" 200 -
+2025-11-04 13:09:25,598 - INFO - Saving cookie security analysis to file: 20251104_130925_cookie_security_https_gn-qa_azurewebsites_net.json
+2025-11-04 13:09:25,600 - INFO - 127.0.0.1 - - [04/Nov/2025 13:09:25] "POST /cookie_security_checker HTTP/1.1" 200 -
+2025-11-04 13:13:15,886 - INFO - Saving cookie security analysis to file: 20251104_131315_cookie_security_https_gn-qa_azurewebsites_net.json
+2025-11-04 13:13:15,919 - INFO - 127.0.0.1 - - [04/Nov/2025 13:13:15] "POST /cookie_security_checker HTTP/1.1" 200 -
