@@ -600,6 +600,44 @@ def save_web_security_to_history(url, results):
         logger.error(f"Failed to save web security analysis to history file {filename}: {str(e)}")
         raise
 
+def save_ssl_tls_to_history(url, results):
+    """Save the SSL/TLS validation results to a JSON file in the history directory"""
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    domain = url.replace("://", "_").replace("/", "_").replace(".", "_")
+    domain = sanitize_filename(domain)
+    filename = f"{timestamp}_ssl_tls_{domain}.json"
+
+    # Add timestamp to results
+    results['timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    logger.info(f"Saving SSL/TLS analysis to file: {filename}")
+
+    try:
+        with open(os.path.join(HISTORY_DIR, filename), 'w') as f:
+            json.dump(results, f)
+    except Exception as e:
+        logger.error(f"Failed to save SSL/TLS analysis to history file {filename}: {str(e)}")
+        raise
+
+def save_cookie_security_to_history(url, results):
+    """Save the cookie security analysis results to a JSON file in the history directory"""
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    domain = url.replace("://", "_").replace("/", "_").replace(".", "_")
+    domain = sanitize_filename(domain)
+    filename = f"{timestamp}_cookie_security_{domain}.json"
+
+    # Add timestamp to results
+    results['timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    logger.info(f"Saving cookie security analysis to file: {filename}")
+
+    try:
+        with open(os.path.join(HISTORY_DIR, filename), 'w') as f:
+            json.dump(results, f)
+    except Exception as e:
+        logger.error(f"Failed to save cookie security analysis to history file {filename}: {str(e)}")
+        raise
+
 # Routes for PDF reports
 @app.route('/export/url_report/<path:id>', methods=['GET'])
 def export_url_report(id):
@@ -859,6 +897,56 @@ def security_headers_checker():
             return render_template('security_headers_checker.html', error=f"Error analyzing security headers: {str(e)}")
 
     return render_template('security_headers_checker.html')
+
+@app.route('/ssl_tls_checker', methods=['GET', 'POST'])
+@login_required
+def ssl_tls_checker():
+    """SSL/TLS & HTTPS Validator"""
+    if request.method == 'POST':
+        url = request.form.get('url', '').strip()
+
+        if not url:
+            return render_template('ssl_tls_checker.html', error="Please provide a URL")
+
+        if not is_valid_url(url):
+            return render_template('ssl_tls_checker.html', error="Invalid URL format")
+
+        try:
+            from utils.ssl_tls_validator import validate_ssl_tls_security
+            results = validate_ssl_tls_security(url)
+            # Save the analysis to history
+            save_ssl_tls_to_history(url, results)
+            return render_template('ssl_tls_checker.html', results=results)
+        except Exception as e:
+            logger.error(f"Error validating SSL/TLS: {str(e)}")
+            return render_template('ssl_tls_checker.html', error=f"Error validating SSL/TLS: {str(e)}")
+
+    return render_template('ssl_tls_checker.html')
+
+@app.route('/cookie_security_checker', methods=['GET', 'POST'])
+@login_required
+def cookie_security_checker():
+    """Cookie Security Checker"""
+    if request.method == 'POST':
+        url = request.form.get('url', '').strip()
+
+        if not url:
+            return render_template('cookie_security_checker.html', error="Please provide a URL")
+
+        if not is_valid_url(url):
+            return render_template('cookie_security_checker.html', error="Invalid URL format")
+
+        try:
+            from utils.web_security_scanner import analyze_cookie_security_full
+            results = analyze_cookie_security_full(url)
+            # Save the analysis to history
+            save_cookie_security_to_history(url, results)
+            return render_template('cookie_security_checker.html', results=results)
+        except Exception as e:
+            logger.error(f"Error analyzing cookie security: {str(e)}")
+            return render_template('cookie_security_checker.html', error=f"Error analyzing cookie security: {str(e)}")
+
+    return render_template('cookie_security_checker.html')
 
 @app.route('/clickjacking_checker', methods=['GET', 'POST'])
 @login_required

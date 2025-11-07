@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Security Checker - SpeeSecure</title>
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .gradient-card {
+            background: linear-gradient(135deg, #18226B 0%, #2D3A8C 100%);
+            border: none;
+        }
+        .result-card {
+            transition: transform 0.3s ease;
+        }
+        .result-card:hover {
+            transform: translateY(-2px);
+        }
+        .vulnerability-card {
+            border-left: 4px solid;
+        }
+        .severity-critical {
+            border-left-color: #dc3545 !important;
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+        .severity-high {
+            border-left-color: #fd7e14 !important;
+            background-color: rgba(253, 126, 20, 0.1);
+        }
+        .severity-medium {
+            border-left-color: #ffc107 !important;
+            background-color: rgba(255, 193, 7, 0.1);
+        }
+        .severity-low {
+            border-left-color: #17a2b8 !important;
+            background-color: rgba(23, 162, 184, 0.1);
+        }
+        .status-good {
+            color: #28a745;
+        }
+        .status-warning {
+            color: #fd7e14;
+        }
+        .status-danger {
+            color: #dc3545;
+        }
+        .cookie-secure {
+            background-color: rgba(40, 167, 69, 0.1);
+            border-left: 4px solid #28a745;
+        }
+        .cookie-insecure {
+            background-color: rgba(220, 53, 69, 0.1);
+            border-left: 4px solid #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shield-alt"></i> SpeeSecure
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/history"><i class="fas fa-history"></i> History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/batch_analysis"><i class="fas fa-tasks"></i> Batch Analysis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/email_analysis"><i class="fas fa-envelope"></i> Email Scanner</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/email_automation"><i class="fas fa-robot"></i> Email Automation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/security_headers_checker"><i class="fas fa-lock"></i> Headers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/ssl_tls_checker"><i class="fas fa-certificate"></i> SSL/TLS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/cookie_security_checker"><i class="fas fa-cookie-bite"></i> Cookies</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/web_security_scanner"><i class="fas fa-bug"></i> Security Scanner</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/clickjacking_checker"><i class="fas fa-mouse-pointer"></i> Clickjacking</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about"><i class="fas fa-info-circle"></i> About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/api/docs"><i class="fas fa-code"></i> API</a>
+                    </li>
+                    {% if current_user.id == 'admin@example.com' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/approve_requests"><i class="fas fa-user-shield"></i> Admin</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card gradient-card text-white">
+                    <div class="card-body text-center">
+                        <i class="fas fa-cookie-bite fa-3x mb-3"></i>
+                        <h1 class="display-5 fw-bold">Cookie Security Checker</h1>
+                        <p class="lead">Analyze cookies for security vulnerabilities and best practices</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-search me-2"></i>Check Cookie Security</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="/cookie_security_checker">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label for="url" class="form-label">Website URL</label>
+                                    <input type="url" class="form-control" id="url" name="url"
+                                           placeholder="https://example.com" required
+                                           value="{{ request.form.url if request.form.url else '' }}">
+                                    <div class="form-text">Enter a complete URL including https:// or http://</div>
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-search me-2"></i>Analyze Cookies
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if results %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-success text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-check-circle me-2"></i>Cookie Security Analysis for {{ results.url }}</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card result-card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="fas fa-shield-alt me-2"></i>Overall Assessment
+                                        </h5>
+                                        <div class="mb-3">
+                                            {% if results.total_cookies == 0 %}
+                                                <span class="badge bg-secondary fs-6">
+                                                    <i class="fas fa-info-circle me-1"></i>No Cookies Found
+                                                </span>
+                                            {% elif results.vulnerable_cookies == 0 %}
+                                                <span class="badge bg-success fs-6">
+                                                    <i class="fas fa-shield-alt me-1"></i>All Cookies Secure
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-danger fs-6">
+                                                    <i class="fas fa-exclamation-triangle me-1"></i>{{ results.vulnerable_cookies }} Vulnerable Cookies
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                        <p class="card-text">
+                                            <strong>Total Cookies:</strong> {{ results.total_cookies }}<br>
+                                            <strong>Secure Cookies:</strong> {{ results.secure_cookies }}<br>
+                                            <strong>Vulnerable Cookies:</strong> {{ results.vulnerable_cookies }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card result-card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="fas fa-list-check me-2"></i>Common Issues Found
+                                        </h5>
+                                        <ul class="list-unstyled">
+                                            {% for issue in results.common_issues %}
+                                            <li class="mb-2">
+                                                <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                                                {{ issue }}
+                                            </li>
+                                            {% endfor %}
+                                            {% if not results.common_issues %}
+                                            <li class="mb-2">
+                                                <i class="fas fa-check-circle text-success me-2"></i>
+                                                No common cookie security issues detected
+                                            </li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if results.cookies %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-info text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-cookie-bite me-2"></i>Detailed Cookie Analysis</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            {% for cookie in results.cookies %}
+                            <div class="col-md-6 mb-4">
+                                <div class="card result-card
+                                    {% if cookie.is_secure %}cookie-secure{% else %}cookie-insecure{% endif %}">
+                                    <div class="card-body">
+                                        <h6 class="card-title">
+                                            <i class="fas fa-cookie me-2"></i>{{ cookie.name }}
+                                            {% if cookie.is_secure %}
+                                                <span class="badge bg-success float-end">Secure</span>
+                                            {% else %}
+                                                <span class="badge bg-danger float-end">Vulnerable</span>
+                                            {% endif %}
+                                        </h6>
+                                        <div class="mb-2">
+                                            <strong>Value:</strong> <code>{{ cookie.value[:20] }}{% if cookie.value|length > 20 %}...{% endif %}</code>
+                                        </div>
+                                        {% if cookie.domain %}
+                                        <div class="mb-2">
+                                            <strong>Domain:</strong> {{ cookie.domain }}
+                                        </div>
+                                        {% endif %}
+                                        {% if cookie.path %}
+                                        <div class="mb-2">
+                                            <strong>Path:</strong> {{ cookie.path }}
+                                        </div>
+                                        {% endif %}
+                                        {% if cookie.expires %}
+                                        <div class="mb-2">
+                                            <strong>Expires:</strong> {{ cookie.expires }}
+                                        </div>
+                                        {% endif %}
+                                        <div class="mb-2">
+                                            <strong>Flags:</strong>
+                                            {% if cookie.secure %}<span class="badge bg-success me-1">Secure</span>{% endif %}
+                                            {% if cookie.http_only %}<span class="badge bg-info me-1">HttpOnly</span>{% endif %}
+                                            {% if cookie.same_site %}<span class="badge bg-primary me-1">SameSite={{ cookie.same_site }}</span>{% endif %}
+                                        </div>
+                                        {% if cookie.issues %}
+                                        <div class="mb-2">
+                                            <strong>Security Issues:</strong>
+                                            <ul class="mb-0">
+                                                {% for issue in cookie.issues %}
+                                                <li class="text-danger small">{{ issue }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-info text-white">
+                        <h2 class="h4 mb-0"><i class="fas fa-lightbulb me-2"></i>Cookie Security Best Practices</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Essential Security Flags:</h5>
+                                <ul>
+                                    <li><strong>Secure:</strong> Ensures cookies are only sent over HTTPS</li>
+                                    <li><strong>HttpOnly:</strong> Prevents JavaScript access to cookies</li>
+                                    <li><strong>SameSite:</strong> Protects against CSRF attacks</li>
+                                    <li><strong>Max-Age/Expires:</strong> Set expiration for session cookies</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Security Checklist:</h5>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="check-secure" disabled>
+                                    <label class="form-check-label" for="check-secure">
+                                        All cookies have Secure flag (HTTPS only)
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="check-httponly" disabled>
+                                    <label class="form-check-label" for="check-httponly">
+                                        Sensitive cookies have HttpOnly flag
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="check-samesite" disabled>
+                                    <label class="form-check-label" for="check-samesite">
+                                        All cookies have SameSite attribute
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="check-expiry" disabled>
+                                    <label class="form-check-label" for="check-expiry">
+                                        Session cookies have proper expiration
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="check-sensitive" disabled>
+                                    <label class="form-check-label" for="check-sensitive">
+                                        No sensitive data stored in cookies
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <h5>Recommendations:</h5>
+                                <ul>
+                                    <li>Use HTTPS everywhere to enable Secure flag</li>
+                                    <li>Set HttpOnly on all cookies that don't need JavaScript access</li>
+                                    <li>Configure SameSite=Lax or Strict based on your needs</li>
+                                    <li>Avoid storing sensitive data in cookies</li>
+                                    <li>Use secure random values for session identifiers</li>
+                                    <li>Regularly audit and monitor cookie configurations</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Error:</strong> {{ error }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-shield-alt me-2" style="color: var(--primary-color); font-size: 1.5rem;"></i>
+                        <h5 class="mb-0">SpeeSecure</h5>
+                    </div>
+                    <p>A comprehensive tool for analyzing URLs and emails to detect potential phishing attempts, helping you stay safe online.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="mb-3">
+                        <a href="/about" class="btn btn-outline-light btn-sm me-2"><i class="fas fa-info-circle me-1"></i> About</a>
+                        <a href="/api/docs" class="btn btn-outline-light btn-sm"><i class="fas fa-code me-1"></i> API</a>
+                    </div>
+                    <p>&copy; 2025 SpeeSecure - Advanced Phishing Protection</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
