@@ -1750,3 +1750,41 @@ Registrars.
 2025-11-07 17:44:38,167 - INFO - 127.0.0.1 - - [07/Nov/2025 17:44:38] "[32mPOST /login HTTP/1.1[0m" 302 -
 2025-11-07 17:44:47,728 - INFO - Saving SSL/TLS analysis to file: 20251107_174447_ssl_tls_https_www_google_com.json
 2025-11-07 17:44:47,730 - INFO - 127.0.0.1 - - [07/Nov/2025 17:44:47] "POST /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-12 15:25:45,097 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.16.50.142:8080
+2025-11-12 15:25:45,099 - INFO - [33mPress CTRL+C to quit[0m
+2025-11-12 15:25:45,102 - INFO -  * Restarting with stat
+2025-11-12 15:25:51,090 - WARNING -  * Debugger is active!
+2025-11-12 15:25:51,097 - INFO -  * Debugger PIN: 640-327-974
+2025-11-12 15:25:51,137 - INFO - 127.0.0.1 - - [12/Nov/2025 15:25:51] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-12 15:25:51,176 - INFO - 127.0.0.1 - - [12/Nov/2025 15:25:51] "GET /login?next=/ HTTP/1.1" 200 -
+2025-11-12 15:25:52,097 - INFO - 127.0.0.1 - - [12/Nov/2025 15:25:52] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-11-12 15:26:01,410 - INFO - 127.0.0.1 - - [12/Nov/2025 15:26:01] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-11-12 15:26:01,679 - INFO - 127.0.0.1 - - [12/Nov/2025 15:26:01] "GET / HTTP/1.1" 200 -
+2025-11-12 15:26:04,867 - INFO - 127.0.0.1 - - [12/Nov/2025 15:26:04] "GET /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-12 15:33:05,260 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\temp_ssl.py', reloading
+2025-11-12 15:33:05,397 - INFO -  * Restarting with stat
+2025-11-12 15:33:07,112 - WARNING -  * Debugger is active!
+2025-11-12 15:33:07,114 - INFO -  * Debugger PIN: 640-327-974
+2025-11-12 15:33:09,152 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\temp_ssl.py', reloading
+2025-11-12 15:33:09,313 - INFO -  * Restarting with stat
+2025-11-12 15:33:11,904 - WARNING -  * Debugger is active!
+2025-11-12 15:33:11,908 - INFO -  * Debugger PIN: 640-327-974
+2025-11-12 15:34:04,359 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\temp_main.py', reloading
+2025-11-12 15:34:04,545 - INFO -  * Restarting with stat
+2025-11-12 15:34:06,544 - WARNING -  * Debugger is active!
+2025-11-12 15:34:06,546 - INFO -  * Debugger PIN: 640-327-974
+2025-11-12 15:34:38,849 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\temp_main.py', reloading
+2025-11-12 15:34:38,992 - INFO -  * Restarting with stat
+2025-11-12 15:34:40,610 - WARNING -  * Debugger is active!
+2025-11-12 15:34:40,612 - INFO -  * Debugger PIN: 640-327-974
+2025-11-12 15:34:59,782 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\temp_main.py', reloading
+2025-11-12 15:34:59,906 - INFO -  * Restarting with stat
+2025-11-12 15:35:01,851 - WARNING -  * Debugger is active!
+2025-11-12 15:35:01,855 - INFO -  * Debugger PIN: 640-327-974
+2025-11-12 15:35:29,094 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\temp_main.py', reloading
+2025-11-12 15:35:29,290 - INFO -  * Restarting with stat
+2025-11-12 15:35:30,958 - WARNING -  * Debugger is active!
+2025-11-12 15:35:30,961 - INFO -  * Debugger PIN: 640-327-974
