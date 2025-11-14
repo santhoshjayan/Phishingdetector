@@ -102,6 +102,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/api/docs"><i class="fas fa-code"></i> API</a>
                     </li>
+                    {% if current_user.id == 'admin@example.com' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/approve_requests"><i class="fas fa-user-shield"></i> Admin</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

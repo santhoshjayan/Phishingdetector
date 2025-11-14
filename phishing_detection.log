@@ -1869,3 +1869,23 @@ Registrars.
 2025-11-14 15:07:32,016 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
 2025-11-14 15:07:32,016 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
 2025-11-14 15:07:32,460 - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-14 15:07:33,933 - WARNING -  * Debugger is active!
+2025-11-14 15:07:33,935 - INFO -  * Debugger PIN: 640-327-974
+2025-11-14 15:13:46,889 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.16.50.142:8080
+2025-11-14 15:13:46,889 - INFO - [33mPress CTRL+C to quit[0m
+2025-11-14 15:13:46,896 - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-14 15:13:48,093 - WARNING -  * Debugger is active!
+2025-11-14 15:13:48,097 - INFO -  * Debugger PIN: 640-327-974
+2025-11-14 15:13:51,841 - INFO - 127.0.0.1 - - [14/Nov/2025 15:13:51] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-14 15:13:51,893 - INFO - 127.0.0.1 - - [14/Nov/2025 15:13:51] "GET /login?next=/ HTTP/1.1" 200 -
+2025-11-14 15:13:52,287 - INFO - 127.0.0.1 - - [14/Nov/2025 15:13:52] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-11-14 15:14:01,002 - INFO - 127.0.0.1 - - [14/Nov/2025 15:14:01] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-11-14 15:14:01,044 - INFO - 127.0.0.1 - - [14/Nov/2025 15:14:01] "GET / HTTP/1.1" 200 -
+2025-11-14 15:14:03,508 - INFO - 127.0.0.1 - - [14/Nov/2025 15:14:03] "GET /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-14 15:19:15,071 - INFO - 127.0.0.1 - - [14/Nov/2025 15:19:15] "GET / HTTP/1.1" 200 -
+2025-11-14 15:20:20,201 - INFO - 127.0.0.1 - - [14/Nov/2025 15:20:20] "GET /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-14 15:20:25,100 - INFO - Saving SSL/TLS analysis to file: 20251114_152025_ssl_tls_https_gn-qa_azurewebsites_net.json
+2025-11-14 15:20:25,102 - INFO - 127.0.0.1 - - [14/Nov/2025 15:20:25] "POST /ssl_tls_checker HTTP/1.1" 200 -
