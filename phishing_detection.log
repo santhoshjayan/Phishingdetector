@@ -1821,3 +1821,51 @@ Registrars.
 2025-11-14 14:53:57,665 - INFO - 127.0.0.1 - - [14/Nov/2025 14:53:57] "[32mPOST /ssl_tls_checker HTTP/1.1[0m" 302 -
 2025-11-14 14:54:24,686 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\jinja2\\loaders.py', reloading
 2025-11-14 14:54:25,599 - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-14 14:54:27,644 - WARNING -  * Debugger is active!
+2025-11-14 14:54:27,651 - INFO -  * Debugger PIN: 640-327-974
+2025-11-14 15:00:31,985 - INFO - 127.0.0.1 - - [14/Nov/2025 15:00:31] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-14 15:00:32,267 - INFO - 127.0.0.1 - - [14/Nov/2025 15:00:32] "GET /login?next=/ HTTP/1.1" 200 -
+2025-11-14 15:00:32,803 - INFO - 127.0.0.1 - - [14/Nov/2025 15:00:32] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-11-14 15:00:39,756 - INFO - 127.0.0.1 - - [14/Nov/2025 15:00:39] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-11-14 15:00:39,964 - INFO - 127.0.0.1 - - [14/Nov/2025 15:00:39] "GET / HTTP/1.1" 200 -
+2025-11-14 15:01:45,893 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:01:45,898 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:01:45,899 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:01:46,606 - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-14 15:01:47,940 - WARNING -  * Debugger is active!
+2025-11-14 15:01:47,942 - INFO -  * Debugger PIN: 640-327-974
+2025-11-14 15:01:57,185 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\flask_login\\__init__.py', reloading
+2025-11-14 15:01:57,208 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\flask_login\\login_manager.py', reloading
+2025-11-14 15:01:57,227 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\flask_login\\mixins.py', reloading
+2025-11-14 15:01:57,244 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\flask_login\\utils.py', reloading
+2025-11-14 15:01:57,268 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\werkzeug\\security.py', reloading
+2025-11-14 15:01:57,373 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:01:57,374 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:01:57,374 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:01:57,619 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\werkzeug\\local.py', reloading
+2025-11-14 15:01:58,108 - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-14 15:01:59,480 - WARNING -  * Debugger is active!
+2025-11-14 15:01:59,484 - INFO -  * Debugger PIN: 640-327-974
+2025-11-14 15:02:49,867 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:02:49,868 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:02:49,872 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:02:50,785 - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-14 15:02:52,120 - WARNING -  * Debugger is active!
+2025-11-14 15:02:52,122 - INFO -  * Debugger PIN: 640-327-974
+2025-11-14 15:03:01,240 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\werkzeug\\routing\\map.py', reloading
+2025-11-14 15:03:02,300 - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-14 15:03:04,002 - WARNING -  * Debugger is active!
+2025-11-14 15:03:04,005 - INFO -  * Debugger PIN: 640-327-974
+2025-11-14 15:03:27,259 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\flask_login\\signals.py', reloading
+2025-11-14 15:03:27,274 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\flask\\signals.py', reloading
+2025-11-14 15:03:27,298 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\blinker\\__init__.py', reloading
+2025-11-14 15:03:27,319 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\blinker\\base.py', reloading
+2025-11-14 15:03:27,359 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\flask\\sessions.py', reloading
+2025-11-14 15:03:27,750 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:03:27,751 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:03:28,346 - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-14 15:03:29,705 - WARNING -  * Debugger is active!
+2025-11-14 15:03:29,707 - INFO -  * Debugger PIN: 640-327-974
+2025-11-14 15:07:32,016 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:07:32,016 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:07:32,460 - INFO -  * Restarting with watchdog (windowsapi)

@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
+from werkzeug.security import generate_password_hash, check_password_hash
 import logging
 import os
 import json
@@ -12,6 +14,55 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "temporary_secret_key")
+
+# Configure Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+# Simple user model
+class User(UserMixin):
+    def __init__(self, id):
+        self.id = id
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id)
+
+# Temporary users - replace with database in production
+users = {
+    'admin@example.com': {'password': generate_password_hash('admin123')},
+    'test@speehive.com': {'password': generate_password_hash('test@123')}
+}
+# Pending access requests
+pending_requests = []
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        # Debug logging for login attempts
+        logger.debug(f"Login attempt for email: {email}")
+        if email in users:
+            logger.debug(f"User found for email: {email}")
+        else:
+            logger.debug(f"No user found for email: {email}")
+
+        if email in users and check_password_hash(users[email]['password'], password):
+            user = User(email)
+            login_user(user)
+            return redirect(url_for('index'))
+        else:
+            flash('Invalid email or password')
+    return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 # Create a directory to store analysis history
 HISTORY_DIR = "analysis_history"
@@ -151,6 +202,7 @@ def api_analyze():
         }), 500
 
 @app.route('/ssl_tls_checker', methods=['GET', 'POST'])
+@login_required
 def ssl_tls_checker():
     """SSL/TLS & HTTPS Validator"""
     if request.method == 'POST':

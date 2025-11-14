@@ -11,3 +11,54 @@
 2025-11-14 14:54:25,449 - INFO -  * Restarting with watchdog (windowsapi)
 2025-11-14 14:54:26,052 - WARNING -  * Debugger is active!
 2025-11-14 14:54:26,060 - INFO -  * Debugger PIN: 640-327-974
+2025-11-14 14:54:51,364 - INFO - 127.0.0.1 - - [14/Nov/2025 14:54:51] "[35m[1mGET /ssl_tls_checker HTTP/1.1[0m" 500 -
+2025-11-14 14:55:31,766 - INFO - 127.0.0.1 - - [14/Nov/2025 14:55:31] "GET /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-14 15:01:45,893 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:01:45,898 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:01:45,899 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:01:46,738 - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-14 15:02:18,024 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.16.50.142:5000
+2025-11-14 15:02:18,025 - INFO - [33mPress CTRL+C to quit[0m
+2025-11-14 15:02:18,035 - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-14 15:02:18,440 - WARNING -  * Debugger is active!
+2025-11-14 15:02:18,443 - INFO -  * Debugger PIN: 640-327-974
+2025-11-14 15:02:30,234 - INFO - 127.0.0.1 - - [14/Nov/2025 15:02:30] "[35m[1mGET /ssl_tls_checker HTTP/1.1[0m" 500 -
+2025-11-14 15:02:49,867 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:02:49,868 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:02:49,872 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:02:50,677 - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-14 15:02:51,298 - WARNING -  * Debugger is active!
+2025-11-14 15:02:51,301 - INFO -  * Debugger PIN: 640-327-974
+2025-11-14 15:03:01,242 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\werkzeug\\routing\\map.py', reloading
+2025-11-14 15:03:01,245 - INFO - 127.0.0.1 - - [14/Nov/2025 15:03:01] "[35m[1mGET /ssl_tls_checker HTTP/1.1[0m" 500 -
+2025-11-14 15:03:01,368 - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-14 15:03:02,089 - WARNING -  * Debugger is active!
+2025-11-14 15:03:02,093 - INFO -  * Debugger PIN: 640-327-974
+2025-11-14 15:03:27,259 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\flask_login\\signals.py', reloading
+2025-11-14 15:03:27,274 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\flask\\signals.py', reloading
+2025-11-14 15:03:27,298 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\blinker\\__init__.py', reloading
+2025-11-14 15:03:27,319 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\blinker\\base.py', reloading
+2025-11-14 15:03:27,359 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\flask\\sessions.py', reloading
+2025-11-14 15:03:27,750 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:03:27,751 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:03:28,238 - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-14 15:03:28,974 - WARNING -  * Debugger is active!
+2025-11-14 15:03:28,976 - INFO -  * Debugger PIN: 640-327-974
+2025-11-14 15:03:38,915 - INFO - 127.0.0.1 - - [14/Nov/2025 15:03:38] "[32mGET /ssl_tls_checker HTTP/1.1[0m" 302 -
+2025-11-14 15:03:55,023 - INFO - 127.0.0.1 - - [14/Nov/2025 15:03:55] "[35m[1mGET /login HTTP/1.1[0m" 500 -
+2025-11-14 15:04:39,846 - INFO - 127.0.0.1 - - [14/Nov/2025 15:04:39] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-11-14 15:04:45,920 - INFO - 127.0.0.1 - - [14/Nov/2025 15:04:45] "[32mGET /ssl_tls_checker HTTP/1.1[0m" 302 -
+2025-11-14 15:04:54,054 - INFO - 127.0.0.1 - - [14/Nov/2025 15:04:54] "[32mGET /ssl_tls_checker HTTP/1.1[0m" 302 -
+2025-11-14 15:05:00,583 - INFO - 127.0.0.1 - - [14/Nov/2025 15:05:00] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-11-14 15:05:07,748 - INFO - 127.0.0.1 - - [14/Nov/2025 15:05:07] "GET /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-14 15:06:36,911 - INFO - 127.0.0.1 - - [14/Nov/2025 15:06:36] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-11-14 15:06:53,090 - INFO - 127.0.0.1 - - [14/Nov/2025 15:06:53] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-11-14 15:07:00,693 - INFO - 127.0.0.1 - - [14/Nov/2025 15:07:00] "GET /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-14 15:07:13,479 - INFO - 127.0.0.1 - - [14/Nov/2025 15:07:13] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+2025-11-14 15:07:32,015 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:07:32,016 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:07:32,016 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 15:07:32,449 - INFO -  * Restarting with watchdog (windowsapi)
