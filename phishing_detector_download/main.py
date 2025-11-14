@@ -4,6 +4,7 @@ import os
 import json
 from datetime import datetime
 from phishing_detector import analyze_url, is_valid_url
+import re
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -121,19 +122,19 @@ def api_docs():
 @app.route('/api/analyze', methods=['GET'])
 def api_analyze():
     url = request.args.get('url')
-    
+
     if not url:
         return jsonify({
             'success': False,
             'message': 'No URL provided. Please add ?url=https://example.com to your request.'
         }), 400
-    
+
     if not is_valid_url(url):
         return jsonify({
             'success': False,
             'message': 'Invalid URL format'
         }), 400
-    
+
     try:
         results = analyze_url(url, verbose=False)
         # Make the results JSON serializable
@@ -149,17 +150,60 @@ def api_analyze():
             'message': f'Error analyzing URL: {str(e)}'
         }), 500
 
+@app.route('/ssl_tls_checker', methods=['GET', 'POST'])
+def ssl_tls_checker():
+    """SSL/TLS & HTTPS Validator"""
+    if request.method == 'POST':
+        url = request.form.get('url', '').strip()
+
+        if not url:
+            return render_template('ssl_tls_checker.html', error="Please provide a URL")
+
+        if not is_valid_url(url):
+            return render_template('ssl_tls_checker.html', error="Invalid URL format")
+
+        try:
+            from utils.ssl_tls_validator import validate_ssl_tls_security
+            results = validate_ssl_tls_security(url)
+            # Save the analysis to history
+            save_ssl_tls_to_history(url, results)
+            return render_template('ssl_tls_checker.html', results=results)
+        except Exception as e:
+            logger.error(f"Error validating SSL/TLS: {str(e)}")
+            return render_template('ssl_tls_checker.html', error=f"Error validating SSL/TLS: {str(e)}")
+
+    return render_template('ssl_tls_checker.html')
+
 def save_to_history(url, results):
     """Save the analysis results to a JSON file in the history directory"""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     domain = url.replace("://", "_").replace("/", "_").replace(".", "_")
     filename = f"{timestamp}_{domain}.json"
-    
+
     # Add timestamp to results
     results['timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
+
     with open(os.path.join(HISTORY_DIR, filename), 'w') as f:
         json.dump(results, f)
+
+def save_ssl_tls_to_history(url, results):
+    """Save the SSL/TLS validation results to a JSON file in the history directory"""
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    domain = url.replace("://", "_").replace("/", "_").replace(".", "_")
+    domain = re.sub(r'[<>:"/\\|?*]', '_', domain)
+    filename = f"{timestamp}_ssl_tls_{domain}.json"
+
+    # Add timestamp to results
+    results['timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    logger.info(f"Saving SSL/TLS analysis to file: {filename}")
+
+    try:
+        with open(os.path.join(HISTORY_DIR, filename), 'w') as f:
+            json.dump(results, f)
+    except Exception as e:
+        logger.error(f"Failed to save SSL/TLS analysis to history file {filename}: {str(e)}")
+        raise
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

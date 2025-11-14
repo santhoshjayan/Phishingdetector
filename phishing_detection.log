@@ -1793,3 +1793,31 @@ Registrars.
 2025-11-12 16:40:48,496 - INFO - Saving SSL/TLS analysis to file: 20251112_164048_ssl_tls_https_gn-qa_azurewebsites_net.json
 2025-11-12 16:40:48,498 - INFO - 127.0.0.1 - - [12/Nov/2025 16:40:48] "POST /ssl_tls_checker HTTP/1.1" 200 -
 2025-11-12 16:40:53,819 - INFO - 127.0.0.1 - - [12/Nov/2025 16:40:53] "GET / HTTP/1.1" 200 -
+2025-11-14 14:52:02,859 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.16.50.142:8080
+2025-11-14 14:52:02,860 - INFO - [33mPress CTRL+C to quit[0m
+2025-11-14 14:52:02,875 - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-14 14:52:04,224 - WARNING -  * Debugger is active!
+2025-11-14 14:52:04,231 - INFO -  * Debugger PIN: 640-327-974
+2025-11-14 14:52:20,645 - INFO - 127.0.0.1 - - [14/Nov/2025 14:52:20] "[32mGET /ssl_tls_checker HTTP/1.1[0m" 302 -
+2025-11-14 14:52:27,395 - INFO - 127.0.0.1 - - [14/Nov/2025 14:52:27] "[32mPOST /ssl_tls_checker HTTP/1.1[0m" 302 -
+2025-11-14 14:52:42,626 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 14:52:42,626 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\Phishingdetector\\Phishingdetector\\phishing_detector_download\\main.py', reloading
+2025-11-14 14:52:43,433 - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-14 14:52:44,678 - WARNING -  * Debugger is active!
+2025-11-14 14:52:44,681 - INFO -  * Debugger PIN: 640-327-974
+2025-11-14 14:52:53,328 - INFO - 127.0.0.1 - - [14/Nov/2025 14:52:53] "[32mGET /ssl_tls_checker HTTP/1.1[0m" 302 -
+2025-11-14 14:53:00,910 - INFO - 127.0.0.1 - - [14/Nov/2025 14:53:00] "[32mPOST /ssl_tls_checker HTTP/1.1[0m" 302 -
+2025-11-14 14:53:07,823 - INFO - Analyzing URL: https://google.com
+2025-11-14 14:53:16,072 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\urllib3\\connectionpool.py', reloading
+2025-11-14 14:53:16,873 - INFO -  * Restarting with watchdog (windowsapi)
+2025-11-14 14:53:18,246 - WARNING -  * Debugger is active!
+2025-11-14 14:53:18,249 - INFO -  * Debugger PIN: 640-327-974
+2025-11-14 14:53:26,769 - INFO - Analyzing URL: https://google.com
+2025-11-14 14:53:48,222 - INFO - Analysis complete for https://google.com - Risk level: High
+2025-11-14 14:53:48,223 - INFO - 127.0.0.1 - - [14/Nov/2025 14:53:48] "GET /api/analyze?url=https://google.com HTTP/1.1" 200 -
+2025-11-14 14:53:57,665 - INFO - 127.0.0.1 - - [14/Nov/2025 14:53:57] "[32mPOST /ssl_tls_checker HTTP/1.1[0m" 302 -
+2025-11-14 14:54:24,686 - INFO -  * Detected change in 'C:\\Users\\SanthoshKumarJP\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\jinja2\\loaders.py', reloading
+2025-11-14 14:54:25,599 - INFO -  * Restarting with watchdog (windowsapi)
