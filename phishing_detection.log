@@ -1788,3 +1788,8 @@ Registrars.
 2025-11-12 15:35:29,290 - INFO -  * Restarting with stat
 2025-11-12 15:35:30,958 - WARNING -  * Debugger is active!
 2025-11-12 15:35:30,961 - INFO -  * Debugger PIN: 640-327-974
+2025-11-12 15:52:01,704 - INFO - Saving SSL/TLS analysis to file: 20251112_155201_ssl_tls_https_gn-qa_azurewebsites_net.json
+2025-11-12 15:52:01,739 - INFO - 127.0.0.1 - - [12/Nov/2025 15:52:01] "POST /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-12 16:40:48,496 - INFO - Saving SSL/TLS analysis to file: 20251112_164048_ssl_tls_https_gn-qa_azurewebsites_net.json
+2025-11-12 16:40:48,498 - INFO - 127.0.0.1 - - [12/Nov/2025 16:40:48] "POST /ssl_tls_checker HTTP/1.1" 200 -
+2025-11-12 16:40:53,819 - INFO - 127.0.0.1 - - [12/Nov/2025 16:40:53] "GET / HTTP/1.1" 200 -
